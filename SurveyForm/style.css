@@ -1,0 +1,61 @@
+body {
+    text-align: center;
+    font-family: helvetica;
+    background-color: whitesmoke;
+}
+#form-container {
+    width: 600px;
+    padding: 20px;
+    background-color: #eddcd2;
+    display: flex;
+    margin: auto;
+    border-radius: 10px;
+    text-align: left;
+}
+span {
+    font-size: 14px;
+}
+#name-label, #email-label, #date-label, #number-label, p {
+font-size: 16px;
+}
+
+#name, #email, #date, #number, #dropdown {
+    width: 560px;
+    margin: 5px;
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+}
+#dropdown {
+    width: 590px;
+}
+.input2 {
+    background-color: white;
+    width: 560px;
+    margin: 5px;
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+    font-size: 15px;
+}
+textarea {
+    border: none;
+    width: 100%;
+}
+.button {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 2%;
+}
+#submit {
+    padding: 10px 100px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    background-color: #d0ad9a;
+    color: white;
+}
+#submit:hover {
+    cursor: pointer;
+}
