@@ -40,10 +40,12 @@ header span {
     display: grid;
     grid-template-columns: 40% 60%;
     text-align: center;
+    justify-items: center;
 }
 ul {
     font-weight: 600;
-    margin-top: 15px;
+    margin: 15px auto;
+    text-align: left;
 }
 .project li, a {
     color: #4e8197;
