@@ -2,13 +2,15 @@
     margin: 0;
     padding: 0;
 }
+
 body {
     text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: rgb(220, 219, 219);
+    /* background-color: #bfced8; */
+    background-image: url('https://unsplash.com/photos/IZ01rjX0XQA');
 }
 h1 {
     font-size: 2rem;
@@ -17,9 +19,6 @@ h1 {
     color: #062543;
     font-family: futura;
     font-size: 2em;
-}
-body {
-    background-color: #bfced8;
 }
 #board{
     border: 1em solid #062543;
@@ -35,6 +34,7 @@ body {
     border-radius: 3px;
     box-shadow: 0px 9px 15px 0px rgba(0,0,0,0.83);
     text-align: center;
+    z-index: 1;
   }
 .box {
     width: 12.5%;
@@ -54,8 +54,12 @@ img:hover {
     cursor: pointer;
 }
 .light {
-    background-color: #a2c6d5;
+    background-color: #c8dee8;
 }
 .dark {
-    background-color: #004e89;
+    background-color: #4694c8;
+}
+svg {
+    position: absolute;
+    bottom: 0;
 }
