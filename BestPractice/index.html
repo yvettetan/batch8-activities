@@ -12,42 +12,59 @@
         * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
-        body {
-            background-image: url(simple.jpg);
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-color: #ebebeb;
+        .title {
+            width: 100%;
+            display: flex;
+            justify-content: center;
         }
 
         h1 {
-            padding: 30px 0 20px 100px;
-            font-size: 80px;
+            width: 100%;
+            text-align: center;
+            font-size: 4em;
             color: #105616;
             font-family: 'Playfair Display', serif;
-            padding-right: 60px;
+            padding: 20px 10px;
         }
 
         section {
-            display: grid;
-            grid-template-columns: 30% 70%;
+            display: flex;
+            flex-wrap: wrap;
+            height: 80vh;
+            margin: 0 20px;
+            justify-content: center;
+            align-items: center;
         }
 
-        section p {
-            align-self: flex-end;
-            padding: 40px;
-            margin: 10%;
+        .image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 200px;
+            height: auto;
+            margin: 50px;
+        }
+
+        .description {
             font-size: 18px;
             font-family: Arial, Helvetica, sans-serif;
+            width: 70%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             line-height: 30px;
-            text-align: justify;
         }
 
-        footer p {
-            display: flex;
-            justify-content: flex-end;
-            margin: 5%;
+        .source {
+            text-align: right;
+            width: 100%;
+            padding: 80px 0;
+            font-size: 13px;
         }
 
         a {
@@ -64,20 +81,26 @@
 </head>
 
 <body>
-    <header>
-        <h1>Keep it simple, silly.</h1>
-    </header>
-    <section>
-        <p></p>
-        <p>Commonly known as the KISS principle, this idea is about maintaining your code short but meaningful.
-            If you can create the same result with less work, effort, and complexity, then by all means do it.
-            Having simpler processes will save you more time and allows for greater efficiency in testing.</p>
-    </section>
-    <footer>
-        <p>Don't believe me?&nbsp<a href="https://www.thinkful.com/blog/software-engineering-best-practices/"> Check
-                this
-                out.</a></p>
-    </footer>
+    <main>
+        <div class="title">
+            <h1>Keep it simple, silly.</h1>
+        </div>
+        <section>
+            <div class="image">
+                <img src="plant.png" alt="">
+            </div>
+            <div class="description">
+                <p>Commonly known as the KISS principle, this idea is about maintaining your code short but meaningful.
+                    If you can create the same result with less work, effort, and complexity, then by all means do it.
+                    Having simpler processes will save you more time and allows for greater efficiency in testing.</p>
+                <p class="source">Don't believe me?&nbsp<a
+                        href="https://www.thinkful.com/blog/software-engineering-best-practices/">
+                        Check
+                        this
+                        out.</a></p>
+            </div>
+        </section>
+    </main>
 
 </body>
 
