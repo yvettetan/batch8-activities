@@ -102,3 +102,11 @@ h1 {
     content: url(./images/w-zebra.png);
     width: 80%;
 }
+.credits {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: .5em;
+    background-color: rgba(222, 184, 135, 0.521);
+    font-size: 2vh;
+}
