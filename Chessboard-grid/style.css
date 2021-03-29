@@ -1,0 +1,104 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    background: url("./images/safari.jpg") no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+h1 {
+    padding: .5em;
+    text-align: center;
+    font-family: futura;
+    font-size: 4vh;
+    letter-spacing: .1vw;
+    color: #271803;
+    margin-bottom: .1vh;
+}
+.board {
+    width: 85vmin;
+    height: 85vmin;
+    margin: auto;
+    display: grid;
+    grid-template: repeat(8, 1fr) / repeat(8, 1fr); 
+    outline: .2vh solid #271803;
+}
+.light, .dark {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;;
+}
+.dark {
+    background-color: #955738c7;
+}
+.light {
+    background-color: #d2ba95c0;
+}
+.dark:hover, .light:hover {
+    cursor: pointer;
+    background-color: blanchedalmond;
+}
+.b-elephant1, .b-elephant2 {
+    content: url(./images/b-elephant.png);
+    width: 80%;
+}
+.w-elephant1, .w-elephant2 {
+    content: url(./images/w-elephant.png);
+    width: 80%;
+    }
+.b-giraffe1, .b-giraffe2 {
+    content: url(./images/b-giraffe.png);
+    width: 80%;
+}
+.w-giraffe1, .w-giraffe2 {
+    content: url(./images/w-giraffe.png);
+    width: 80%;
+}
+.b-lion {
+    content: url(./images/b-lion.png);
+    width: 80%;
+}
+.w-lion {
+    content: url(./images/w-lion.png);
+    width: 80%;
+}
+.b-monkey1, .b-monkey2, .b-monkey3, .b-monkey4, .b-monkey5, .b-monkey6, .b-monkey7, .b-monkey8 {
+    content: url(./images/b-monkey.png);
+    width: 80%;
+}
+.w-monkey1, .w-monkey2, .w-monkey3, .w-monkey4, .w-monkey5, .w-monkey6, .w-monkey7, .w-monkey8{
+    content: url(./images/w-monkey.png);
+    width: 80%;
+}
+.b-tiger {
+    content: url(./images/b-tiger.png);
+    width: 80%;
+}
+.w-tiger {
+    content: url(./images/w-tiger.png);
+    width: 80%;
+}
+.b-zebra1, .b-zebra2 {
+    content: url(./images/b-zebra.png);
+    width: 80%;
+}
+.w-zebra1, .w-zebra2{
+    content: url(./images/w-zebra.png);
+    width: 80%;
+}
