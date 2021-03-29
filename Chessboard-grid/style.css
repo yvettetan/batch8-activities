@@ -4,7 +4,8 @@
     box-sizing: border-box;
 }
 body {
-    background: url("./images/safari.jpg") no-repeat;
+    background-image: url("./images/safari.jpg");
+    background-position: no-repeat;
     background-size: cover;
     background-position: center;
     height: 100vh;
@@ -12,6 +13,34 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+.header {
+    width: 95vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2vh;
+    margin: auto;
+}
+.header a {
+    font-family: futura;
+    text-decoration: none;
+    color: black;
+    font-size: 2.5vh;
+    margin: 1.5vh;
+    padding: 1vh;
+    background-color: #d2ba95c0;
+    letter-spacing: .1vw;
+}
+.header a:nth-of-type(3) {
+    background-color: #4694c86e;
+    font-size: 2vh;
+}
+a:hover {
+    outline: .1em solid #955738c7;
+}
+a:hover:nth-of-type(3) {
+    outline: .1em solid #062543;
 }
 .container {
     width: 100%;
@@ -22,13 +51,14 @@ body {
     transform: translate(-50%, -50%);
 }
 h1 {
-    padding: .5em;
     text-align: center;
     font-family: futura;
     font-size: 4vh;
     letter-spacing: .1vw;
     color: #271803;
     margin-bottom: .1vh;
+    padding-left: .5em;
+    padding-right: .5em;
 }
 .board {
     width: 85vmin;
@@ -81,6 +111,10 @@ h1 {
 .b-monkey1, .b-monkey2, .b-monkey3, .b-monkey4, .b-monkey5, .b-monkey6, .b-monkey7, .b-monkey8 {
     content: url(./images/b-monkey.png);
     width: 80%;
+}
+.b-monkey2:hover {
+    animation-name: monkey;
+    animation-timing-function: ease-in;
 }
 .w-monkey1, .w-monkey2, .w-monkey3, .w-monkey4, .w-monkey5, .w-monkey6, .w-monkey7, .w-monkey8{
     content: url(./images/w-monkey.png);
