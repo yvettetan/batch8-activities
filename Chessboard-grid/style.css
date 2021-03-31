@@ -14,6 +14,29 @@ body {
     justify-content: center;
     align-items: center;
 }
+.cloud {
+    background: url(./images/cloud.png);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    animation-name: cloud;
+    animation-duration: 30s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    opacity: 60%;
+    z-index: -1;
+}
+@keyframes cloud {
+    0% {
+        background-position: 0;
+    }
+    100% {
+        background-position: 100vmin;
+    }
+}
+
 .header {
     width: 95vw;
     display: flex;
@@ -21,6 +44,16 @@ body {
     align-items: center;
     padding: 2vh;
     margin: auto;
+}
+h1 {
+    text-align: center;
+    font-family: futura;
+    font-size: 4vh;
+    letter-spacing: .1vw;
+    color: #271803;
+    margin-bottom: .1vh;
+    padding-left: .5em;
+    padding-right: .5em;
 }
 .header > a, #play-label {
     font-family: futura;
@@ -92,16 +125,6 @@ a:hover:nth-of-type(2) {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-}
-h1 {
-    text-align: center;
-    font-family: futura;
-    font-size: 4vh;
-    letter-spacing: .1vw;
-    color: #271803;
-    margin-bottom: .1vh;
-    padding-left: .5em;
-    padding-right: .5em;
 }
 .board {
     background-color: #9557389c;
@@ -175,8 +198,8 @@ h1 {
 .move1 {
     position: relative;
     animation-name: b-monkey-move;
-    animation-timing-function: linear;
-    animation-duration: 1s;
+    animation-timing-function: ease-in;
+    animation-duration: .5s;
     animation-fill-mode: forwards;
     animation-delay: 2s;
 }
@@ -185,13 +208,13 @@ h1 {
         top: 0;
     }
     100% {
-        top: 20vh;
+        top: 20vmin;
     }
 }
 .move2 {
     position: relative;
     animation-name: w-monkey-move;
-    animation-duration: 1s;
+    animation-duration: .5s;
     animation-fill-mode: forwards;
     animation-delay: 3s;
     animation-timing-function: linear;
@@ -201,17 +224,17 @@ h1 {
         top: 0;
     }
     50% {
-        bottom: 5vh;
+        bottom: 5vmin;
     }
     100% {
-        bottom: 10vh;
+        bottom: 10vmin;
     }
 }
 .move3 {
     position: relative;
     animation-name: b-monkey-move;
     animation-timing-function: linear;
-    animation-duration: 1s;
+    animation-duration: .5s;
     animation-fill-mode: forwards;
     animation-delay: 4.2s;
 }
@@ -228,7 +251,7 @@ h1 {
         transform: translate(0);
     }
     100% {
-       transform: translate(-15.5vw, -30vh);
+       transform: translate(-30vmin, -30vmin);
     }
 }
 
@@ -246,12 +269,12 @@ h1 {
         transform: translate(0);
     }
     33% {
-        transform: translate(0,10vh);
+        transform: translate(0,10vmin);
     }
     70% {
-        transform: translate(0,20vh);
+        transform: translate(0,20vmin);
     }
     100% {
-       transform: translate(-5vw, 20vh);
+       transform: translate(-10vmin, 20vmin);
     }
 }
