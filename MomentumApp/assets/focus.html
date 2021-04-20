@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./main.css">
+    <title>Momentum App | Focus</title>
+</head>
+
+<body>
+    <header>
+        <img class="logo" src="../images/logo.png" alt="momentum logo">
+        <div class="todo">
+            <button id="todoButton">Todo</button>
+        </div>
+    </header>
+    <main>
+        <div class="center-container">
+            <!-- time -->
+            <div id="center-time"></div>
+            <h1>Good <span id="timeOfDay"></span>,<br>
+                <div class="greeting-name">
+                    <span id="name-input">name</span><i class="fa fa-edit"></i>
+                </div>
+            </h1>
+            <!-- focus -->
+            <div>
+                <h2>What is your main focus for today?</h2>
+                <div class="focus-input-container">
+                    <input type="text" id="focus-input"><i id="addFocus" class="fa fa-plus-square"></i>
+                </div>
+                <div id="focus-list"></div>
+            </div>
+        </div>
+        <!-- quote -->
+        <div class="quote-container">
+            <q id="random-quote">We're all traveling through time together, every day of our lives. All we can do is
+                do our best to relish this remarkable ride.</q><br>
+            <p id="author">-&nbsp;Tim lake</p>
+            <button id="shuffleButton"><img src="../images/shuffle.svg" alt="shuffle-button"></button>
+        </div>
+        <div class="quote">
+            <button id="quoteButton"><i class="fa fa-cog"></i>&nbsp;Quote</button>
+        </div>
+        <div id="quote-list-container">
+            <div class="add-quote">
+                <button id="add-quote-option">Add new quote</button>
+                <form id="add-quote-container">
+                    <input id="new-quote-input" type="text" autocomplete="off" placeholder="enter quote">
+                    <input id="new-author-input" type="text" autocomplete="off" placeholder="enter author">
+                    <button type="submit" id="add-new-quote-button">add</button>
+                </form>
+            </div>
+            <div class="show-quote">
+                <button id="show-quote-option">Show all quotes</button>
+                <div id="show-quote-container">
+                    <div id="quote-list">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- credits -->
+        <div id="credits">
+            <p class="location"><i class="fa fa-map-marker"></i>Lake Louise, Canada</p>
+            <p>Photo by Mark Koch on Unsplash</p>
+        </div>
+        <div class="quote-container">
+            <p id="quote"></p>
+        </div>
+    </main>
+    <script src="./focus.js"></script>
+</body>
+
+</html>

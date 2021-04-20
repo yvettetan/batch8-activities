@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./assets/main.css">
+    <title>Momentum App</title>
+</head>
+
+<body>
+    <header>
+        <img class="logo" src="./images/logo.png" alt="momentum logo">
+        <div id="time"></div>
+    </header>
+    <main>
+        <div class='center-container'>
+            <h1 id="name-question">Hello, what is your name?</h1>
+            <form action="./assets/focus.html" method="GET">
+                <input type="text" autocomplete="off" id="name" name="name" required>
+                <div class="continue">
+                    <button id="continue-button" type="submit">continue&nbsp<i
+                            class="fa fa-arrow-circle-right"></i></button>
+                </div>
+            </form>
+        </div>
+        <div id="credits">
+            <p class="location"><i class="fa fa-map-marker"></i>Lake Louise, Canada</p>
+            <p>Photo by Mark Koch on Unsplash</p>
+        </div>
+    </main>
+    <script src="./assets/index.js"></script>
+</body>
+
+</html>

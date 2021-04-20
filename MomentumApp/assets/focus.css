@@ -1,0 +1,272 @@
+#center-time {
+    font-size: 3rem;
+}
+h1 {
+    font-size: 1.25rem;
+}
+h2 {
+    font-size: .8rem;
+    margin-top: 2em;
+}
+#todoButton {
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+    padding: .5em 1.5em;
+    font-family: var(--montserrat);
+    font-weight: 700;
+    letter-spacing: 2px;
+    outline: none;
+  }
+#todoButton:hover {
+    background-color: white;
+    color: black;
+    -webkit-transition: .3s linear;
+    transition: .3s linear;
+}
+.greeting-name {
+    margin-top: .5em;
+}
+#name-input {
+    font-size: 1.5rem;
+}
+.focus-input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1em;
+}
+#focus-input {
+    background-color: transparent;
+    color: white;
+    border: none;
+    border-bottom: 1px solid white;
+    outline: none;
+    text-align: center;
+    width: 100%;
+}
+.fa-plus-square {
+    position: relative;
+    right: 5%;
+    margin-bottom: .2em;
+}
+.fa-plus-square:hover {
+    cursor: pointer;
+}
+.fa-edit {
+    font-size: .8rem;
+}
+#focus-list {
+    display: flex;
+    position: relative;
+    text-align: center;
+    margin: auto;
+    font-size: .8rem;
+    align-items: center;
+    font-size: 1rem;
+    justify-content: center;
+    width: 100%;
+}
+#main-focus:checked ~ label {
+    text-decoration: line-through;
+  }
+.quote-container {
+    color: white;
+    text-align: center;
+    font-family: var(--garamond);
+    font-size: .8rem;
+    line-height: 1;
+    position: absolute;
+    bottom: 3em;
+    width: 100%;
+    padding: .8em;
+    margin: auto;
+}
+#author {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top: .8em;
+    font-size: .5rem;
+}
+#shuffleButton {
+    background-color: transparent;
+    border: none;
+    margin-top: .5em;
+    outline: none;
+}
+#shuffleButton img {
+    max-width: 15px;
+    height: auto;
+}
+#quote-list-container {
+    background-color: rgb(255, 255, 255);
+    height: auto;
+    width: 150px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 2.5em 1em;
+    padding: .5em;
+    display: none;
+    text-align: right;
+    border-radius: 5px;
+}
+#add-quote-container {
+    display: none;
+    flex-wrap: wrap;
+    flex-direction: column;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color: white;
+    width: 80vmin;
+    padding: 1em;
+    border-radius: 5px;
+}
+#add-quote-option, #show-quote-option {
+    background-color: white;
+    border: none;
+    border-bottom: 1px solid black;
+    color: black;
+    outline: none;
+    padding: .2em .3em;
+    width: 100%;
+    font-family: var(--montserrat);
+    font-size: .6rem;
+}
+#show-quote-option {
+    margin-top: .2em;
+}
+#add-quote-option:hover, #show-quote-option:hover {
+    border: 1px solid black;
+    color: black;
+    outline: none;
+    padding: .2em .3em;
+    width: 100%;
+}
+#new-quote-input, #new-author-input   {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid black;
+    max-width: 100%;
+    padding: .5em;
+}
+#new-author-input {
+    margin-top: .5em;
+}
+#add-new-quote-button {
+    margin: auto;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    border: 1px solid black;
+    color: black;
+    padding: .5em 2em;
+    margin-top: 2em;
+    border-radius: 15px;
+    max-width: 100%;
+}
+#add-new-quote-button:hover, #add-new-quote-button:active {
+    background-color: black;
+    color: white;
+    transition: .3s ease-in-out;
+}
+#show-quote-container {
+    display: none;
+    flex-wrap: wrap;
+    flex-direction: column;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color: white;
+    width: 80vmin;
+    max-height: 70vmin;
+    padding: 1em;
+    border-radius: 5px;
+    overflow: scroll;
+}
+.quote-item {
+    border-bottom: 1px solid black;
+    font-size: .8rem;
+    text-align: left;
+    padding: 1em 0;
+    font-family: var(--garamond);
+}
+.quote-item:last-child {
+    border: none;
+}
+.quote {
+    position: fixed;
+    bottom: 1em;
+    right: 0;
+  }
+#quoteButton {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid white;
+    color: white;
+    font-family: "Montserrat";
+    font-weight: 700;
+    outline: none;
+    margin-right: 1.5em;
+    padding-bottom: .2em;
+  }
+#quote-question {
+    font-size: .8rem;
+    text-align: center;
+}
+
+@media(min-width: 700px) {
+    #center-time {
+        font-size: 16vmin;
+    }
+    h1 {
+        font-size: 6vmin;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #name-input {
+        font-size: 6vmin;
+    }
+    .greeting-name {
+        margin-top: 0;
+    }
+    h1 span {
+        margin-left: .3em;
+    }
+    h2 {
+        font-size: 4.5vmin;
+        margin-top: 1em;
+        letter-spacing: 3px;
+    }
+    #focus-input {
+        font-size: 3vmin;
+    }
+    #focus-list {
+        font-size: 4vmin;
+    }
+    #main-focus-text {
+        margin-left: .5em;
+    }
+    #random-quote {
+        font-size: 2.5vmin;
+    }
+    #author {
+        font-size: 2vmin;
+    }
+    #add-quote-option, #show-quote-option {
+        font-size: 2vmin;
+        height: max-content;
+    }
+    #quote-list p {
+        font-size: 2.5vmin;
+    }
+    
+}
+
+@media(min-width: 1024px) {
+
+}
