@@ -1,0 +1,144 @@
+@import url("https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap&family=Montserrat:wght@400;500;600;700&display=swap");
+@import './focus.css';
+:root {
+    --montserrat: 'Montserrat', sans-serif;
+    --garamond: 'EB Garamond', serif;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    letter-spacing: 1px;
+}
+body {
+    width: 100vw;
+    height: 100vh;
+    background-image: url(../images/background.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: var(--montserrat);
+    position: relative;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+    color: #13567c;
+    font-size: 1rem;
+    font-weight: 600;
+}
+header .logo {
+    max-width: 50px;
+}
+#time {
+    background-color: white;
+    padding: .2em;
+}
+button:hover {
+    cursor: pointer;
+}
+.center-container {
+    color: white;
+    text-shadow: 2px 2px 25px rgb(0, 0, 0);
+    margin: 2em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 65vh;
+}
+#name-question {
+    font-weight: 500;
+    font-size: 2rem;
+}
+
+/* text input */
+
+#name {
+    width: 100%;
+    margin-top: 1em;
+    font-size: 1.5rem;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    border-bottom: 2px solid white;
+    text-align: center;
+    color: white;
+    font-family: var(--montserrat);
+    font-weight: 500;
+    padding: .2em;
+}
+
+/* continue button */
+
+.continue {
+    margin-top: 1em;
+    display: flex;
+    justify-content: center;
+}
+#continue-button {
+    color: white;
+    text-decoration: none;
+    font-size: .8rem;
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+#continue-button:hover, #continue-button:active {
+    transform: scale(1.1);
+    transition: 3s ease-in-out;
+}
+/* credits */
+#credits {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 5em;
+    color: white;
+    font-size: .1rem;
+    font-weight: 400;
+    font-family: var(--montserrat);
+}
+.location {
+    background-color: white;
+    border-radius: 25px;
+    color: black;
+    width: 80%;
+    padding: .2em;
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 1em;
+}
+.fa-map-marker {
+    padding-right: 2em;
+}
+@media(min-width: 700px) {
+    #name-question {
+        font-size: 6vmin;
+    }
+    #name {
+        font-size: 5vmin;
+    }
+    #continue-button {
+        font-size: 1rem;
+    }
+    #time {
+        font-size: 1rem;
+    }
+    #continue-button {
+        font-size: 3vmin;
+    }
+    #time {
+        font-size: 3vmin;
+    }
+   
+}
+@media(min-width: 1024px) {
+    header .logo {
+        max-width: 10vmin;
+        position: relative;
+    }
+}
