@@ -1,37 +1,38 @@
-//time
-setInterval(timeNowCenter, 1000);
-
-function timeNowCenter() {
-    const centerTime = document.getElementById('center-time');
-    let now = new Date();
-    const currentTime = new Intl.DateTimeFormat('default',
-        {
-            hour12: true,
-            hour: 'numeric',
-            minute: 'numeric'
-        }).format(now);
-    centerTime.innerHTML = currentTime;
-}
 
 
-// greeting
+
+//greeting
 
 function greeting() {
-    let dayOrNightValue = document.getElementById('timeOfDay');
-    let dayOrNight = centerTime.innerHTML[centerTime.innerHTML.length - 2];
-    if (dayOrNight === 'A') {
-        dayOrNightValue.innerText = 'morning';
-    } else if (centerTime.innerHTML[0] === '1') {
-        if (centerTime.innerHTML[1] < 2) {
-            dayOrNightValue.innerText = 'evening';
+    //time
+    setInterval(timeNowCenter, 1000);
+    const centerTime = document.getElementById('center-time');
+
+    function timeNowCenter() {
+        let now = new Date();
+        const currentTime = new Intl.DateTimeFormat('default',
+            {
+                hour12: true,
+                hour: 'numeric',
+                minute: 'numeric'
+            }).format(now);
+        centerTime.innerHTML = currentTime;
+        let dayOrNightValue = document.getElementById('timeOfDay');
+        let dayOrNight = centerTime.innerHTML[centerTime.innerHTML.length - 2];
+        if (dayOrNight === 'A') {
+            dayOrNightValue.innerText = 'morning';
+        } else if (centerTime.innerHTML[0] === '1') {
+            if (centerTime.innerHTML[1] < 2) {
+                dayOrNightValue.innerText = 'evening';
+            } else {
+                dayOrNightValue.innerText = 'afternoon';
+            }
+        } else if (centerTime.innerHTML[0] < 6) {
+            dayOrNightValue.innerText = 'afternoon'
         } else {
-            dayOrNightValue.innerText = 'afternoon';
+            dayOrNightValue.innerText = 'evening';
         }
-    } else if (centerTime.innerHTML[0] < 6) {
-        dayOrNightValue.innerText = 'afternoon'
-    } else {
-        dayOrNightValue.innerText = 'evening';
-    }
+    };
 }
 greeting();
 
@@ -59,6 +60,67 @@ function createFocusList() {
     addFocus.style.display = "none";
     document.querySelector('h2').innerHTML = "TODAY'S FOCUS:"
 }
+//display todo container
+const toDoBtn = document.getElementById('todoButton');
+const toDoContainer = document.getElementById('todoContainer');
+toDoBtn.addEventListener('click', showToDoContainer);
+
+function showToDoContainer() {
+    if (toDoContainer.style.display === "none") {
+        toDoContainer.style.display = "block";
+    } else {
+        toDoContainer.style.display = "none";
+        toDoContainer.style.display = "none";
+        toDoContainer.style.display = "none";
+    }
+};
+
+//todo list
+
+let TodoList = [];
+const addTodoBtn = document.querySelector('#add-todoButton');
+addTodoBtn.addEventListener('click', todo);
+const todoList = document.getElementById('todo-list')
+
+function todo() {
+    //add new todo
+    let newTodo = document.getElementById('todoInput').value;
+    let todoItem = document.createElement('div');
+    todoItem.classList.add('todoItem');
+    const todoCheckbox = document.createElement('input');
+    todoCheckbox.type = 'checkbox';
+    todoCheckbox.classList.add('todoCheck');
+    let todo = document.createElement('label');
+    todo.classList.add('todo-text');
+    todoInput.value = "";
+    todo.innerHTML = newTodo;
+    //add new todo to array
+    TodoList.push(newTodo);
+    //item link to checkbox
+    todoCheckbox.id = `todoCheckbox-${TodoList.indexOf(newTodo)}`;
+    todo.setAttribute('for', todoCheckbox.id);
+    //done todo
+    todo.addEventListener('click', () => {
+        if (todoCheckbox.checked) {
+            todo.style.textDecoration = 'none';
+        } else {
+            todo.style.textDecoration = 'line-through';
+        };
+    });
+    //create remove button
+    const removeBtn = document.createElement('button');
+    removeBtn.classList.add('remove-todo');
+    removeBtn.innerHTML = '<i class="fa fa-trash"></i>';
+    todo.appendChild(removeBtn);
+    todoItem.appendChild(todoCheckbox);
+    todoItem.appendChild(todo);
+    todoList.appendChild(todoItem);
+    //delete todo and remove from array
+    removeBtn.addEventListener('click', () => {
+        todoItem.style.display = 'none';
+        TodoList.splice(TodoList.indexOf(newTodo), 1);
+    });
+}
 
 // quote 
 
@@ -74,6 +136,11 @@ let quotes = [
     {
         author: "Ferris Bueller",
         quote: "Life moves pretty fast. If you don't stop and look around once in a while, you could miss it."
+    },
+    {
+        author: "Tim lake",
+        quote: `We're all traveling through time together, every day of our lives. All we can do is
+        do our best to relish ${this} remarkable ride."`
     }
 ]
 
@@ -171,3 +238,6 @@ function displayQuotes() {
     };
 }
 displayQuotes();
+
+//show todo container
+
