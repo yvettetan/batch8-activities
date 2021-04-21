@@ -1,16 +1,22 @@
 
 // time
-const time = document.getElementById('time');
+setInterval(timeNow, 1000);
 
-let now = new Date();
-const currentTime = new Intl.DateTimeFormat('default',
-    {
-        hour12: true,
-        hour: 'numeric',
-        minute: 'numeric'
-    }).format(now);
+function timeNow() {
+    const time = document.getElementById('time');
+    let now = new Date();
+    const currentTime = new Intl.DateTimeFormat('default',
+        {
+            hour12: true,
+            hour: 'numeric',
+            minute: 'numeric'
+        }).format(now);
+    time.innerHTML = currentTime;
+};
 
-time.innerHTML = currentTime;
+
+
+
 
 let userName;
 
