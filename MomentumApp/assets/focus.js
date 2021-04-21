@@ -1,13 +1,18 @@
-const centerTime = document.getElementById('center-time');
-let now = new Date();
-const currentTime = new Intl.DateTimeFormat('default',
-    {
-        hour12: true,
-        hour: 'numeric',
-        minute: 'numeric'
-    }).format(now);
+//time
+setInterval(timeNowCenter, 1000);
 
-centerTime.innerHTML = currentTime;
+function timeNowCenter() {
+    const centerTime = document.getElementById('center-time');
+    let now = new Date();
+    const currentTime = new Intl.DateTimeFormat('default',
+        {
+            hour12: true,
+            hour: 'numeric',
+            minute: 'numeric'
+        }).format(now);
+    centerTime.innerHTML = currentTime;
+}
+
 
 // greeting
 
