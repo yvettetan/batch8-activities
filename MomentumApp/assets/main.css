@@ -88,8 +88,8 @@ button:hover {
     outline: none;
 }
 #continue-button:hover, #continue-button:active {
-    transform: scale(1.1);
-    transition: 3s ease-in-out;
+    text-shadow: 2px 2px 15px black;
+    transition: .1s linear;
 }
 /* credits */
 #credits {

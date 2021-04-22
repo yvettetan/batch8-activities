@@ -14,16 +14,3 @@ function timeNow() {
     time.innerHTML = currentTime;
 };
 
-
-
-
-
-let userName;
-
-function getUserName() {
-    const continueBtn = document.getElementById('continue-button');
-    const nameInput = document.getElementById('name').value;
-    userName = nameInput;
-    return userName;
-};
-
