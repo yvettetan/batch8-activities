@@ -146,9 +146,16 @@ let quotes = [
         quote: "Life moves pretty fast. If you don't stop and look around once in a while, you could miss it."
     },
     {
-        author: "Tim lake",
-        quote: `We're all traveling through time together, every day of our lives. All we can do is
-        do our best to relish ${this} remarkable ride."`
+        author: "Eleanor Roosevelt",
+        quote: "Do one thing everyday that scares you."
+    },
+    {
+        author: "Anonymous",
+        quote: "Do something today that your future self will thank you for."
+    },
+    {
+        author: "Oprah",
+        quote: "Turn your wounds into wisdom."
     }
 ]
 
