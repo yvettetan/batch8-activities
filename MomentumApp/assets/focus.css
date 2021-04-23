@@ -44,6 +44,7 @@ h2 {
     outline: none;
     text-align: left;
     width: 100%;
+    padding: .2em;
 }
 #add-todoButton {
     background-color: transparent;
@@ -68,13 +69,14 @@ h2 {
     border-bottom: none;
 }
 .todoItem:nth-child(odd) {
-    background-color: rgba(227, 227, 227, 0.432);
+    background-color: rgba(227, 227, 227, 0.315);
   }
-.remove-todo {
+.remove-todo,  #remove-focus {
     float: right;
     padding: 0 .5em;
     border: none;
     background-color: transparent;
+
 }
 .greeting-name {
     margin-top: .5em;
@@ -130,11 +132,32 @@ h2 {
     align-items: center;
     font-size: 1rem;
     justify-content: center;
+    align-items: center;
     width: 100%;
+}
+#focus-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 #main-focus:checked ~ label {
     text-decoration: line-through;
-  }
+}
+#main-focus-text {
+    padding-left: .5em;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#remove-focus {
+    height: 100%;
+    margin-left: .8em;
+}
+#remove-focus .fa-trash {
+    color: white;
+    font-size: 1rem;
+}
 .quote-container {
     color: white;
     text-align: center;
@@ -147,6 +170,9 @@ h2 {
     padding: .8em;
     margin: auto;
 }
+#random-quote {
+    font-size: .8rem;
+}
 #author {
     font-family: Arial, Helvetica, sans-serif;
     margin-top: .8em;
@@ -155,17 +181,19 @@ h2 {
 #shuffleButton {
     background-color: transparent;
     border: none;
-    margin-top: .5em;
     outline: none;
+    padding: .5em .2em;
+    width: auto;
 }
 #shuffleButton img {
     max-width: 15px;
     height: auto;
+    vertical-align: middle;
 }
 #quote-list-container {
     background-color: rgb(255, 255, 255);
     height: auto;
-    width: 150px;
+    width: auto;
     position: absolute;
     bottom: 0;
     right: 0;
@@ -253,17 +281,28 @@ h2 {
     overflow: scroll;
 }
 .quote-item {
-    border-bottom: 1px solid black;
     font-size: .8rem;
     text-align: left;
-    padding: 1em 0;
+    padding: 1em .5em;
     font-family: var(--garamond);
 }
-.quote-item:last-child {
+.quote-item-container {
+    border-bottom: 1px solid black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.quote-item-container:last-child {
+    border: none;
+}
+.remove-quote {
+    background-color: transparent;
+    padding: .1em;
+    height: 50%;
     border: none;
 }
 .quote {
-    position: fixed;
+    position: absolute;
     bottom: 1em;
     right: 0;
   }
@@ -320,7 +359,7 @@ h2 {
         margin-left: .5em;
     }
     #random-quote {
-        font-size: 2.5vmin;
+        font-size: 3vmin;
     }
     #author {
         font-size: 2vmin;
