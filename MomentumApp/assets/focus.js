@@ -44,6 +44,8 @@ window.addEventListener('load', () => {
 
 })
 
+//focus
+
 const focusList = document.getElementById('focus-list');
 const addFocus = document.getElementById('addFocus');
 
@@ -51,6 +53,7 @@ addFocus.addEventListener('click', createFocusList);
 
 function createFocusList() {
     const focusItem = document.createElement('div');
+    focusItem.id = 'focus-item';
     const focusInput = document.getElementById('focus-input');
     const focusInputValue = focusInput.value;
     const focusCheckbox = document.createElement('input');
@@ -67,7 +70,18 @@ function createFocusList() {
     focusInput.style.display = "none";
     addFocus.style.display = "none";
     document.querySelector('h2').innerHTML = "TODAY'S FOCUS:"
+    //remove focus
+    const removeFocusBtn = document.createElement('button');
+    removeFocusBtn.id = 'remove-focus';
+    removeFocusBtn.innerHTML = '<i class="fa fa-trash"></i>';
+    toFocus.appendChild(removeFocusBtn);
+    removeFocusBtn.addEventListener('click', () => {
+        focusItem.remove();
+        focusInput.style.display = "block";
+        addFocus.style.display = "block";
+    });
 }
+
 //display todo container
 const toDoBtn = document.getElementById('todoButton');
 const toDoContainer = document.getElementById('todoContainer');
@@ -125,7 +139,7 @@ function todo() {
     todoList.appendChild(todoItem);
     //delete todo and remove from array
     removeBtn.addEventListener('click', () => {
-        todoItem.style.display = 'none';
+        todoItem.remove();
         TodoList.splice(TodoList.indexOf(newTodo), 1);
     });
 }
@@ -231,10 +245,7 @@ function addToQuotes(event) {
     quoteObject.author = newAuthor.value;
     quoteObject.quote = newQuote.value;
     quotes.push(quoteObject);
-    const newQuoteItem = document.createElement('p');
-    newQuoteItem.classList.add('quote-item');
-    newQuoteItem.innerHTML = (`"${quoteObject.quote}" - ${quoteObject.author}`);
-    quoteList.appendChild(newQuoteItem);
+    displayQuotes();
     newQuote.value = "";
     newAuthor.value = "";
     showQuotesContainer();
@@ -244,15 +255,25 @@ function addToQuotes(event) {
 
 function displayQuotes() {
     for (let i = 0; i < quotes.length; i++) {
+        const quoteItemContainer = document.createElement('div');
+        quoteItemContainer.classList.add('quote-item-container');
         const quoteItem = document.createElement('p');
         quoteItem.classList.add('quote-item');
+        const quoteItemBtn = document.createElement('button');
+        quoteItemBtn.classList.add('remove-quote');
+        quoteItemBtn.innerHTML = '<i class="fa fa-trash"></i>';
         let quoteText = quotes[i].quote;
         let authorText = quotes[i].author;
         quoteItem.innerHTML = (`"${quoteText}" - ${authorText}`);
-        quoteList.appendChild(quoteItem);
+        quoteList.appendChild(quoteItemContainer);
+        quoteItemContainer.appendChild(quoteItem);
+        quoteItemContainer.appendChild(quoteItemBtn);
+        //remove quote
+        quoteItemBtn.addEventListener('click', () => {
+            quoteItemContainer.remove();
+            quotes.splice(quotes.indexOf(quoteItem), 1);
+        })
     };
+
 }
 displayQuotes();
-
-//show todo container
-
