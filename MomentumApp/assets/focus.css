@@ -91,7 +91,15 @@ h2 {
     margin-left: .5em;
     vertical-align: middle;
 }
-.fa-edit {
+[contenteditable='true'] {
+    outline: 0px solid transparent;
+    background-color: rgba(227, 227, 227, 0.315);
+    border-bottom: 2px solid white;
+  }
+.fa-edit, .fa-check-square {
+    color: rgba(255, 255, 255, 0.709);
+}
+.fa-edit:hover, .fa-check-square:hover, .fa-edit:active, .fa-check-square:active {
     color: white;
 }
 #name-input {
@@ -322,7 +330,7 @@ h2 {
     text-align: center;
 }
 
-@media(min-width: 700px) {
+@media(min-width: 500px) {
     #center-time {
         font-size: 16vmin;
     }
@@ -349,6 +357,9 @@ h2 {
     .fa-edit {
         font-size: 1.5em;
     }
+    .fa-check-square {
+        font-size: 1.3em;
+    }
     #focus-input {
         font-size: 3vmin;
     }
@@ -372,7 +383,7 @@ h2 {
         font-size: 2.5vmin;
     }
     #todoContainer{
-        width: auto;
+        width: 40vmin;
         font-size: 2vmin;
     }
     .todoItem {

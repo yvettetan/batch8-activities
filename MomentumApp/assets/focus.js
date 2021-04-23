@@ -40,9 +40,25 @@ window.addEventListener('load', () => {
     let params = (new URL(document.location)).searchParams;
     const name = params.get('name');
     document.getElementById('name-input').innerHTML = name;
-
-
 })
+
+const username = document.getElementById('name-input');
+const editNameBtn = document.getElementById('edit-name');
+const editIcon = document.getElementById('edit-name-icon');
+editNameBtn.addEventListener('click', editName);
+
+function editName() {
+    if (username.isContentEditable) {
+        username.contentEditable = 'false';
+        editIcon.classList.remove('fa-check-square');
+        editIcon.classList.add('fa-edit');
+    } else {
+        username.contentEditable = 'true';
+        editIcon.classList.remove('fa-edit');
+        editIcon.classList.add('fa-check-square');
+    };
+
+}
 
 //focus
 
@@ -79,6 +95,7 @@ function createFocusList() {
         focusItem.remove();
         focusInput.style.display = "block";
         addFocus.style.display = "block";
+        document.querySelector('h2').innerHTML = "What is your main focus for today?"
     });
 }
 
@@ -104,9 +121,9 @@ const addTodoBtn = document.querySelector('#add-todoButton');
 addTodoBtn.addEventListener('click', todo);
 const todoList = document.getElementById('todo-list')
 
-function todo() {
+function todo(newTodo, index) {
     //add new todo
-    let newTodo = document.getElementById('todoInput').value;
+    newTodo = document.getElementById('todoInput').value;
     let todoItem = document.createElement('div');
     todoItem.classList.add('todoItem');
     const todoCheckbox = document.createElement('input');
@@ -119,17 +136,10 @@ function todo() {
     //add new todo to array
     TodoList.push(newTodo);
     //item link to checkbox
-    todoCheckbox.id = `todoCheckbox-${TodoList.indexOf(newTodo)}`;
-    todo.setAttribute('for', todoCheckbox.id);
-    //done todo
-    todo.addEventListener('click', () => {
-        if (todoCheckbox.checked) {
-            todo.style.textDecoration = 'none';
-        } else {
-            todo.style.textDecoration = 'line-through';
-        };
-    });
-    //create remove button
+    index = TodoList.indexOf(newTodo);
+    todoCheckbox.setAttribute('id', `check${index}`);
+    todo.setAttribute('for', `check${index}`);
+    // create remove button
     const removeBtn = document.createElement('button');
     removeBtn.classList.add('remove-todo');
     removeBtn.innerHTML = '<i class="fa fa-trash"></i>';
@@ -245,9 +255,24 @@ function addToQuotes(event) {
     quoteObject.author = newAuthor.value;
     quoteObject.quote = newQuote.value;
     quotes.push(quoteObject);
-    displayQuotes();
+    const newQuoteContainer = document.createElement('div');
+    newQuoteContainer.classList.add('quote-item-container');
+    const newQuoteItem = document.createElement('p');
+    newQuoteItem.classList.add('quote-item');
+    const newQuoteItemBtn = document.createElement('button');
+    newQuoteItemBtn.classList.add('remove-quote');
+    newQuoteItemBtn.innerHTML = '<i class="fa fa-trash"></i>';
+    quoteList.appendChild(newQuoteContainer)
+    newQuoteContainer.appendChild(newQuoteItem);
+    newQuoteContainer.appendChild(newQuoteItemBtn);
+    newQuoteItem.innerHTML = (`"${quoteObject.quote}" - ${quoteObject.author}`);
     newQuote.value = "";
     newAuthor.value = "";
+    //remove new quote
+    newQuoteItemBtn.addEventListener('click', () => {
+        newQuoteContainer.remove();
+        quotes.splice(quotes.indexOf(newQuoteItem), 1);
+    });
     showQuotesContainer();
 }
 
@@ -274,6 +299,7 @@ function displayQuotes() {
             quotes.splice(quotes.indexOf(quoteItem), 1);
         })
     };
-
 }
+
 displayQuotes();
+
