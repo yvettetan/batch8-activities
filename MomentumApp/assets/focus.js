@@ -31,19 +31,21 @@ function greeting() {
         //greets user depending on time of day
         let dayOrNightValue = document.getElementById('timeOfDay');
         let dayOrNight = centerTime.innerHTML[centerTime.innerHTML.length - 2];
-        let afternoonOrnight = Number(centerTime.innerHTML[0] + centerTime.innerHTML[1]);
-        //if time is AM, good morning
         if (dayOrNight === 'A') {
             dayOrNightValue.innerText = 'morning';
-            //if time is 1pm - 5:59pm, good afternoon
-        } else if (afternoonOrnight < 6) {
-            dayOrNightValue.innerText = 'afternoon';
-            //if time is 6pm - 11:59pm, good evening
+        } else if (centerTime.innerHTML[0] === '1') {
+            if (centerTime.innerHTML[1] < 2) {
+                dayOrNightValue.innerText = 'evening';
+            } else {
+                dayOrNightValue.innerText = 'afternoon';
+            }
+        } else if (centerTime.innerHTML[0] < 6) {
+            dayOrNightValue.innerText = 'afternoon'
         } else {
             dayOrNightValue.innerText = 'evening';
         }
-    };
-}
+    }
+};
 
 greeting();
 
