@@ -5,24 +5,24 @@ h1 {
     font-size: 1.25rem;
 }
 h2 {
-    font-size: .8rem;
+    font-size: 0.8rem;
     margin-top: 2em;
 }
 #todoButton {
     background-color: transparent;
     color: white;
     border: 1px solid white;
-    padding: .5em 1.5em;
+    padding: 0.5em 1.5em;
     font-family: var(--montserrat);
     font-weight: 700;
     letter-spacing: 2px;
     outline: none;
-  }
+}
 #todoButton:hover {
     background-color: white;
     color: black;
-    -webkit-transition: .3s ease-in-out;
-    transition: .3s ease-in-out;
+    -webkit-transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out;
 }
 #todoContainer {
     display: none;
@@ -44,7 +44,7 @@ h2 {
     outline: none;
     text-align: left;
     width: 100%;
-    padding: .2em;
+    padding: 0.2em;
 }
 #add-todoButton {
     background-color: transparent;
@@ -54,32 +54,39 @@ h2 {
     outline: none;
     padding-left: 1em;
 }
-.todo-input-container{
+.todo-input-container {
     display: flex;
-    margin-bottom: .5em;
+    margin-bottom: 0.5em;
 }
 .todoItem {
-    padding: .5em 0;
-    font-size: .8rem;
+    padding: 0.5em 0;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
 }
 .todoCheck {
-    margin:0 .5em;
+    margin: 0 0.5em;
+}
+.todo-text {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
 }
 .todoItem:last-child {
     border-bottom: none;
 }
 .todoItem:nth-child(odd) {
     background-color: rgba(227, 227, 227, 0.315);
-  }
-.remove-todo,  #remove-focus {
+}
+.remove-todo,
+#remove-focus {
     float: right;
-    padding: 0 .5em;
+    padding: 0 0.5em;
     border: none;
     background-color: transparent;
-
 }
 .greeting-name {
-    margin-top: .5em;
+    margin-top: 0.5em;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -88,18 +95,22 @@ h2 {
     background-color: transparent;
     border: none;
     outline: none;
-    margin-left: .5em;
+    margin-left: 0.5em;
     vertical-align: middle;
 }
-[contenteditable='true'] {
+[contenteditable="true"] {
     outline: 0px solid transparent;
     background-color: rgba(227, 227, 227, 0.315);
     border-bottom: 2px solid white;
-  }
-.fa-edit, .fa-check-square {
+}
+.fa-edit,
+.fa-check-square {
     color: rgba(255, 255, 255, 0.709);
 }
-.fa-edit:hover, .fa-check-square:hover, .fa-edit:active, .fa-check-square:active {
+.fa-edit:hover,
+.fa-check-square:hover,
+.fa-edit:active,
+.fa-check-square:active {
     color: white;
 }
 #name-input {
@@ -123,20 +134,20 @@ h2 {
 .fa-plus-square {
     position: relative;
     right: 5%;
-    margin-bottom: .2em;
+    margin-bottom: 0.2em;
 }
 .fa-plus-square:hover {
     cursor: pointer;
 }
 .fa-edit {
-    font-size: .8rem;
+    font-size: 0.8rem;
 }
 #focus-list {
     display: flex;
     position: relative;
     text-align: center;
     margin: auto;
-    font-size: .8rem;
+    font-size: 0.8rem;
     align-items: center;
     font-size: 1rem;
     justify-content: center;
@@ -152,7 +163,7 @@ h2 {
     text-decoration: line-through;
 }
 #main-focus-text {
-    padding-left: .5em;
+    padding-left: 0.5em;
     font-size: 1.5rem;
     display: flex;
     justify-content: center;
@@ -160,7 +171,7 @@ h2 {
 }
 #remove-focus {
     height: 100%;
-    margin-left: .8em;
+    margin-left: 0.8em;
 }
 #remove-focus .fa-trash {
     color: white;
@@ -170,27 +181,27 @@ h2 {
     color: white;
     text-align: center;
     font-family: var(--garamond);
-    font-size: .8rem;
+    font-size: 0.8rem;
     line-height: 1;
     position: absolute;
     bottom: 3em;
     width: 100%;
-    padding: .8em;
+    padding: 0.8em;
     margin: auto;
 }
 #random-quote {
-    font-size: .8rem;
+    font-size: 0.8rem;
 }
 #author {
     font-family: Arial, Helvetica, sans-serif;
-    margin-top: .8em;
-    font-size: .5rem;
+    margin-top: 0.8em;
+    font-size: 0.5rem;
 }
 #shuffleButton {
     background-color: transparent;
     border: none;
     outline: none;
-    padding: .5em .2em;
+    padding: 0.5em 0.2em;
     width: auto;
 }
 #shuffleButton img {
@@ -206,7 +217,7 @@ h2 {
     bottom: 0;
     right: 0;
     margin: 2.5em 1em;
-    padding: .5em;
+    padding: 0.5em;
     display: none;
     text-align: right;
     border-radius: 5px;
@@ -218,43 +229,46 @@ h2 {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     background-color: white;
     width: 80vmin;
     padding: 1em;
     border-radius: 5px;
 }
-#add-quote-option, #show-quote-option {
+#add-quote-option,
+#show-quote-option {
     background-color: white;
     border: none;
     border-bottom: 1px solid black;
     color: black;
     outline: none;
-    padding: .2em .3em;
+    padding: 0.2em 0.3em;
     width: 100%;
     font-family: var(--montserrat);
-    font-size: .6rem;
+    font-size: 0.6rem;
 }
 #show-quote-option {
-    margin-top: .2em;
+    margin-top: 0.2em;
 }
-#add-quote-option:hover, #show-quote-option:hover {
+#add-quote-option:hover,
+#show-quote-option:hover {
     border: 1px solid black;
     color: black;
     outline: none;
-    padding: .2em .3em;
+    padding: 0.2em 0.3em;
     width: 100%;
 }
-#new-quote-input, #new-author-input   {
+#new-quote-input,
+#new-author-input {
     background-color: transparent;
     border: none;
     outline: none;
     border-bottom: 1px solid black;
     max-width: 100%;
-    padding: .5em;
+    padding: 0.5em;
 }
 #new-author-input {
-    margin-top: .5em;
+    margin-top: 0.5em;
 }
 #add-new-quote-button {
     margin: auto;
@@ -263,15 +277,16 @@ h2 {
     border: none;
     border: 1px solid black;
     color: black;
-    padding: .5em 2em;
+    padding: 0.5em 2em;
     margin-top: 2em;
     border-radius: 15px;
     max-width: 100%;
 }
-#add-new-quote-button:hover, #add-new-quote-button:active {
+#add-new-quote-button:hover,
+#add-new-quote-button:active {
     background-color: black;
     color: white;
-    transition: .3s linear;
+    transition: 0.3s linear;
 }
 #show-quote-container {
     display: none;
@@ -280,7 +295,7 @@ h2 {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     background-color: white;
     width: 80vmin;
     max-height: 70vmin;
@@ -289,9 +304,9 @@ h2 {
     overflow: scroll;
 }
 .quote-item {
-    font-size: .8rem;
+    font-size: 0.8rem;
     text-align: left;
-    padding: 1em .5em;
+    padding: 1em 0.5em;
     font-family: var(--garamond);
 }
 .quote-item-container {
@@ -305,7 +320,7 @@ h2 {
 }
 .remove-quote {
     background-color: transparent;
-    padding: .1em;
+    padding: 0.1em;
     height: 50%;
     border: none;
 }
@@ -313,7 +328,7 @@ h2 {
     position: absolute;
     bottom: 1em;
     right: 0;
-  }
+}
 #quoteButton {
     background-color: transparent;
     border: none;
@@ -323,14 +338,14 @@ h2 {
     font-weight: 700;
     outline: none;
     margin-right: 1.5em;
-    padding-bottom: .2em;
-  }
+    padding-bottom: 0.2em;
+}
 #quote-question {
-    font-size: .8rem;
+    font-size: 0.8rem;
     text-align: center;
 }
 
-@media(min-width: 500px) {
+@media (min-width: 500px) {
     #center-time {
         font-size: 16vmin;
     }
@@ -347,7 +362,7 @@ h2 {
         margin-top: 0;
     }
     h1 span {
-        margin-left: .3em;
+        margin-left: 0.3em;
     }
     h2 {
         font-size: 4.5vmin;
@@ -367,7 +382,7 @@ h2 {
         font-size: 4vmin;
     }
     #main-focus-text {
-        margin-left: .5em;
+        margin-left: 0.5em;
     }
     #random-quote {
         font-size: 3vmin;
@@ -375,23 +390,22 @@ h2 {
     #author {
         font-size: 2vmin;
     }
-    #add-quote-option, #show-quote-option {
+    #add-quote-option,
+    #show-quote-option {
         font-size: 2vmin;
         height: max-content;
     }
     #quote-list p {
         font-size: 2.5vmin;
     }
-    #todoContainer{
+    #todoContainer {
         width: 40vmin;
         font-size: 2vmin;
     }
     .todoItem {
         font-size: 2vmin;
     }
-    
 }
 
-@media(min-width: 1024px) {
-
+@media (min-width: 1024px) {
 }
