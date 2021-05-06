@@ -8,17 +8,20 @@ const resetBtn = document.querySelector('#resetBtn');
 
 /*****VARIABLES*****/
 let gameHistory = [];
-let moves = 0;
 let xTurn = true;
-let currentPlayer = '';
 let occupiedCells = 0;
-let previousPlayer = '';
 
 let board = [
     ['', '', ''],
     ['', '', ''],
     ['', '', '']
 ];
+
+let previousMoveStorage = [];
+let nextMoveStorage = [];
+let playerStorage = [];
+let previousPlayerStorage = [];
+let nextPlayerStorage = [];
 
 /*****EVENT LISTENERS*****/
 
@@ -27,37 +30,46 @@ for (let cell of cells) {
     cell.addEventListener('click', play);
 }
 
-previousBtn.addEventListener('click', () => { //previous button
+//previous button
+previousBtn.addEventListener('click', () => {
     nextBtn.style.display = 'block';
-    let lastMove = gameHistory.length - 1;
-    console.log(gameHistory[lastMove]);
-    for (let cell of cells) {
-        console.log(cell.classList[1]);
+    if (previousMoveStorage.length != 0) {
+        let lastIndex = previousMoveStorage.length - 1;
+        let lastMove = previousMoveStorage[lastIndex];
+        let targetCellClasslist = cells[lastMove].classList;
+        let lastPlayer = previousPlayerStorage[previousPlayerStorage.length - 1];
+        targetCellClasslist.remove(targetCellClasslist[2]); //remove last move from cell
+        nextMoveStorage.push(lastMove); //add last move to nextMoveStorage
+        previousMoveStorage.pop(); //remove last move from previousMoveStorage
+        nextPlayerStorage.push(lastPlayer); //add last player to nextPlayerStorage
+        previousPlayerStorage.pop(); //remove last player from previousPlayerStorage
+    } else {
+        previousBtn.style.display = 'none';
     }
 });
 
-function undo() {
-    if (moves > 0) {
-        position--;
+//next button
+nextBtn.addEventListener('click', () => {
+    previousBtn.style.display = 'block';
+    if (nextMoveStorage.length != 0) {
+        let lastMoveIndex = nextMoveStorage[0];
+        let targetCell = cells[lastMoveIndex];
+        let lastPlayer = nextPlayerStorage[0]
+        targetCell.classList.add(lastPlayer); //display last player in cell
+        previousMoveStorage.push(lastMoveIndex); //add last move to previousMoveStorage
+        nextMoveStorage.shift(); //remove last move from nextMoveStorage
+        previousPlayerStorage.push(lastPlayer); //add last player to previousPlayerStorage
+        nextPlayerStorage.shift(); //remove last player from nextPlayerStorage
+    } else {
+        nextBtn.style.display = 'none';
+        previousBtn.style.display = 'block';
     }
-};
-
-function redo() {
-    if (moves < gameHistory.length - 1) {
-        position++;
-    }
-}
-
-
-
-nextBtn.addEventListener('click', () => { //next button
-    console.log('next');
 })
 
 /********
     a. restarts the game
     b. hides the next and prev buttons
-    c. clears move history *********/
+    c. clears history and storage *********/
 
 resetBtn.addEventListener('click', () => { //reset button
     // clear all Xs and Os
@@ -80,8 +92,10 @@ resetBtn.addEventListener('click', () => { //reset button
 
     //clears game history
     occupiedCells = 0;
-    gameHistory = [];
-    console.clear();
+    previousMoveStorage = [];
+    nextMoveStorage = [];
+    previousPlayerStorage = [];
+    nextPlayerStorage = [];
 })
 
 /*****FUNCTIONS*****/
@@ -110,11 +124,13 @@ function play(e) {
         occupiedCells++;
         previousPlayer = '0';
     }
+    previousMoveStorage.push(row); //adds move to previousMoveStorage
     isWinner(); //check if any player has won the game
 }
 
-// add move to array
+// add player to storage
 function addMove(row, player) {
+    previousPlayerStorage.push(player); //adds player to previousPlayerStorage
     let rowIndex = parseInt(row);
     //coordinates of cell
     if (rowIndex === 0 || rowIndex === 1 || rowIndex === 2) { //if cell 0, 1, 2 was played
@@ -221,7 +237,6 @@ function isDraw() {
     if (occupiedCells === 9 && !isGameOver()) {
         turnIndicator.textContent = 'DRAW';
         previousBtn.style.display = 'block';
-        nextBtn.style.display = 'block';
         isGameOver(true);
     };
 }
@@ -238,3 +253,7 @@ function isGameOver(status) {
         }
     }
 }
+
+
+
+
