@@ -152,11 +152,13 @@ button:active {
 }
 #previousBtn {
     background-color: var(--blue);
-    display: none;
+    display: block;
+    visibility: hidden;
 }
 #nextBtn {
     background-color: var(--yellow);
-    display: none;
+    display: block;
+    visibility: hidden;
 }
 #resetBtn {
     background-color: var(--rose);
