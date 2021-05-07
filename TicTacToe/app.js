@@ -7,7 +7,6 @@ const nextBtn = document.querySelector('#nextBtn');
 const resetBtn = document.querySelector('#resetBtn');
 
 /*****VARIABLES*****/
-let gameHistory = [];
 let xTurn = true;
 let occupiedCells = 0;
 
@@ -19,7 +18,6 @@ let board = [
 
 let previousMoveStorage = [];
 let nextMoveStorage = [];
-let playerStorage = [];
 let previousPlayerStorage = [];
 let nextPlayerStorage = [];
 
@@ -35,9 +33,9 @@ previousBtn.addEventListener('click', () => {
     nextBtn.style.visibility = 'visible';
     if (previousMoveStorage.length != 0) {
         let lastMove = previousMoveStorage[previousMoveStorage.length - 1];
-        let targetCellClasslist = cells[lastMove].classList;
+        let targetCell = cells[lastMove];
         let lastPlayer = previousPlayerStorage[previousPlayerStorage.length - 1];
-        targetCellClasslist.remove(targetCellClasslist[2]); //remove last move from cell
+        targetCell.classList.remove(targetCell.classList[2]); //remove last move from cell
         nextMoveStorage.push(lastMove); //add last move to nextMoveStorage
         previousMoveStorage.pop(); //remove last move from previousMoveStorage
         nextPlayerStorage.push(lastPlayer); //add last player to nextPlayerStorage
@@ -65,12 +63,8 @@ nextBtn.addEventListener('click', () => {
     }
 })
 
-/********
-    a. restarts the game
-    b. hides the next and prev buttons
-    c. clears history and storage *********/
-
-resetBtn.addEventListener('click', () => { //reset button
+//reset button
+resetBtn.addEventListener('click', () => {
     // clear all Xs and Os
     for (let cell of cells) {
         let classList = cell.classList;
@@ -101,14 +95,15 @@ resetBtn.addEventListener('click', () => { //reset button
         ['', '', ''],
         ['', '', '']
     ];
+    console.clear();
 })
 
 /*****FUNCTIONS*****/
 
 function play(e) {
-    const cell = e.target; //know wich cell was clicked
-    const classList = e.target.classList; //check list of classes
-    const row = classList[1]; //select second class as identifier of cell row location
+    const target = e.target; //know wich cell was clicked
+    const classList = target.classList; //check list of classes
+    const cell = classList[1]; //select second class as identifier of cell location
     //adds an extra class to cell depending on if xturn is true (X), if false (O)
     const player = classList[2];
     if (player === 'X' || player === 'O') { //if class already contains x or o, do nothing
@@ -116,27 +111,27 @@ function play(e) {
     }
     else if (xTurn) { // if x's turn
         classList.add('X'); //add x class (displays x in cell)
-        addMove(row, 'X'); //add current x move to array
+        addMove(cell, 'X'); //add current x move to array
         updatePlayer('O'); //change turn indicator to o's turn
         xTurn = !xTurn; //x turn ends
         occupiedCells++;
         previousPlayer = 'X';
     } else { //if o's turn
         classList.add('O'); //add o class (displays o in cell)
-        addMove(row, 'O'); //add current o move to array
+        addMove(cell, 'O'); //add current o move to array
         updatePlayer('X'); //change turn indicator to x's turn
         xTurn = !xTurn; //back to x turn
         occupiedCells++;
         previousPlayer = '0';
     }
-    previousMoveStorage.push(row); //adds move to previousMoveStorage
+    previousMoveStorage.push(cell); //adds move to previousMoveStorage
     isWinner(); //check if any player has won the game
 }
 
 // add player to storage
-function addMove(row, player) {
+function addMove(cell, player) {
     previousPlayerStorage.push(player); //adds player to previousPlayerStorage
-    let rowIndex = parseInt(row);
+    let rowIndex = parseInt(cell);
     //coordinates of cell
     if (rowIndex === 0 || rowIndex === 1 || rowIndex === 2) { //if cell 0, 1, 2 was played
         let row = 0; //set row to 0
@@ -179,21 +174,12 @@ function addMove(row, player) {
 
 //stores each move in move array
 function saveMove(row, column, player) {
-    let move = [
-        ['', '', ''],
-        ['', '', ''],
-        ['', '', '']
-    ];
-    let moveCopy = [...move];
     board[row].splice(column, 1, player); //saves move to board array
-    moveCopy[row][column] = player;
-    gameHistory.push(moveCopy);
 }
 
 //changes turn indicator to player's turn
 function updatePlayer(player) {
     turnIndicator.textContent = `${player}'s Turn`;
-    currentPlayer = player;
 }
 
 //check if a player has won
@@ -256,6 +242,7 @@ function isGameOver(status) {
         for (let cell of cells) {
             cell.removeEventListener('click', play);
         }
+        console.log(board);
     }
 }
 
