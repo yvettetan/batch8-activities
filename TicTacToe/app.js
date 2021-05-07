@@ -9,7 +9,7 @@ const resetBtn = document.querySelector('#resetBtn');
 /*****VARIABLES*****/
 let xTurn = true;
 let occupiedCells = 0;
-
+let historyLog = [];
 let board = [
     ['', '', ''],
     ['', '', ''],
@@ -174,7 +174,10 @@ function addMove(cell, player) {
 
 //stores each move in move array
 function saveMove(row, column, player) {
+    let move = [];
     board[row].splice(column, 1, player); //saves move to board array
+    move.push(`[${row}][${column}], ${player}`);
+    historyLog.push(move);
 }
 
 //changes turn indicator to player's turn
@@ -242,7 +245,10 @@ function isGameOver(status) {
         for (let cell of cells) {
             cell.removeEventListener('click', play);
         }
+        console.log('Board State:');
         console.log(board);
+        console.log('Game History:');
+        console.log(historyLog);
     }
 }
 
