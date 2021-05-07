@@ -84,7 +84,7 @@ resetBtn.addEventListener('click', () => {
     isGameOver(false);
 
     //clears game history
-    gameHistory = [];
+    historyLog = [];
     occupiedCells = 0;
     previousMoveStorage = [];
     nextMoveStorage = [];
