@@ -131,26 +131,26 @@ function play(e) {
 // add player to storage
 function addMove(cell, player) {
     previousPlayerStorage.push(player); //adds player to previousPlayerStorage
-    let rowIndex = parseInt(cell);
+    let cellPlayed = parseInt(cell);
     //coordinates of cell
-    if (rowIndex === 0 || rowIndex === 1 || rowIndex === 2) { //if cell 0, 1, 2 was played
+    if (cellPlayed === 0 || cellPlayed === 1 || cellPlayed === 2) { //if cell 0, 1, 2 was played
         let row = 0; //set row to 0
-        if (rowIndex === 0) { //if cell 0
+        if (cellPlayed === 0) { //if cell 0
             let column = 0; //set column to 1
             saveMove(row, column, player); //saves location and player to array
-        } else if (rowIndex === 1) {
+        } else if (cellPlayed === 1) {
             let column = 1;
             saveMove(row, column, player);
         } else {
             let column = 2;
             saveMove(row, column, player);
         }
-    } else if (rowIndex === 3 || rowIndex === 4 || rowIndex === 5) { //if cell 3, 4, 5 was played
+    } else if (cellPlayed === 3 || cellPlayed === 4 || cellPlayed === 5) { //if cell 3, 4, 5 was played
         let row = 1;
-        if (rowIndex === 3) {
+        if (cellPlayed === 3) {
             let column = 0;
             saveMove(row, column, player);
-        } else if (rowIndex === 4) {
+        } else if (cellPlayed === 4) {
             let column = 1;
             saveMove(row, column, player);
         } else {
@@ -159,10 +159,10 @@ function addMove(cell, player) {
         }
     } else { //if cell 6, 7, 8 was played
         let row = 2;
-        if (rowIndex === 6) {
+        if (cellPlayed === 6) {
             let column = 0;
             saveMove(row, column, player);
-        } else if (rowIndex === 7) {
+        } else if (cellPlayed === 7) {
             let column = 1;
             saveMove(row, column, player);
         } else {
