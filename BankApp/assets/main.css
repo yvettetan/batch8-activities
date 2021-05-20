@@ -17,7 +17,7 @@ body {
     width: 100vw;
     height: 100vh;
     position: relative;
-    line-height: 1;
+    line-height: 1.2;
     background-color: var(--background);
     font-family: "Work Sans", sans-serif;
 }
@@ -28,6 +28,15 @@ button {
     /* background-color: transparent; */
     outline: none;
     cursor: pointer;
+}
+.input-group {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 1em;
+}
+form img {
+    width: 1.5rem;
 }
 input {
     border-radius: 0.5rem;
@@ -45,11 +54,7 @@ input::-webkit-inner-spin-button {
 }
 input[type="number"] {
     -moz-appearance: textfield;
-    width: 90%;
     padding: 1em;
-}
-#account-number-input {
-    width: 60%;
 }
 input[type="submit"] {
     padding: 0.5em 1em;
@@ -92,6 +97,17 @@ nav-link:active {
 .login-container {
     width: 100vw;
     height: 100vh;
+    display: grid;
+    grid-template-columns: 55% 45%;
+}
+.login-image-container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+.login-image {
+    width: 30rem;
+    height: auto;
 }
 #login-logo {
     position: fixed;
@@ -102,36 +118,55 @@ nav-link:active {
 .login {
     width: 100%;
     height: 100%;
-
+    color: #ffffff;
+    background-color: var(--blue);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 .login-form {
+    width: 35rem;
+    height: 25rem;
+    margin-top: 4em;
     display: flex;
     flex-direction: column;
-    margin-top: 1em;
-    padding: 1em 2em 2em 2em;
-    border-radius: 1rem;
-    background-color: var(--blue);
+    align-items: center;
 }
 .login-form input {
-    width: 50vh;
+    width: 100%;
     outline: none;
 }
-.login-form label {
-    color: #ffffff;
-}
-.input-group {
+.login-input-group {
+    padding-left: 0.5em;
+    margin-top: 1.5em;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    width: 80%;
     display: flex;
-    flex-direction: column;
-    margin-top: 1em;
+    align-items: center;
 }
 #login-submit {
-    width: 90%;
-    margin: 0 auto;
+    font-weight: 600;
+    width: 100%;
+    margin: 1em 0 2em 0;
     padding: 1em 1.5em;
+}
+#login-submit:hover,
+#login-submit:active {
+    color: #ffffff;
+    background-color: #1b5c81;
+    transition: 0.3s ease-in-out;
+}
+.forgot-password {
+    color: #ffffff;
+    margin-top: 0.5em;
+    width: 80%;
+    text-align: right;
+    cursor: pointer;
+}
+.forgot-password:hover {
+    color: #d1d1d1;
 }
 /** header */
 header {
@@ -145,8 +180,24 @@ header {
     box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.15);
     z-index: 1;
 }
-header button {
-    background-color: transparent;
+.user-account-modal {
+    position: absolute;
+    border-radius: 0.2rem;
+    margin-top: 1em;
+    padding: 2em 1em;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 20px rgba(151, 151, 151, 0.5);
+}
+.user-account-modal a {
+    color: var(--black);
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.logout-image {
+    width: 1.5rem;
+    margin-right: 0.5em;
 }
 #logo {
     margin: 0 1em;
@@ -196,33 +247,58 @@ nav {
     font-size: 1.2rem;
 }
 /** dashboard */
+.visible {
+    visibility: visible;
+}
 .alert-container {
     margin-top: 1em;
-    padding: 2em;
+    height: 10vh;
+    padding: 1em;
     color: #ffffff;
     background-color: var(--black);
     text-align: center;
+    /* visibility: hidden; */
 }
 .dashboard-content {
-    /* padding: 2em 0 1.5em 1.5em; */
-    padding-top: 5vmin;
-    display: flex;
-    flex-wrap: wrap;
+    height: 60vh;
+    padding: 1.5em 0.5em;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 }
 .display-balance-container {
-    width: 80vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
+.display-balance {
+    height: 100%;
+    background-color: #ffffff;
+    padding: 2em 5em;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#display-balance-form {
+    width: 100%;
+    background-color: rgba(190, 187, 187, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 1em;
+    border-radius: 1rem;
+}
 #account-number-input {
-    width: 20rem;
+    width: 100%;
 }
 #bank-card {
     width: 25rem;
-    height: 13rem;
-    margin: 2em;
+    height: 15rem;
+    margin: 2.5em;
     color: #ffffff;
     background: var(--blue);
     background: linear-gradient(90deg, rgba(57, 126, 165, 1) 0%, rgb(111, 160, 189) 65%, rgba(119, 161, 186, 1) 100%);
@@ -248,6 +324,12 @@ nav {
     flex-direction: column;
     padding-left: 2em;
 }
+.account-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 .small-card {
     width: 10rem;
     padding: 1em 0;
@@ -262,18 +344,22 @@ nav {
     width: 3rem;
 }
 .modal-bg {
-    height: 45vh;
+    width: 90%;
+    height: 100%;
     padding: 0.5em;
     display: none;
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-color: rgba(190, 187, 187, 0.5);
+    background-color: rgba(190, 188, 188, 0.5);
     border-radius: 1rem;
 }
-.modal-form {
+.modal form {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 30rem;
 }
 /** accounts */
 #accounts {
@@ -292,16 +378,32 @@ nav {
 .account-list {
     height: 100%;
 }
-td img {
-    width: 2rem;
-}
+
 #accounts-table {
+    margin: 0 auto;
+    text-align: center;
+    width: 90%;
+    border-collapse: collapse;
     background-color: #ffffff;
+    border: 1px solid var(--black);
 }
 thead {
-    background-color: var(--blue);
+    border: 0.5px solid #ffffff;
+    background-color: var(--black);
     color: #ffffff;
 }
+tr {
+    border: 0.5px solid var(--black);
+}
+
 th {
     padding: 0.5em 2em;
+}
+td {
+    padding: 0.2em 0;
+    border: 0.5px solid var(--black);
+}
+.fa-trash {
+    margin-left: 1em;
+    color: var(--black);
 }
