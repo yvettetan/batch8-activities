@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./assets/main.css">
+    <title>Bank App</title>
+</head>
+
+<body>
+    <!--* header -->
+    <header>
+        <div class="header-left">
+            <img id="logo" src="./assets/images/logo.svg" alt="bank logo">
+            <button><img id="main-user-icon" src="./assets/images/user.svg" alt="user icon"></button>
+            <span id="main-user-name">User</span>
+            <button><img class="notification" src="./assets/images/notification.svg" alt="notificaton bell"></button>
+            <button><img class="email" src="./assets/images/email.svg" alt="mail icon"></button>
+        </div>
+        <nav>
+            <a id="dashboard-btn" class="nav-link active" href="#"><img src="./assets/images/dashboard.svg"
+                    alt="dashboard icon">
+                Dashboard</a>
+            <a id="accounts-btn" class="nav-link" href="#"> <img src="./assets/images/accounts.svg" alt="accounts icon">
+                Accounts</a>
+            <a id="budget-btn" class="nav-link" href="#"> <img src="./assets/images/budget.svg" alt="budget icon">
+                Budget</a>
+        </nav>
+    </header>
+
+    <!-- *dashboard -->
+    <div id="dashboard">
+        <div class="alert-container">WELCOME</div>
+        <div class="dashboard-content">
+            <!-- display balance -->
+            <div class="display-balance-container">
+                <form action="" id="display-balance-form">
+                    <div class="input-group">
+                        <label for="account-number-input">Account Number</label>
+                        <input type="number" id="account-number-input" placeholder="Enter 12-digit Account Number"
+                            autocomplete="off" required>
+                    </div>
+
+                    <input type="submit" value="Display Balance">
+                </form>
+                <div id="bank-card">
+                    <div class="bank-card-label">
+                        <p id="account-balance">₱0.00</p>
+                        <p id="account-name"></p>
+                    </div>
+                </div>
+
+            </div>
+            <!-- account acctions -->
+            <div>
+                <button id="db-deposit" class="card small-card">
+                    <h2>Deposit</h2><img src="./assets/images/deposit.svg" alt="">
+                </button>
+                <button id="db-withdraw" class="card small-card">
+                    <h2>Withdraw</h2><img src="./assets/images/withdraw.svg" alt="">
+                </button>
+                <button id="db-send-money" class="card small-card">
+                    <h2>Send Money</h2><img src="./assets/images/send.svg" alt="">
+                </button>
+                <a href="#add-account-container">
+                    <button id="db-add-account" class="card small-card">
+                        <h2>Add Account</h2><img src="./assets/images/add-account.svg" alt="">
+                    </button>
+                </a>
+                <!-- deposit form -->
+                <div class="modal-bg deposit-modal-bg">
+                    <div class="modal deposit-modal">
+                        <h3 id="deposit-modal-header">DEPOSIT FORM</h3>
+                        <p>Account Name:<strong id="deposit-name"></strong></p>
+                        <form action="" id="deposit-modal-form">
+                            <div>
+                                <label for="deposit-account-input">Account Number</label>
+                                <input type="number" id="deposit-account-input" placeholder="Enter Account Number"
+                                    autocomplete="off" required>
+                            </div>
+                            <div>
+                                <label for="deposit-amount-input">Amount</label>
+                                <input type="number" id="deposit-amount-input" placeholder="₱0.00" autocomplete="off"
+                                    step=".01" required>
+                            </div>
+                            <input type="submit" value="Deposit Amount">
+                        </form>
+                    </div>
+                </div>
+                <!-- withdraw form -->
+                <div class="modal-bg withdraw-modal-bg">
+                    <div class="modal withdraw-modal">
+                        <h3 id="withdraw-modal-header">WITHDRAW FORM</h3>
+                        <p>Account Name:<strong id="withdraw-name"></strong></p>
+                        <form id="withdraw-modal-form">
+                            <div>
+                                <label for="withdraw-account-input">Account Number</label>
+                                <input type="number" id="withdraw-account-input" placeholder="Enter Account Number"
+                                    autocomplete="off" required>
+                            </div>
+                            <div>
+                                <label for="deposit-amount-input">Amount</label>
+                                <input type="number" id="withdraw-amount-input" placeholder="₱0.00" autocomplete="off"
+                                    step=".01" required>
+                            </div>
+                            <input type="submit" value="Withdraw Amount">
+                        </form>
+                    </div>
+                </div>
+                <!-- send money form -->
+                <div class="modal-bg send-modal-bg">
+                    <div class="modal send-modal">
+                        <h3 id="send-modal-header">SEND MONEY FORM</h3>
+                        <form id="send-modal-form">
+                            <div>
+                                <p>Account Name:<strong id="sender-name"></strong></p>
+                                <label for="sender-input"> From Account Number</label>
+                                <input type="number" id="sender-input" placeholder="Enter Account Number" minlength="12"
+                                    maxlength="12" autocomplete="off" required>
+                            </div>
+                            <div>
+                                <p>Account Name:<strong id="receiver-name"></strong></p>
+                                <label for="receiver-input"> To Account Number</label>
+                                <input type="number" id="receiver-input" placeholder="Enter Account Number"
+                                    autocomplete="off" required>
+                            </div>
+                            <div>
+                                <label for="send-amount-input">Amount</label>
+                                <input type="number" id="send-amount-input" placeholder="₱0.00" autocomplete="off"
+                                    step=".01" required>
+                            </div>
+                            <input type="submit" value="Send Amount">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- *accounts -->
+    <div id="accounts" class="hide">
+        <div class="accounts-header">
+            <button id="acc-list-accounts">All Accounts</button>
+            <button id="acc-add-account"> <img src="./assets/images/add-account.svg" alt=""> Create New Account</button>
+        </div>
+
+        <!-- accounts list -->
+        <div id="account-list">
+            <table id="accounts-table">
+                <thead>
+                    <tr>
+                        <th>Account Number</th>
+                        <th>Account Name</th>
+                        <th>Balance</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <!-- insert new accounts-->
+                <tbody id="account-list-data"></tbody>
+            </table>
+            <button id="clear-storage">clear local storage</button>
+        </div>
+        <!-- add account -->
+        <div id="add-account-container" class="hide">
+            <form action="" id="add-account-form">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" autocomplete="off" required>
+                <label for="lasttName">Last Name</label>
+                <input type="text" id="lastName" autocomplete="off" required>
+                <input id="add-account-btn" type="submit" value="Add Account">
+            </form>
+        </div>
+    </div>
+    <!-- *budget -->
+    <div id="budget" class="hide">
+        <h2>Budget</h2>
+    </div>
+
+    <script src="./assets/index.js"></script>
+</body>
+
+</html>
