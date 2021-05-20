@@ -202,7 +202,7 @@ class AccountUI {
         row.innerHTML = `
                 <td>${account.accountNumber}</td>
                 <td>${account.name}</td>
-                <td>${account.balance}</td>
+                <td>₱${account.balance}</td>
                 <td><a href="#">View Transactions</a></td>`;
         accountlist.appendChild(row);
     }
@@ -313,7 +313,7 @@ Account.get_balance = function (accountNumber) {
 const depositAccountInput = document.querySelector('#deposit-account-input');
 const depositName = document.querySelector('#deposit-name');
 //event listener on user input: display account name if valid
-depositAccountInput.addEventListener('input', (e) => {
+depositAccountInput.addEventListener('input', () => {
     let depositAccountName;
     //if input has no value
     if (!depositAccountInput.value) {
@@ -401,30 +401,37 @@ Account.withdraw = function (accountNumber, amount) {
     amount = parseFloat(amount);
     const accounts = AccountStore.getAccouts();
     let withdrawAccount;
+    let balance;
     for (let i = 0; i < accounts.length; i++) {
         if (accounts[i].accountNumber === accountNumber) {
             withdrawAccount = accountNumber;
+            balance = accounts[i].balance;
         };
     }
     if (withdrawAccount) {
-        withdrawName.innerText = "";
-        alert(`Successfully withdrew ₱${amount} from ${withdrawAccount}`);
-        // update account balance in local storage
-        AccountStore.withdraw(accountNumber, amount);
-        AccountUI.clear_inputs();
+        if (balance >= amount) {
+            withdrawName.innerText = "";
+            alert(`Successfully withdrew ₱${amount} from ${withdrawAccount}`);
+            // update account balance in local storage
+            AccountStore.withdraw(accountNumber, amount);
+            AccountUI.clear_inputs();
+        } else {
+            alert(`INSUFFICIENT BALANCE: Account has ₱${balance} balance`);
+        }
     } else {
         //check if length is just wrong or if account really does not exist
         checkNumberLength(accountNumber);
     }
     //to not override
     withdrawAccount = undefined;
+    balance = undefined;
 }
 
 //*SEND FORM 
 const senderAccountInput = document.querySelector('#sender-input');
 const receiverAccountInput = document.querySelector('#receiver-input');
-const senderName = document.querySelector('#sender-name');
-const receiverName = document.querySelector('#receiver-name');
+let senderName = document.querySelector('#sender-name');
+let receiverName = document.querySelector('#receiver-name');
 
 //event listener on user input: display account name if valid
 senderAccountInput.addEventListener('input', (e) => {
@@ -481,6 +488,7 @@ Account.send = function (from_accountNumber, to_accountNumber, amount) {
     let receiverAccount;
     let senderAccountName;
     let receiverAccountName;
+    let senderBalance;
     amount = parseFloat(amount);
     const accounts = AccountStore.getAccouts();
     //check if sender and receiver accounts exist
@@ -488,19 +496,25 @@ Account.send = function (from_accountNumber, to_accountNumber, amount) {
         if (accounts[i].accountNumber === Number(from_accountNumber)) {
             senderAccount = Number(from_accountNumber);
             senderAccountName = accounts[i].name;
+            senderBalance = accounts[i].balance;
         } else if (accounts[i].accountNumber === Number(to_accountNumber)) {
             receiverAccount = Number(to_accountNumber);
             receiverAccountName = accounts[i].name;
         };
     }
     if (senderAccount && receiverAccount) {
-        senderName.innerText = "";
-        receiverName.innerText = "";
-        alert(`Successfully sent ₱${amount} from ${senderAccountName}: ${senderAccount} to ${receiverAccountName}: ${receiverAccount}`);
-        //update local storage
-        AccountStore.send(senderAccount, receiverAccount, amount);
-        //todo update UI
-        AccountUI.clear_inputs();
+        if (senderBalance >= amount) {
+            senderName.innerText = "";
+            receiverName.innerText = "";
+            alert(`Successfully sent ₱${amount} from ${senderAccountName}: ${senderAccount} to ${receiverAccountName}: ${receiverAccount}`);
+            //update local storage
+            AccountStore.send(senderAccount, receiverAccount, amount);
+            //todo update UI
+            AccountUI.clear_inputs();
+        } else {
+            alert(`INSUFFICIENT BALANCE: Sender has ₱${senderBalance} balance`)
+        }
+
     } else if (!senderAccount && receiverAccount) {
         alert('Sender does not exist');
     } else if (senderAccount && !receiverAccount) {
@@ -511,8 +525,6 @@ Account.send = function (from_accountNumber, to_accountNumber, amount) {
     //reset sender and receiver details to prevent override
     senderAccount = undefined;
     receiverAccount = undefined;
-    senderName = undefined;
-    receiverName = undefined;
 }
 //clears local storage
 document.getElementById('clear-storage').addEventListener('click', () => {
@@ -520,7 +532,6 @@ document.getElementById('clear-storage').addEventListener('click', () => {
 })
 //checks if account number is 12 digits
 function checkNumberLength(accountNumber) {
-    const accounts = AccountStore.getAccouts();
     if (String(accountNumber).length != 12) {
         alert(`INVALID ACCOUNT:
 Account number must contain 12 digits. Current input contains ${String(accountNumber).length} digits`);
