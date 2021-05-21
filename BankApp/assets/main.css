@@ -5,6 +5,9 @@
     --background: #f2f7f9;
     --shadow1: #d9d9d94f;
     --shadow2: #01010149;
+    --form: #bebcbc80;
+    --success: #42a475;
+    --invalid: #c02424bb;
     font-size: 14px;
 }
 * {
@@ -25,9 +28,10 @@ a {
     text-decoration: none;
 }
 button {
-    /* background-color: transparent; */
+    background-color: transparent;
     outline: none;
     cursor: pointer;
+    font-family: "Work Sans", sans-serif;
 }
 .input-group {
     width: 80%;
@@ -41,9 +45,6 @@ form img {
 input {
     border-radius: 0.5rem;
     margin-top: 0.2em;
-}
-input[type="text"],
-input[type="password"] {
     padding: 0.8em;
 }
 /* hide input number arrows */
@@ -54,15 +55,19 @@ input::-webkit-inner-spin-button {
 }
 input[type="number"] {
     -moz-appearance: textfield;
-    padding: 1em;
 }
 input[type="submit"] {
     padding: 0.5em 1em;
-    margin-top: 1em;
+    margin-top: 1.5em;
     border: 1px solid var(--blue);
     border-radius: 3.5rem;
     cursor: pointer;
     background-color: #ffffff;
+    font-family: "Work Sans", sans-serif;
+}
+input:focus {
+    outline: none;
+    box-shadow: 0px 0px 4px var(--black);
 }
 .card:hover {
     transform: translateY(-3%);
@@ -137,6 +142,10 @@ nav-link:active {
     width: 100%;
     outline: none;
 }
+.login-form input {
+    outline: none;
+    box-shadow: none;
+}
 .login-input-group {
     padding-left: 0.5em;
     margin-top: 1.5em;
@@ -178,7 +187,7 @@ header {
     align-items: center;
     justify-content: space-between;
     box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.15);
-    z-index: 1;
+    padding: 0 1em;
 }
 .user-account-modal {
     position: absolute;
@@ -187,6 +196,7 @@ header {
     padding: 2em 1em;
     background-color: #ffffff;
     box-shadow: 0px 0px 20px rgba(151, 151, 151, 0.5);
+    z-index: 1;
 }
 .user-account-modal a {
     color: var(--black);
@@ -239,12 +249,21 @@ nav {
 }
 #main-user-icon,
 .notification,
-.email {
+.email,
+.plant {
     margin-right: 1em;
+}
+.plant {
+    height: 2rem;
 }
 #main-user-name {
     margin-right: 2em;
     font-size: 1.2rem;
+}
+#date {
+    color: #ffffff;
+    background-color: var(--black);
+    padding: 0.5em;
 }
 /** dashboard */
 .visible {
@@ -253,11 +272,29 @@ nav {
 .alert-container {
     margin-top: 1em;
     height: 10vh;
-    padding: 1em;
+    padding: 0.5em;
     color: #ffffff;
     background-color: var(--black);
-    text-align: center;
-    /* visibility: hidden; */
+    position: relative;
+    transition: background-color 0.2s ease-in-out;
+}
+.alert-message {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#db-remove-alert {
+    top: 0;
+    right: 0;
+    margin: 1em 5em 0 0;
+    font-size: 1.5rem;
+    color: var(--black);
+    background-color: white;
+    position: absolute;
+    border-radius: 30px;
+    padding: 0 0.2em;
+    display: none;
 }
 .dashboard-content {
     height: 60vh;
@@ -281,10 +318,11 @@ nav {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    box-shadow: 0px 0px 20px rgba(151, 151, 151, 0.5);
 }
 #display-balance-form {
     width: 100%;
-    background-color: rgba(190, 187, 187, 0.5);
+    background-color: var(--form);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -307,23 +345,27 @@ nav {
     justify-content: flex-start;
     align-items: center;
 }
-#account-balance {
-    font-size: 2rem;
-    margin-bottom: 0.5em;
-}
-#account-name {
-    font-size: 1.5rem;
-}
 .card {
     background-color: #ffffff;
     box-shadow: 0px 0px 20px rgba(151, 151, 151, 0.5);
     border-radius: 1rem;
 }
 .bank-card-label {
+    width: 95%;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    padding-left: 2em;
+    padding-left: 1.5em;
 }
+#account-balance {
+    width: 90%;
+    font-size: 2rem;
+    margin-bottom: 0.5em;
+}
+#account-name {
+    font-size: 1.5rem;
+}
+
 .account-actions {
     display: flex;
     flex-direction: column;
@@ -351,7 +393,7 @@ nav {
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-color: rgba(190, 188, 188, 0.5);
+    background-color: var(--form);
     border-radius: 1rem;
 }
 .modal form {
@@ -361,16 +403,83 @@ nav {
     align-items: center;
     width: 30rem;
 }
+.modal-input-group {
+    width: 90%;
+    margin-top: 0.5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.modal-input-group label {
+    text-align: left;
+}
+.display-name {
+    width: 90%;
+    margin: 0 auto;
+    padding: 1em 0 0.5em 0;
+    text-align: left;
+}
+.display-name strong {
+    font-size: 1rem;
+    padding: 1em 0 0 0.5em;
+}
+hr {
+    width: 100%;
+    margin-top: 0.5em;
+    border: 0.5px solid rgb(110, 110, 110);
+}
 /** accounts */
 #accounts {
-    margin: 0 auto;
-    padding: 2em 0 1.5em 1.5em;
+    padding: 1em;
+}
+.accounts-header {
+    background-color: #ffffff;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.acc-alert-container {
+    display: flex;
+    background-color: antiquewhite;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+#acc-list-accounts,
+#acc-add-account {
+    font-size: 1.2rem;
+}
+#add-account-container {
+    margin-top: 4em;
 }
 #acc-add-account {
     margin-left: 2em;
 }
 #acc-add-account img {
-    width: 3rem;
+    width: 2.5rem;
+    background-color: antiquewhite;
+}
+#add-account-form {
+    background-color: var(--form);
+    width: 80vmin;
+    padding: 2em 0;
+    margin: 0 auto;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#add-account-form input {
+    width: 100%;
+}
+#add-account-form input[type="text"] {
+    text-transform: uppercase;
+}
+#add-account-form #add-account-btn {
+    width: 50%;
+    padding: 1em 0;
 }
 .accounts-header {
     padding-bottom: 2em;
@@ -378,7 +487,6 @@ nav {
 .account-list {
     height: 100%;
 }
-
 #accounts-table {
     margin: 0 auto;
     text-align: center;
@@ -388,20 +496,25 @@ nav {
     border: 1px solid var(--black);
 }
 thead {
-    border: 0.5px solid #ffffff;
     background-color: var(--black);
     color: #ffffff;
+    text-transform: uppercase;
 }
 tr {
     border: 0.5px solid var(--black);
 }
-
 th {
+    border-bottom: 0.5px solid var(--black);
     padding: 0.5em 2em;
+    letter-spacing: 1.5px;
 }
 td {
-    padding: 0.2em 0;
-    border: 0.5px solid var(--black);
+    padding: 0.2em 0 0.2em 1em;
+    border: 1px solid var(--black);
+    text-align: left;
+}
+td:last-child {
+    text-align: center;
 }
 .fa-trash {
     margin-left: 1em;
