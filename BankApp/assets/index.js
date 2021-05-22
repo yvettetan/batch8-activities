@@ -1,8 +1,8 @@
 //todo wrong_arguments (e.g. name cannot start with a number)
-//todo update table UI for deposit, withdraw, send updates
-//todo create alert message for new account & delete account
-//todo show new balance in alert after every balance update
-//todo use helper functions for each form
+//todo fix alert message for new account & delete account
+//todo fix listeners on form inputs
+//todo fix clear inputs UI
+//todo refactor storage code
 
 /*****ELEMENTS*****/
 const dashboard = document.querySelector('#dashboard');
@@ -139,6 +139,49 @@ hideModal = elementsArr => {
         element.style.display = 'none';
     });
 }
+//*HELPER FUNCTIONS 
+//look for account number is in storage, return number or balance or name
+function findAccount(accountNumber, type) {
+    const accounts = AccountStore.getAccouts();
+    for (let i = 0; i < accounts.length; i++) {
+        if (accounts[i].accountNumber === accountNumber) {
+            if (type === 'number') {
+                return accounts[i].accountNumber;
+            } else if (type === 'balance') {
+                return accounts[i].balance;
+            } else {
+                return accounts[i].name;
+            };
+        };
+    };
+}
+//check if account number is valid
+function checkNumberLength(accountNumber) {
+    if (String(accountNumber).length != 12) {
+        alertMessage.textContent = `INVALID ACCOUNT:
+Account number must contain 12 digits. Current input contains ${String(accountNumber).length} digits`;
+    } else {
+        alertMessage.textContent = `INVALID ACCOUNT: ACCOUNT NOT FOUND`;
+    }
+    invalid();
+}
+function checkBalance(currentBalance, amount) {
+    if (currentBalance >= amount) {
+        return currentBalance;
+    } else {
+        alertMessage.textContent = `INSUFFICIENT BALANCE: Account only has ₱${currentBalance} balance`;
+        invalid();
+        return false;
+    }
+}
+function success() {
+    removeAlert.style.display = 'block';
+    alertBox.style.backgroundColor = 'var(--success)';
+}
+function invalid() {
+    removeAlert.style.display = 'block';
+    alertBox.style.backgroundColor = 'var(--invalid)';
+}
 
 //*USER CLASS 
 class Account {
@@ -240,50 +283,37 @@ class AccountUI {
                 <td>${account.name}</td>
                 <td>${account.dateOfBirth}</td>
                 <td id="b-${String(account.accountNumber)}">₱${account.balance.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</td>
-                <td><button class="fas fa-trash delete"></button></td>`;
+                <td>Delete Account <button class="fas fa-trash delete"></button></td>`;
         accountlist.appendChild(row);
     }
 
-    static deposit(accountNumber, amount) {
-        let previousBalanceText = document.getElementById(`b-${String(accountNumber)}`).innerHTML;
-        //turn text into number (remove peso sign and commas)
-        let previousBalance = parseFloat(previousBalanceText.slice(1).replace(/,/g, ''));
-        //add amounts then turn back to a string
-        let newBalance = String(previousBalance + amount);
-        //add peso and commas again
-        document.getElementById(`b-${String(accountNumber)}`).innerHTML = `₱${newBalance.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`;
+    // AccountUI.deposit(accountNumber, amount, previousBalance, newBalance);
+    static depositOrWithdraw(accountNumber, amount, newBalance, action) {
+        //turn amount to string and add commas
+        amount = amount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        newBalance = newBalance.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        let toOrFrom;
+        if (action === 'Deposited') {
+            toOrFrom = 'to'
+        } else {
+            toOrFrom = 'from';
+        }
+        document.getElementById(`b-${String(accountNumber)}`).innerHTML = `₱${newBalance}`
+        alertMessage.textContent = `Successfully ${action} ₱${amount} ${toOrFrom} Account Number: ${accountNumber}. New Balance: ₱${newBalance}`;
+        success();
     }
 
+    static send(senderAccountName, senderAccountNumber, newSenderBalance, receiverAccountName, receiverAccountNumber, newReceiverBalance, amount) {
+        amount = amount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        newSenderBalance = newSenderBalance.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        newReceiverBalance = newReceiverBalance.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 
-    static withdraw(accountNumber, amount) {
-        let previousBalanceText = document.getElementById(`b-${String(accountNumber)}`).innerHTML;
-        //turn text into number (remove peso sign and commas)
-        let previousBalance = parseFloat(previousBalanceText.slice(1).replace(/,/g, ''));
-        //subtract amounts then turn back to a string
-        let newBalance = String(previousBalance - amount);
-        //add peso and commas again
-        document.getElementById(`b-${String(accountNumber)}`).innerHTML = `₱${newBalance.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`;
-    }
+        document.getElementById(`b-${String(senderAccountNumber)}`).innerHTML = `₱${newSenderBalance}`;
+        document.getElementById(`b-${String(receiverAccountNumber)}`).innerHTML = `₱${newReceiverBalance}`;
 
-    //todo update table row balance after money transfer
-    static send(senderAccountNumber, receiverAccountNumber, amount) {
-        //update sender balance
-        let previousSenderBalanceText = document.getElementById(`b-${String(senderAccountNumber)}`).innerHTML;
-        //turn text into number (remove peso sign and commas)
-        let previousSenderBalance = parseFloat(previousSenderBalanceText.slice(1).replace(/,/g, ''));
-        //subtract amounts then turn back to a string
-        let newSenderBalance = String(previousSenderBalance - amount);
-        //add peso and commas again
-        document.getElementById(`b-${String(senderAccountNumber)}`).innerHTML = `₱${newSenderBalance.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`;
-
-        //update receiver balance
-        let previousReceiverBalanceText = document.getElementById(`b-${String(receiverAccountNumber)}`).innerHTML;
-        //turn text into number (remove peso sign and commas)
-        let previousReceiverBalance = parseFloat(previousReceiverBalanceText.slice(1).replace(/,/g, ''));
-        //add amounts then turn back to a string
-        let newReceiverBalance = String(previousReceiverBalance + amount);
-        //add peso and commas again
-        document.getElementById(`b-${String(receiverAccountNumber)}`).innerHTML = `₱${newReceiverBalance.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`;
+        alertMessage.textContent = `Successfully Sent ₱${amount} from ${senderAccountNumber} to ${receiverAccountNumber}
+                    New Balance: ${senderAccountName} = ₱${newSenderBalance}; ${receiverAccountName} = ₱${newReceiverBalance}`;
+        success();
     }
 
     //make sure that target element contains the class of delete then delete the whole account row
@@ -299,7 +329,7 @@ class AccountUI {
         document.querySelector("#middleName").value = '';
         document.querySelector("#dateOfBirth").value = '';
         document.querySelector('#account-number-input').value = '';
-        document.querySelector('#deposit-account-input').value = '';
+        // document.querySelector('#deposit-account-input').value = '';
         document.querySelector('#deposit-amount-input').value = '';
         document.querySelector('#withdraw-account-input').value = '';
         document.querySelector('#withdraw-amount-input').value = '';
@@ -310,7 +340,7 @@ class AccountUI {
 }
 
 //*DISPLAY ALL ACCOUNTS 
-//as soon as the DOM loads, display current accounts list
+//display current accounts list as soon as the DOM loads
 document.addEventListener('DOMContentLoaded', AccountUI.list_users);
 
 //*CREATE NEW ACCOUNT 
@@ -339,7 +369,6 @@ addAccountForm.addEventListener('submit', (e) => {
     } else {
         create_user(randNumber, fullName, dateOfBirth, 0);
     }
-    //todo how to not repeat random account number
     existingAccount = false;
 });
 
@@ -355,11 +384,26 @@ create_user = (accountNumber, name, dateOfBirth, balance) => {
     AccountUI.clear_inputs();
 }
 
-//* GET BALANCE 
-//event listener on user input
+//*FORM ELEMENTS 
+//get balance
 const balanceDisplay = document.querySelector('#account-balance');
 const nameDisplay = document.querySelector('#account-name');
 const displayAccountInput = document.querySelector('#account-number-input');
+//deposit form elements
+const depositForm = document.querySelector('#deposit-modal-form');
+const depositAccountInput = document.querySelector('#deposit-account-input');
+const depositName = document.querySelector('#deposit-name');
+//withdraw form elements
+const withdrawAccountInput = document.querySelector('#withdraw-account-input');
+const withdrawName = document.querySelector('#withdraw-name');
+//send form elements
+const senderAccountInput = document.querySelector('#sender-input');
+const receiverAccountInput = document.querySelector('#receiver-input');
+const senderName = document.querySelector('#sender-name');
+const receiverName = document.querySelector('#receiver-name');
+
+//* GET BALANCE 
+//event listener on user input
 displayAccountInput.addEventListener('input', () => {
     if (!displayAccountInput.value) {
         balanceDisplay.innerText = '₱0.00';
@@ -377,21 +421,18 @@ displayBalanceForm.addEventListener('submit', (e) => {
 
 Account.get_balance = (accountNumber) => {
     accountNumber = Number(accountNumber);
-    let getAccountNumber;
-    let balance;
-    let name;
-    const accounts = AccountStore.getAccouts();
-    accounts.forEach(account => {
-        if (account.accountNumber === accountNumber) {
-            getAccountNumber = accountNumber;
-            //display balance with comma
-            balance = account.balance.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-            name = account.name;
-        };
-    });
+    let getAccountNumber = findAccount(accountNumber, 'number');
+    let balance = findAccount(accountNumber, 'balance').toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+    let name = findAccount(accountNumber, 'name');
     if (getAccountNumber) {
-        Number.isInteger(balance) ? balanceDisplay.innerText = `₱${balance}.00` : balanceDisplay.innerText = `₱${balance}`;
+        //check if balance is an integer or not
+        balance.indexOf('.') ? balanceDisplay.innerText = `₱${balance}.00` : balanceDisplay.innerText = `₱${balance}`;
         nameDisplay.innerText = name;
+        //auto input account number to deposit form and withdraw form
+        depositAccountInput.value = getAccountNumber;
+        depositName.innerText = name;
+        withdrawAccountInput.value = getAccountNumber;
+        withdrawName.innerText = name;
     } else {
         //check if length is just wrong or if account really does not exist
         checkNumberLength(accountNumber);
@@ -403,11 +444,8 @@ Account.get_balance = (accountNumber) => {
 }
 
 //*DEPOSIT FORM 
-const depositAccountInput = document.querySelector('#deposit-account-input');
-const depositName = document.querySelector('#deposit-name');
 //event listener on user input: display account name if valid
 depositAccountInput.addEventListener('input', () => {
-    let depositAccountName;
     //if input has no value
     if (!depositAccountInput.value) {
         depositName.innerText = "";
@@ -426,8 +464,7 @@ depositAccountInput.addEventListener('input', () => {
     }
     depositAccountName = undefined;
 })
-//event listener on form submit
-const depositForm = document.querySelector('#deposit-modal-form');
+//event listener on deposit form submit
 depositForm.addEventListener('submit', (e) => {
     e.preventDefault();
     let accountNumberValue = document.querySelector('#deposit-account-input').value;
@@ -437,24 +474,14 @@ depositForm.addEventListener('submit', (e) => {
 Account.deposit = (accountNumber, amount) => {
     accountNumber = Number(accountNumber);
     amount = parseFloat(amount);
-    let depositAccount;
-    let previousBalance;
+    let depositAccount = findAccount(accountNumber, 'number');
+    let previousBalance = findAccount(accountNumber, 'balance');
     let newBalance = previousBalance + amount;
-    const accounts = AccountStore.getAccouts();
-    for (let i = 0; i < accounts.length; i++) {
-        if (accounts[i].accountNumber === accountNumber) {
-            depositAccount = accountNumber;
-            previousBalance = parseFloat(accounts[i].balance);
-        };
-    }
     if (depositAccount) {
         depositName.innerText = "";
-        alertMessage.textContent = `Successfully Deposited ₱${amount} to Account Number: ${depositAccount}.`;
-        success();
-        // alert(`Successfully deposited ₱${amount} to ${depositAccount} `);
         // update account balance in local storage
         AccountStore.deposit(accountNumber, amount);
-        AccountUI.deposit(accountNumber, amount);
+        AccountUI.depositOrWithdraw(accountNumber, amount, newBalance, 'Deposited');
         AccountUI.clear_inputs();
     } else {
         //check if length is just wrong or if account really does not exist
@@ -465,8 +492,6 @@ Account.deposit = (accountNumber, amount) => {
 }
 
 //*WITHDRAW FORM 
-const withdrawAccountInput = document.querySelector('#withdraw-account-input');
-const withdrawName = document.querySelector('#withdraw-name');
 //event listener on user input: display account name if valid
 withdrawAccountInput.addEventListener('input', () => {
     let withdrawAccountName;
@@ -499,24 +524,17 @@ withdrawForm.addEventListener('submit', (e) => {
 Account.withdraw = (accountNumber, amount) => {
     accountNumber = Number(accountNumber);
     amount = parseFloat(amount);
-    const accounts = AccountStore.getAccouts();
-    let withdrawAccount;
-    let balance;
-    for (let i = 0; i < accounts.length; i++) {
-        if (accounts[i].accountNumber === accountNumber) {
-            withdrawAccount = accountNumber;
-            balance = accounts[i].balance;
-        };
-    }
+    // const accounts = AccountStore.getAccouts();
+    let withdrawAccount = findAccount(accountNumber, 'number');
+    let previousBalance = findAccount(accountNumber, 'balance');
+    let newBalance = previousBalance - amount;
     if (withdrawAccount) {
-        let isBalanceSufficient = checkBalance(balance, amount);
+        let isBalanceSufficient = checkBalance(previousBalance, amount);
         if (isBalanceSufficient) {
             withdrawName.innerText = "";
-            alertMessage.textContent = `Successfully withdrew ₱${amount} from ${withdrawAccount}`;
-            success();
             // alert(`Successfully withdrew ₱${amount} from ${withdrawAccount} `);
             AccountStore.withdraw(accountNumber, amount);
-            AccountUI.withdraw(accountNumber, amount);
+            AccountUI.depositOrWithdraw(accountNumber, amount, newBalance, 'Withdrew');
             AccountUI.clear_inputs();
         }
     } else {
@@ -525,15 +543,9 @@ Account.withdraw = (accountNumber, amount) => {
     }
     //to not override
     withdrawAccount = undefined;
-    balance = undefined;
 }
 
 //*SEND FORM 
-const senderAccountInput = document.querySelector('#sender-input');
-const receiverAccountInput = document.querySelector('#receiver-input');
-let senderName = document.querySelector('#sender-name');
-let receiverName = document.querySelector('#receiver-name');
-
 //event listener on user input: display account name if valid
 senderAccountInput.addEventListener('input', () => {
     let senderAccountName;
@@ -554,7 +566,6 @@ senderAccountInput.addEventListener('input', () => {
         };
     }
 })
-
 receiverAccountInput.addEventListener('input', () => {
     let receiverAccountName;
     //if input has no value
@@ -574,7 +585,6 @@ receiverAccountInput.addEventListener('input', () => {
         };
     }
 })
-
 //event listener on form submit
 const sendForm = document.querySelector('#send-modal-form');
 sendForm.addEventListener('submit', (e) => {
@@ -585,34 +595,25 @@ sendForm.addEventListener('submit', (e) => {
     Account.send(senderAccountNumberValue, receiverAccountNumberValue, sendAmount);
 })
 Account.send = (from_accountNumber, to_accountNumber, amount) => {
-    let senderAccount;
-    let senderAccountName;
-    let senderBalance;
-    let receiverAccount;
-    let receiverAccountName;
-
+    from_accountNumber = Number(from_accountNumber);
+    to_accountNumber = Number(to_accountNumber);
     amount = parseFloat(amount);
-    const accounts = AccountStore.getAccouts();
-    //check if sender and receiver accounts exist
-    for (let i = 0; i < accounts.length; i++) {
-        if (accounts[i].accountNumber === Number(from_accountNumber)) {
-            senderAccount = Number(from_accountNumber);
-            senderAccountName = accounts[i].name;
-            senderBalance = accounts[i].balance;
-        } else if (accounts[i].accountNumber === Number(to_accountNumber)) {
-            receiverAccount = Number(to_accountNumber);
-            receiverAccountName = accounts[i].name;
-        };
-    }
+    //sender
+    let senderAccount = findAccount(from_accountNumber, 'number');
+    let senderAccountName = findAccount(from_accountNumber, 'name');
+    let previousSenderBalance = findAccount(from_accountNumber, 'balance');
+    //receiver
+    let receiverAccount = findAccount(to_accountNumber, 'number');
+    let receiverAccountName = findAccount(to_accountNumber, 'name');
+    let previousReceiverBalance = findAccount(to_accountNumber, 'balance');
+    //new balance after transaction
+    let newSenderBalance = previousSenderBalance - amount;
+    let newReceiverBalance = previousReceiverBalance + amount;
     if (senderAccount && receiverAccount) {
-        let isBalanceSufficient = checkBalance(senderBalance, amount);
+        let isBalanceSufficient = checkBalance(previousSenderBalance, amount);
         if (isBalanceSufficient) {
-            senderName.innerText = "";
-            receiverName.innerText = "";
-            alertMessage.textContent = `Successfully sent ₱${amount} from ${senderAccountName}: ${senderAccount} to ${receiverAccountName}: ${receiverAccount} `;
-            success();
             AccountStore.send(senderAccount, receiverAccount, amount);
-            AccountUI.send(senderAccount, receiverAccount, amount);
+            AccountUI.send(senderAccountName, senderAccount, newSenderBalance, receiverAccountName, receiverAccount, newReceiverBalance, amount);
             AccountUI.clear_inputs();
         }
     } else if (!senderAccount && receiverAccount) {
@@ -643,53 +644,6 @@ document.querySelector('#account-list-data').addEventListener('click', (e) => {
     AccountUI.deleteAccount(e.target);
 })
 
-//*HELPER FUNCTIONS
 
-//todo use helper functions for each form
-function findAccountNumber(accountNumber) {
-    const accounts = AccountStore.getAccouts();
-    accounts.forEach(account => {
-        if (account.accountNumber === accountNumber) {
-            return accountNumber;
-        } else {
-            return false;
-        }
-    })
-};
-function findAccountName(accountNumber) {
-    const accounts = AccountStore.getAccouts();
-    accounts.forEach(account => {
-        if (account.accountNumber === accountNumber) {
-            return account.name;
-        } else {
-            return false;
-        }
-    })
-}
-function checkNumberLength(accountNumber) {
-    if (String(accountNumber).length != 12) {
-        alertMessage.textContent = `INVALID ACCOUNT:
-Account number must contain 12 digits. Current input contains ${String(accountNumber).length} digits`;
-    } else {
-        alertMessage.textContent = `INVALID ACCOUNT: ACCOUNT NOT FOUND`;
-    }
-    invalid();
-}
-function checkBalance(currentBalance, amount) {
-    if (currentBalance >= amount) {
-        return currentBalance;
-    } else {
-        alertMessage.textContent = `INSUFFICIENT BALANCE: Account only has ₱${currentBalance} balance`;
-        invalid();
-        return false;
-    }
-}
-function success() {
-    removeAlert.style.display = 'block';
-    alertBox.style.backgroundColor = 'var(--success)';
-}
-function invalid() {
-    removeAlert.style.display = 'block';
-    alertBox.style.backgroundColor = 'var(--invalid)';
-}
+
 
