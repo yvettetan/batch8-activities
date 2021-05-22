@@ -1,6 +1,7 @@
 //todo wrong_arguments (e.g. name cannot start with a number)
 //todo update table UI for deposit, withdraw, send updates
 //todo create alert message for new account & delete account
+//todo show new balance in alert after every balance update
 //todo use helper functions for each form
 
 /*****ELEMENTS*****/
@@ -233,25 +234,57 @@ class AccountUI {
         const accountlist = document.querySelector('#account-list-data');
         //create trow to insert to tbody
         const row = document.createElement('tr');
+        //create unique id for balance to access when updating UI
         row.innerHTML = `
-                <td> ${account.accountNumber.toString().match(/.{1,4}/g).join(' ')}</td>
+                <td>${account.accountNumber.toString().match(/.{1,4}/g).join(' ')}</td>
                 <td>${account.name}</td>
                 <td>${account.dateOfBirth}</td>
-                <td>₱${account.balance.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</td>
+                <td id="b-${String(account.accountNumber)}">₱${account.balance.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</td>
                 <td><button class="fas fa-trash delete"></button></td>`;
         accountlist.appendChild(row);
     }
-    //todo update row balance after deposit
-    static deposit(accountNumber, amount) {
 
+    static deposit(accountNumber, amount) {
+        let previousBalanceText = document.getElementById(`b-${String(accountNumber)}`).innerHTML;
+        //turn text into number (remove peso sign and commas)
+        let previousBalance = parseFloat(previousBalanceText.slice(1).replace(/,/g, ''));
+        //add amounts then turn back to a string
+        let newBalance = String(previousBalance + amount);
+        //add peso and commas again
+        document.getElementById(`b-${String(accountNumber)}`).innerHTML = `₱${newBalance.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`;
     }
 
-    //todo update table row balance after withdraw
-    static withdraw(accountNumber, amount) {
 
+    static withdraw(accountNumber, amount) {
+        let previousBalanceText = document.getElementById(`b-${String(accountNumber)}`).innerHTML;
+        //turn text into number (remove peso sign and commas)
+        let previousBalance = parseFloat(previousBalanceText.slice(1).replace(/,/g, ''));
+        //subtract amounts then turn back to a string
+        let newBalance = String(previousBalance - amount);
+        //add peso and commas again
+        document.getElementById(`b-${String(accountNumber)}`).innerHTML = `₱${newBalance.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`;
     }
 
     //todo update table row balance after money transfer
+    static send(senderAccountNumber, receiverAccountNumber, amount) {
+        //update sender balance
+        let previousSenderBalanceText = document.getElementById(`b-${String(senderAccountNumber)}`).innerHTML;
+        //turn text into number (remove peso sign and commas)
+        let previousSenderBalance = parseFloat(previousSenderBalanceText.slice(1).replace(/,/g, ''));
+        //subtract amounts then turn back to a string
+        let newSenderBalance = String(previousSenderBalance - amount);
+        //add peso and commas again
+        document.getElementById(`b-${String(senderAccountNumber)}`).innerHTML = `₱${newSenderBalance.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`;
+
+        //update receiver balance
+        let previousReceiverBalanceText = document.getElementById(`b-${String(receiverAccountNumber)}`).innerHTML;
+        //turn text into number (remove peso sign and commas)
+        let previousReceiverBalance = parseFloat(previousReceiverBalanceText.slice(1).replace(/,/g, ''));
+        //add amounts then turn back to a string
+        let newReceiverBalance = String(previousReceiverBalance + amount);
+        //add peso and commas again
+        document.getElementById(`b-${String(receiverAccountNumber)}`).innerHTML = `₱${newReceiverBalance.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`;
+    }
 
     //make sure that target element contains the class of delete then delete the whole account row
     static deleteAccount(target) {
@@ -306,7 +339,7 @@ addAccountForm.addEventListener('submit', (e) => {
     } else {
         create_user(randNumber, fullName, dateOfBirth, 0);
     }
-    //todo how to not repeat random account number with exactly 12 numbers
+    //todo how to not repeat random account number
     existingAccount = false;
 });
 
@@ -405,19 +438,23 @@ Account.deposit = (accountNumber, amount) => {
     accountNumber = Number(accountNumber);
     amount = parseFloat(amount);
     let depositAccount;
+    let previousBalance;
+    let newBalance = previousBalance + amount;
     const accounts = AccountStore.getAccouts();
     for (let i = 0; i < accounts.length; i++) {
         if (accounts[i].accountNumber === accountNumber) {
             depositAccount = accountNumber;
+            previousBalance = parseFloat(accounts[i].balance);
         };
     }
     if (depositAccount) {
         depositName.innerText = "";
-        alertMessage.textContent = `Successfully Deposited ₱${amount} to Account Number: ${depositAccount}`;
+        alertMessage.textContent = `Successfully Deposited ₱${amount} to Account Number: ${depositAccount}.`;
         success();
         // alert(`Successfully deposited ₱${amount} to ${depositAccount} `);
         // update account balance in local storage
         AccountStore.deposit(accountNumber, amount);
+        AccountUI.deposit(accountNumber, amount);
         AccountUI.clear_inputs();
     } else {
         //check if length is just wrong or if account really does not exist
@@ -479,6 +516,7 @@ Account.withdraw = (accountNumber, amount) => {
             success();
             // alert(`Successfully withdrew ₱${amount} from ${withdrawAccount} `);
             AccountStore.withdraw(accountNumber, amount);
+            AccountUI.withdraw(accountNumber, amount);
             AccountUI.clear_inputs();
         }
     } else {
@@ -574,22 +612,18 @@ Account.send = (from_accountNumber, to_accountNumber, amount) => {
             alertMessage.textContent = `Successfully sent ₱${amount} from ${senderAccountName}: ${senderAccount} to ${receiverAccountName}: ${receiverAccount} `;
             success();
             AccountStore.send(senderAccount, receiverAccount, amount);
+            AccountUI.send(senderAccount, receiverAccount, amount);
             AccountUI.clear_inputs();
         }
     } else if (!senderAccount && receiverAccount) {
         alertMessage.textContent = 'INVALID ACCOUNT: Sender does not exist';
         invalid();
-        // alert('Sender does not exist');
     } else if (senderAccount && !receiverAccount) {
         alertMessage.textContent = 'INVALID ACCOUNT: Receiver does not exist';
         invalid();
-
-        // alert('Receiver does not exist');
     } else {
         alertMessage.textContent = 'INVALID ACCOUNTS';
         invalid();
-
-        // alert('Invalid Accounts');
     }
     //reset sender and receiver details to prevent override
     senderAccount = undefined;
