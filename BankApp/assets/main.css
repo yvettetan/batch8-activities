@@ -56,7 +56,8 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
     -moz-appearance: textfield;
 }
-input[type="submit"] {
+input[type="submit"],
+.clear-input {
     padding: 0.5em 1em;
     margin-top: 1.5em;
     border: 1px solid var(--blue);
@@ -141,10 +142,10 @@ nav-link:active {
 .login-form input {
     width: 100%;
     outline: none;
-}
-.login-form input {
-    outline: none;
     box-shadow: none;
+}
+.login-form input[type="text"] {
+    text-transform: capitalize;
 }
 .login-input-group {
     padding-left: 0.5em;
@@ -396,6 +397,18 @@ nav {
     background-color: var(--form);
     border-radius: 1rem;
 }
+#deposit-modal-header,
+#withdraw-modal-header {
+    margin-bottom: 2em;
+    padding-bottom: 1em;
+}
+.modal h3 {
+    width: 60%;
+    margin: auto;
+    text-align: center;
+    padding-bottom: 0.2em;
+    border-bottom: 2px solid var(--black);
+}
 .modal form {
     display: flex;
     flex-direction: column;
@@ -433,32 +446,49 @@ hr {
     padding: 1em;
 }
 .accounts-header {
+    height: 8vh;
     background-color: #ffffff;
+    position: relative;
+    margin-bottom: 2em;
     display: flex;
     justify-content: flex-start;
     align-items: center;
 }
 .acc-alert-container {
+    width: 65%;
+    margin: 2em 0 0 0;
     display: flex;
-    background-color: antiquewhite;
-    width: 100%;
-    height: 100%;
     justify-content: center;
     align-items: center;
+    font-weight: 600;
 }
-#acc-list-accounts,
-#acc-add-account {
-    font-size: 1.2rem;
-}
-#add-account-container {
-    margin-top: 4em;
-}
-#acc-add-account {
+#acc-remove-alert {
     margin-left: 2em;
+    display: none;
+}
+.acc-nav {
+    margin-top: 2em;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+#acc-list-accounts {
+    padding: 1em;
+    font-size: 1.2rem;
+    color: var(--blue);
+}
+.acc-active {
+    text-decoration: underline;
 }
 #acc-add-account img {
     width: 2.5rem;
-    background-color: antiquewhite;
+}
+#acc-add-account img:hover,
+#acc-list-accounts:hover {
+    transform: translateY(-3%);
+}
+#add-account-container {
+    margin-top: 4em;
 }
 #add-account-form {
     background-color: var(--form);
@@ -509,7 +539,7 @@ th {
     letter-spacing: 1.5px;
 }
 td {
-    padding: 0.2em 0 0.2em 1em;
+    padding: 0.2em 0 0.2em 1.5em;
     border: 1px solid var(--black);
     text-align: left;
 }
