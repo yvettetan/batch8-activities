@@ -58,7 +58,10 @@
                             <input type="number" id="account-number-input" placeholder="Enter 12-digit Account Number"
                                 autocomplete="off" required>
                         </div>
-                        <input type="submit" value="Display Balance">
+                        <div>
+                            <button type="button" class="clear-input">Clear</button>
+                            <input type="submit" value="Display Balance">
+                        </div>
                     </form>
                     <div id="bank-card">
                         <div class="bank-card-label">
@@ -90,8 +93,8 @@
                 <div class="modal-bg deposit-modal-bg">
                     <div class="modal deposit-modal">
                         <h3 id="deposit-modal-header">DEPOSIT FORM</h3>
-                        <hr>
-                        <p class="display-name">ACCOUNT NAME:<strong id="deposit-name"></strong></p>
+                        <p class="display-name">ACCOUNT NAME:<strong id="deposit-name"
+                                class="display-name-text"></strong></p>
                         <form id="deposit-modal-form">
                             <div class="modal-input-group">
                                 <label for="deposit-account-input">Account Number</label>
@@ -100,7 +103,7 @@
                             </div>
                             <div class="modal-input-group">
                                 <label for="deposit-amount-input">Amount</label>
-                                <input type="number" id="deposit-amount-input" placeholder="₱0.00" autocomplete="off"
+                                <input type="number" id="deposit-amount-input" placeholder="₱0" autocomplete="off"
                                     min="1" step="any" required>
                             </div>
                             <input type="submit" value="Deposit Amount">
@@ -111,8 +114,8 @@
                 <div class="modal-bg withdraw-modal-bg">
                     <div class="modal withdraw-modal">
                         <h3 id="withdraw-modal-header">WITHDRAW FORM</h3>
-                        <hr>
-                        <p class="display-name">ACCOUNT NAME:<strong id="withdraw-name"></strong></p>
+                        <p class="display-name">ACCOUNT NAME:<strong id="withdraw-name"
+                                class="display-name-text"></strong></p>
                         <form id="withdraw-modal-form">
                             <div class="modal-input-group">
                                 <label for="withdraw-account-input">Account Number</label>
@@ -121,7 +124,7 @@
                             </div>
                             <div class="modal-input-group">
                                 <label for="deposit-amount-input">Amount</label>
-                                <input type="number" id="withdraw-amount-input" placeholder="₱0.00" autocomplete="off"
+                                <input type="number" id="withdraw-amount-input" placeholder="₱0" autocomplete="off"
                                     min="1" step="any" required>
                             </div>
                             <input type="submit" value="Withdraw Amount">
@@ -132,24 +135,25 @@
                 <div class="modal-bg send-modal-bg">
                     <div class="modal send-modal">
                         <h3 id="send-modal-header">SEND MONEY FORM</h3>
-                        <hr>
                         <form id="send-modal-form">
-                            <p class="display-name">ACCOUNT NAME:<strong id="sender-name"></strong></p>
-                            <div class="modal-input-group">
+                            <p class="display-name">ACCOUNT NAME:<strong id="sender-name"
+                                    class="display-name-text"></strong></p>
+                            <div class=" modal-input-group">
                                 <label for="sender-input"> From Account Number</label>
                                 <input type="number" id="sender-input" placeholder="Enter Sender Account Number"
                                     minlength="12" maxlength="12" autocomplete="off" required>
                             </div>
-                            <p class="display-name">ACCOUNT NAME:<strong id="receiver-name"></strong></p>
-                            <div class="modal-input-group">
+                            <p class="display-name">ACCOUNT NAME:<strong id="receiver-name"
+                                    class="display-name-text"></strong></p>
+                            <div class=" modal-input-group">
                                 <label for="receiver-input"> To Account Number</label>
                                 <input type="number" id="receiver-input" placeholder="Enter Receiver Account Number"
                                     autocomplete="off" required>
                             </div>
                             <div class="modal-input-group">
                                 <label for="send-amount-input">Amount</label>
-                                <input type="number" id="send-amount-input" placeholder="₱0.00" autocomplete="off"
-                                    min="1" step="any" required>
+                                <input type="number" id="send-amount-input" placeholder="₱0" autocomplete="off" min="1"
+                                    step="any" required>
                             </div>
                             <input type="submit" value="Send Amount">
                         </form>
@@ -160,12 +164,13 @@
     </div>
     <!-- *accounts -->
     <div id="accounts" class="hide">
-
         <div class="accounts-header">
-            <button id="acc-list-accounts">View All Accounts</button>
-            <button id="acc-add-account"><img src="./assets/images/add-account.svg" alt="add account"></button>
+            <div class="acc-nav">
+                <button id="acc-list-accounts">View All Accounts</button>
+                <button id="acc-add-account"><img src="./assets/images/add-account.svg" alt="add account"></button>
+            </div>
             <div class="acc-alert-container">
-                <p class="alert-message">dsfgdsg</p>
+                <p class="acc-alert-message"></p>
                 <button id="acc-remove-alert">✘</button>
             </div>
         </div>
@@ -176,7 +181,6 @@
                     <tr>
                         <th>Account Number</th>
                         <th>Account Name</th>
-                        <th>Date of Birth</th>
                         <th>Balance</th>
                         <th>Actions</th>
                     </tr>
@@ -194,15 +198,16 @@
                 </div>
                 <div class="input-group">
                     <label for="middleName">Middle Name</label>
-                    <input type="text" id="middleName" autocomplete="off" required>
+                    <input type="text" id="middleName" autocomplete="off">
                 </div>
                 <div class="input-group">
                     <label for=" lasttName">Last Name</label>
                     <input type="text" id="lastName" autocomplete="off" required>
                 </div>
                 <div class="input-group">
-                    <label for="dateOfBirth">Date of Birth</label>
-                    <input type="date" id="dateOfBirth" autocomplete="off" required>
+                    <label for="initialDeposit">Initial Deposit</label>
+                    <input type="number" id="initialDeposit" placeholder="₱0" autocomplete="off" min="1" step="any"
+                        required>
                 </div>
                 <input id="add-account-btn" type="submit" value="Add Account">
             </form>

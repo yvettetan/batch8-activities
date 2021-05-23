@@ -1,15 +1,12 @@
-//todo wrong_arguments (e.g. name cannot start with a number)
-//todo fix alert message for new account & delete account
-//todo fix listeners on form inputs
-//todo fix clear inputs UI
-//todo refactor storage code
-
 /*****ELEMENTS*****/
 const dashboard = document.querySelector('#dashboard');
 const accounts = document.querySelector('#accounts');
 const budget = document.querySelector('#budget');
 const currentDate = document.querySelector('#date');
 const userAccountModal = document.querySelector('.user-account-modal');
+const inputNumbers = document.querySelectorAll('input[type=number]');
+const inputTexts = document.querySelectorAll('input[type=text]');
+const displayNames = document.querySelectorAll('.display-name-text');
 
 //* HEADER  
 const dashboardBtn = document.querySelector('#dashboard-btn');
@@ -39,16 +36,20 @@ userIcon.addEventListener('click', () => {
     userAccountModal.classList.toggle('hide');
 })
 
+//date display
 const today = new Date();
 var months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
-
 currentDate.textContent = `${months[today.getMonth()]} ${today.getDate()}, ${today.getFullYear()}`;
 
 let alertName;
 //display user's name on page load
 window.addEventListener('load', () => {
     let params = (new URL(document.location)).searchParams;
-    const name = params.get('name');
+    //capitalize name
+    const name = params.get('name').toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
     //display user's name
     document.querySelector('#main-user-name').textContent = name;
     alertMessage.textContent = `Welcome, ${name}`;
@@ -56,10 +57,6 @@ window.addEventListener('load', () => {
 })
 
 //*DASHBOARD TAB 
-const alertBox = document.querySelector('.alert-container');
-const alertMessage = document.querySelector('.alert-message');
-const removeAlert = document.querySelector('#db-remove-alert');
-
 const dbDeposit = document.querySelector('#db-deposit');
 const depositModal = document.querySelector('.deposit-modal-bg');
 const dbWithdraw = document.querySelector('#db-withdraw');
@@ -67,6 +64,9 @@ const withdrawModal = document.querySelector('.withdraw-modal-bg');
 const dbSendMoney = document.querySelector('#db-send-money');
 const sendModal = document.querySelector('.send-modal-bg');
 const dbAddAccount = document.querySelector('#db-add-account');
+const alertBox = document.querySelector('.alert-container');
+const alertMessage = document.querySelector('.alert-message');
+const removeAlert = document.querySelector('#db-remove-alert');
 
 removeAlert.addEventListener('click', () => {
     alertMessage.textContent = `Welcome, ${alertName}`;
@@ -100,18 +100,27 @@ dbAddAccount.addEventListener('click', () => {
 //*ACCOUNTS TAB 
 const accListAccounts = document.querySelector('#acc-list-accounts');
 const accAddAccount = document.querySelector('#acc-add-account');
-
+const accAlertMessage = document.querySelector('.acc-alert-message');
+const accRemoveAlert = document.querySelector('#acc-remove-alert');
 const accountList = document.querySelector('#account-list');
 const addAccountContainer = document.querySelector('#add-account-container');
 
 accListAccounts.addEventListener('click', () => {
     show(accountList);
     hide([addAccountContainer]);
+    accListAccounts.classList.add('acc-active');
 });
 
 accAddAccount.addEventListener('click', () => {
     show(addAccountContainer);
     hide([accountList]);
+    accListAccounts.classList.remove('acc-active');
+})
+
+accRemoveAlert.addEventListener('click', () => {
+    accAlertMessage.innerText = '';
+    accRemoveAlert.style.display = 'none';
+
 })
 
 //* TOGGLE DISPLAYS 
@@ -174,6 +183,10 @@ function checkBalance(currentBalance, amount) {
         return false;
     }
 }
+function displayToCard(newBalance) {
+    newBalance.indexOf('.') ? balanceDisplay.innerText = `₱${newBalance}` : balanceDisplay.innerText = `₱${newBalance}.00`;
+}
+//for alert box
 function success() {
     removeAlert.style.display = 'block';
     alertBox.style.backgroundColor = 'var(--success)';
@@ -185,10 +198,9 @@ function invalid() {
 
 //*USER CLASS 
 class Account {
-    constructor(accountNumber, name, dateOfBirth, balance) {
+    constructor(accountNumber, name, balance) {
         this.accountNumber = accountNumber;
         this.name = name;
-        this.dateOfBirth = dateOfBirth;
         this.balance = balance;
     };
 }
@@ -277,11 +289,10 @@ class AccountUI {
         const accountlist = document.querySelector('#account-list-data');
         //create trow to insert to tbody
         const row = document.createElement('tr');
-        //create unique id for balance to access when updating UI
+        //create unique id for balance to access when acount table UI
         row.innerHTML = `
                 <td>${account.accountNumber.toString().match(/.{1,4}/g).join(' ')}</td>
                 <td>${account.name}</td>
-                <td>${account.dateOfBirth}</td>
                 <td id="b-${String(account.accountNumber)}">₱${account.balance.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</td>
                 <td>Delete Account <button class="fas fa-trash delete"></button></td>`;
         accountlist.appendChild(row);
@@ -301,6 +312,10 @@ class AccountUI {
         document.getElementById(`b-${String(accountNumber)}`).innerHTML = `₱${newBalance}`
         alertMessage.textContent = `Successfully ${action} ₱${amount} ${toOrFrom} Account Number: ${accountNumber}. New Balance: ₱${newBalance}`;
         success();
+        //display new balance in balance card
+        if (displayAccountInput.value != '') {
+            displayToCard(newBalance);
+        }
     }
 
     static send(senderAccountName, senderAccountNumber, newSenderBalance, receiverAccountName, receiverAccountNumber, newReceiverBalance, amount) {
@@ -314,6 +329,7 @@ class AccountUI {
         alertMessage.textContent = `Successfully Sent ₱${amount} from ${senderAccountNumber} to ${receiverAccountNumber}
                     New Balance: ${senderAccountName} = ₱${newSenderBalance}; ${receiverAccountName} = ₱${newReceiverBalance}`;
         success();
+        displayToCard(newSenderBalance);
     }
 
     //make sure that target element contains the class of delete then delete the whole account row
@@ -324,18 +340,15 @@ class AccountUI {
         }
     }
     static clear_inputs() {
-        document.querySelector("#firstName").value = '';
-        document.querySelector("#lastName").value = '';
-        document.querySelector("#middleName").value = '';
-        document.querySelector("#dateOfBirth").value = '';
-        document.querySelector('#account-number-input').value = '';
-        // document.querySelector('#deposit-account-input').value = '';
-        document.querySelector('#deposit-amount-input').value = '';
-        document.querySelector('#withdraw-account-input').value = '';
-        document.querySelector('#withdraw-amount-input').value = '';
-        document.querySelector('#sender-input').value = '';
-        document.querySelector('#receiver-input').value = '';
-        document.querySelector('#send-amount-input').value = '';
+        for (let input of inputNumbers) {
+            input.value = '';
+        }
+        for (let input of inputTexts) {
+            input.value = '';
+        }
+        for (let name of displayNames) {
+            name.innerText = '';
+        }
     }
 }
 
@@ -349,33 +362,35 @@ addAccountForm.addEventListener('submit', (e) => {
     e.preventDefault();
     let randNumber = Math.floor(Math.random() * 900000000000) + 100000000000;
     const firstName = document.querySelector('#firstName').value;
-    const lasttName = document.querySelector('#lastName').value;
     const middleName = document.querySelector('#middleName').value;
+    const lasttName = document.querySelector('#lastName').value;
     const fullName = `${firstName} ${middleName} ${lasttName} `;
-    const dateOfBirth = document.querySelector('#dateOfBirth').value;
+    const initialDeposit = Number(document.querySelector('#initialDeposit').value);
 
     let existingAccount;
     const accounts = AccountStore.getAccouts();
     //check if account already exists
     accounts.forEach(account => {
-        if (account.name.toLowerCase() === fullName) {
-            if (account.dateOfBirth === dateOfBirth) {
-                existingAccount = true;
-            }
+        if (account.name.toLowerCase() === fullName.toLowerCase()) {
+            existingAccount = true;
         }
     })
     if (existingAccount) {
-        alert('Account already exists!');
+        accRemoveAlert.style.display = 'block';
+        accAlertMessage.innerText = 'INVALID: Account Already Exists!';
+        accAlertMessage.style.color = 'var(--invalid)';
     } else {
-        create_user(randNumber, fullName, dateOfBirth, 0);
+        create_user(randNumber, fullName, initialDeposit);
     }
     existingAccount = false;
 });
 
-create_user = (accountNumber, name, dateOfBirth, balance) => {
+create_user = (accountNumber, name, initialDeposit) => {
     //instantiate a new account from the Account class
-    const account = new Account(accountNumber, name.toUpperCase(), dateOfBirth, balance);
-    alert(`New Account: ${accountNumber} - ${name.toUpperCase()} - ${balance} `);
+    const account = new Account(accountNumber, name.toUpperCase(), initialDeposit);
+    accRemoveAlert.style.display = 'block';
+    accAlertMessage.innerText = `NEW ACCOUNT: ${accountNumber} NAME: ${name.toUpperCase()} BALANCE: ₱${initialDeposit}`;
+    accAlertMessage.style.color = 'var(--success)';
     //display new account in list
     AccountUI.addAccount(account);
     //add new account to storage
@@ -389,6 +404,8 @@ create_user = (accountNumber, name, dateOfBirth, balance) => {
 const balanceDisplay = document.querySelector('#account-balance');
 const nameDisplay = document.querySelector('#account-name');
 const displayAccountInput = document.querySelector('#account-number-input');
+
+const clearInput = document.querySelector('.clear-input');
 //deposit form elements
 const depositForm = document.querySelector('#deposit-modal-form');
 const depositAccountInput = document.querySelector('#deposit-account-input');
@@ -403,6 +420,14 @@ const senderName = document.querySelector('#sender-name');
 const receiverName = document.querySelector('#receiver-name');
 
 //* GET BALANCE 
+//clear button
+clearInput.addEventListener('click', () => {
+    AccountUI.clear_inputs();
+    if (!displayAccountInput.value) {
+        balanceDisplay.innerText = '₱0.00';
+        nameDisplay.innerText = '';
+    }
+})
 //event listener on user input
 displayAccountInput.addEventListener('input', () => {
     if (!displayAccountInput.value) {
@@ -410,35 +435,52 @@ displayAccountInput.addEventListener('input', () => {
         nameDisplay.innerText = '';
     }
 })
-
 //event listener on form submit
 const displayBalanceForm = document.querySelector('#display-balance-form');
 displayBalanceForm.addEventListener('submit', (e) => {
-    let accountNumberValue = displayAccountInput.value;
     e.preventDefault();
+    let accountNumberValue = displayAccountInput.value;
     Account.get_balance(accountNumberValue);
 })
 
 Account.get_balance = (accountNumber) => {
     accountNumber = Number(accountNumber);
-    let getAccountNumber = findAccount(accountNumber, 'number');
-    let balance = findAccount(accountNumber, 'balance').toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-    let name = findAccount(accountNumber, 'name');
+    let getAccountNumber;
+    let balance;
+    let name;
+    const accounts = AccountStore.getAccouts();
+    accounts.forEach(account => {
+        if (account.accountNumber === accountNumber) {
+            getAccountNumber = accountNumber;
+            balance = account.balance;
+            //display balance with comma
+            balance = account.balance.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+            name = account.name;
+        };
+    })
     if (getAccountNumber) {
         //check if balance is an integer or not
-        balance.indexOf('.') ? balanceDisplay.innerText = `₱${balance}.00` : balanceDisplay.innerText = `₱${balance}`;
+        balance.indexOf('.') ? balanceDisplay.innerText = `₱${balance}` : balanceDisplay.innerText = `₱${balance}.00`;
         nameDisplay.innerText = name;
-        //auto input account number to deposit form and withdraw form
-        depositAccountInput.value = getAccountNumber;
         depositName.innerText = name;
-        withdrawAccountInput.value = getAccountNumber;
         withdrawName.innerText = name;
+        senderName.innerText = name;
     } else {
         //check if length is just wrong or if account really does not exist
         checkNumberLength(accountNumber);
         balanceDisplay.innerText = '₱0.00';
         nameDisplay.innerText = 'Account not Found';
+        depositName.innerText = 'Account not Found';
+        withdrawName.innerText = 'Account not Found';
+        senderName.innerText = 'Account not Found';
     }
+    //auto input account number to deposit form and withdraw form
+    depositAccountInput.value = getAccountNumber;
+    withdrawAccountInput.value = getAccountNumber;
+    senderAccountInput.value = getAccountNumber;
+    receiverAccountInput.value = '';
+    receiverName.innerText = '';
+
     //to not override
     depositAccount = undefined;
 }
@@ -446,6 +488,7 @@ Account.get_balance = (accountNumber) => {
 //*DEPOSIT FORM 
 //event listener on user input: display account name if valid
 depositAccountInput.addEventListener('input', () => {
+    let depositAccountName;
     //if input has no value
     if (!depositAccountInput.value) {
         depositName.innerText = "";
@@ -478,11 +521,10 @@ Account.deposit = (accountNumber, amount) => {
     let previousBalance = findAccount(accountNumber, 'balance');
     let newBalance = previousBalance + amount;
     if (depositAccount) {
-        depositName.innerText = "";
         // update account balance in local storage
         AccountStore.deposit(accountNumber, amount);
         AccountUI.depositOrWithdraw(accountNumber, amount, newBalance, 'Deposited');
-        AccountUI.clear_inputs();
+        document.querySelector('#deposit-amount-input').value = '';
     } else {
         //check if length is just wrong or if account really does not exist
         checkNumberLength(accountNumber);
@@ -531,11 +573,10 @@ Account.withdraw = (accountNumber, amount) => {
     if (withdrawAccount) {
         let isBalanceSufficient = checkBalance(previousBalance, amount);
         if (isBalanceSufficient) {
-            withdrawName.innerText = "";
-            // alert(`Successfully withdrew ₱${amount} from ${withdrawAccount} `);
+            withdrawAmount = '';
             AccountStore.withdraw(accountNumber, amount);
             AccountUI.depositOrWithdraw(accountNumber, amount, newBalance, 'Withdrew');
-            AccountUI.clear_inputs();
+            document.querySelector('#withdraw-amount-input').value = '';
         }
     } else {
         //check if length is just wrong or if account really does not exist
@@ -609,18 +650,21 @@ Account.send = (from_accountNumber, to_accountNumber, amount) => {
     //new balance after transaction
     let newSenderBalance = previousSenderBalance - amount;
     let newReceiverBalance = previousReceiverBalance + amount;
-    if (senderAccount && receiverAccount) {
+    if (senderAccount === receiverAccount) {
+        alertMessage.textContent = 'INVALID ACTION: Cannot Send to the Same Account';
+        invalid();
+    } else if (senderAccount && receiverAccount) {
         let isBalanceSufficient = checkBalance(previousSenderBalance, amount);
         if (isBalanceSufficient) {
             AccountStore.send(senderAccount, receiverAccount, amount);
             AccountUI.send(senderAccountName, senderAccount, newSenderBalance, receiverAccountName, receiverAccount, newReceiverBalance, amount);
-            AccountUI.clear_inputs();
+            document.querySelector('#send-amount-input').value = '';
         }
     } else if (!senderAccount && receiverAccount) {
-        alertMessage.textContent = 'INVALID ACCOUNT: Sender does not exist';
+        alertMessage.textContent = 'INVALID ACCOUNT: Sender Does Not Exist';
         invalid();
     } else if (senderAccount && !receiverAccount) {
-        alertMessage.textContent = 'INVALID ACCOUNT: Receiver does not exist';
+        alertMessage.textContent = 'INVALID ACCOUNT: Receiver Does Not Exist';
         invalid();
     } else {
         alertMessage.textContent = 'INVALID ACCOUNTS';
