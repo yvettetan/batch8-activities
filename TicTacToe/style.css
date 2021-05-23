@@ -5,6 +5,9 @@
     --blue: #5b708e;
     --background: #e0dfd5;
     --black: #313638;
+    --hover: #e4b36369;
+    --x-hover: #5b708eaf;
+    --o-hover: #a26769af;
 }
 *,
 *::before,
@@ -84,10 +87,11 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 4rem;
 }
+
 /* PLAYERS */
 .cell::after {
-    font-size: 4rem;
     font-weight: 500;
 }
 .X::after {
@@ -166,25 +170,78 @@ button:active {
     display: block;
     visibility: hidden;
 }
-#resetBtn {
-    background-color: var(--rose);
-}
 
-@media (min-width: 500px) {
+/* MODAL */
+.modal-bg {
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    padding: 0.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+}
+.modal {
+    letter-spacing: 4px;
+    background-color: #ffffff;
+    border-radius: 0.8em;
+    padding: 2em 0;
+    color: var(--black);
+    line-height: 60px;
+}
+#modal-header,
+#modal-text {
+    font-size: 7vmin;
+    font-weight: 700;
+}
+#modal-header {
+    color: var(--yellow);
+}
+.modal-btn {
+    margin-top: 1.5em;
+}
+.modal-btn button {
+    width: 16em;
+    padding: 1em 0;
+}
+#historyBtn {
+    background-color: var(--blue);
+}
+#resetBtn,
+#newBtn {
+    background-color: var(--rose);
+    color: white;
+}
+@media (min-width: 475px) {
     h1 {
         font-size: 3rem;
     }
-    #turnIndicator {
+    #turnIndicator,
+    h2 {
         font-size: 2rem;
     }
     #board {
         width: 55vmin;
         height: 55vmin;
     }
+    .cell {
+        font-size: 10vmin;
+    }
     #buttons {
         justify-content: space-evenly;
     }
     button {
         margin: 2em;
+    }
+    .modal {
+        width: 90vmin;
+    }
+    #modal-header,
+    #modal-text {
+        font-size: 6vmin;
+        padding: 1.5em;
     }
 }

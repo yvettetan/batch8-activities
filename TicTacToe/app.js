@@ -1,62 +1,67 @@
 /*****ELEMENTS*****/
 const turnIndicator = document.querySelector('#turnIndicator');
 const cells = document.querySelectorAll('.cell');
-
 const previousBtn = document.querySelector('#previousBtn');
 const nextBtn = document.querySelector('#nextBtn');
 const resetBtn = document.querySelector('#resetBtn');
+const modalContainer = document.querySelector('.modal-bg');
+const modalHeader = document.querySelector('#modal-header');
+const modalText = document.querySelector('#modal-text');
+const newGameBtn = document.querySelector('#newBtn');
+const gameHistoryBtn = document.querySelector('#historyBtn');
 
 /*****VARIABLES*****/
 let xTurn = true;
 let occupiedCells = 0;
-let historyLog = [];
-let board = [
-    ['', '', ''],
-    ['', '', ''],
-    ['', '', '']
-];
-
-let previousMoveStorage = [];
-let nextMoveStorage = [];
-let previousPlayerStorage = [];
-let nextPlayerStorage = [];
+let boardArray = [];
+let previousMoveArray = [];
 
 /*****EVENT LISTENERS*****/
-
 //add event listener for each cell
 for (let cell of cells) {
     cell.addEventListener('click', play);
+    cell.addEventListener('mouseenter', hover);
+    cell.addEventListener('mousedown', (e) => {
+        e.target.textContent = '';
+    })
+    cell.addEventListener('mouseout', (e) => {
+        e.target.textContent = '';
+    });
 }
+//modal buttons
+newGameBtn.addEventListener('click', reset);
+
+gameHistoryBtn.addEventListener('click', () => {
+    previousBtn.style.visibility = 'visible';
+    modalContainer.style.display = 'none';
+});
 
 //previous button
 previousBtn.addEventListener('click', () => {
     nextBtn.style.visibility = 'visible';
-    if (previousMoveStorage.length != 0) {
-        let lastMove = previousMoveStorage[previousMoveStorage.length - 1];
-        let targetCell = cells[lastMove];
-        let lastPlayer = previousPlayerStorage[previousPlayerStorage.length - 1];
-        targetCell.classList.remove(targetCell.classList[2]); //remove last move from cell
-        nextMoveStorage.push(lastMove); //add last move to nextMoveStorage
-        previousMoveStorage.pop(); //remove last move from previousMoveStorage
-        nextPlayerStorage.push(lastPlayer); //add last player to nextPlayerStorage
-        previousPlayerStorage.pop(); //remove last player from previousPlayerStorage
+    if (boardArray.length != 0) {
+        let lastMove = boardArray[boardArray.length - 1]; //move object
+        let targetCell = cells[parseInt(lastMove.cell)];
+        targetCell.classList.remove(targetCell.classList[2]);
+        previousMoveArray.push(lastMove);
+        boardArray.pop();
+        console.log(lastMove);
     } else {
         previousBtn.style.visibility = 'hidden';
-    };
+    }
 });
 
 //next button
 nextBtn.addEventListener('click', () => {
     previousBtn.style.visibility = 'visible';
-    if (nextMoveStorage.length != 0) {
-        let lastMove = nextMoveStorage[nextMoveStorage.length - 1];
-        let targetCell = cells[lastMove];
-        let lastPlayer = nextPlayerStorage[nextPlayerStorage.length - 1]
-        targetCell.classList.add(lastPlayer); //display last player in cell
-        previousMoveStorage.push(lastMove); //add last move to previousMoveStorage
-        nextMoveStorage.pop(); //remove last move from nextMoveStorage
-        previousPlayerStorage.push(lastPlayer); //add last player to previousPlayerStorage
-        nextPlayerStorage.pop(); //remove last player from nextPlayerStorage
+    if (previousMoveArray.length != 0) {
+        let lastMove = previousMoveArray[previousMoveArray.length - 1]; //moveObject
+        let targetCell = cells[parseInt(lastMove.cell)];
+        let lastPlayer = lastMove.player;
+        targetCell.classList.add(lastPlayer);
+        boardArray.push(lastMove);
+        previousMoveArray.pop();
+        console.log(lastMove);
     } else {
         nextBtn.style.visibility = 'hidden';
         previousBtn.style.visibility = 'visible';
@@ -64,120 +69,55 @@ nextBtn.addEventListener('click', () => {
 })
 
 //reset button
-resetBtn.addEventListener('click', () => {
-    // clear all Xs and Os
-    for (let cell of cells) {
-        let classList = cell.classList;
-        if (classList.length = 3) {
-            classList.remove(classList[2]);
-        } else {
-            return;
-        }
-    }
-    //start with x turn again
-    xTurn = true;
-    updatePlayer('X');
-    //remove previous and next buttons
-    previousBtn.style.visibility = 'hidden';
-    nextBtn.style.visibility = 'hidden';
-    //add event listener to cells
-    isGameOver(false);
-
-    //clears game history
-    historyLog = [];
-    occupiedCells = 0;
-    previousMoveStorage = [];
-    nextMoveStorage = [];
-    previousPlayerStorage = [];
-    nextPlayerStorage = [];
-    board = [
-        ['', '', ''],
-        ['', '', ''],
-        ['', '', '']
-    ];
-    console.clear();
-})
+resetBtn.addEventListener('click', reset);
 
 /*****FUNCTIONS*****/
 
 function play(e) {
-    const target = e.target; //know wich cell was clicked
-    const classList = target.classList; //check list of classes
-    const cell = classList[1]; //select second class as identifier of cell location
-    //adds an extra class to cell depending on if xturn is true (X), if false (O)
+    //know wich cell was clicked
+    const target = e.target;
+    //check list of classes
+    const classList = target.classList;
+    //select second class as identifier of cell location
+    const cell = classList[1];
+    //add class to cell if xturn or not
     const player = classList[2];
-    if (player === 'X' || player === 'O') { //if class already contains x or o, do nothing
+    target.removeEventListener('mouseenter', hover);
+    //if class already contains x or o
+    if (player === 'X' || player === 'O') {
         return;
     }
-    else if (xTurn) { // if x's turn
-        classList.add('X'); //add x class (displays x in cell)
-        addMove(cell, 'X'); //add current x move to array
-        updatePlayer('O'); //change turn indicator to o's turn
-        xTurn = !xTurn; //x turn ends
+    // if x's turn
+    else if (xTurn) {
+        //display x in cell
+        classList.add('X');
+        saveMove(cell, 'X');
+        //change turn indicator to o's turn
+        updatePlayer('O');
+        //x turn ends
+        xTurn = !xTurn;
         occupiedCells++;
-        previousPlayer = 'X';
-    } else { //if o's turn
-        classList.add('O'); //add o class (displays o in cell)
-        addMove(cell, 'O'); //add current o move to array
-        updatePlayer('X'); //change turn indicator to x's turn
-        xTurn = !xTurn; //back to x turn
+        //if o's turn
+    } else {
+        //display o in cell
+        classList.add('O');
+        saveMove(cell, 'O');
+        updatePlayer('X');
+        //back to x turn
+        xTurn = !xTurn;
         occupiedCells++;
-        previousPlayer = '0';
     }
-    previousMoveStorage.push(cell); //adds move to previousMoveStorage
-    isWinner(); //check if any player has won the game
+    //check if any player has won the game
+    isWinner();
 }
 
-// add player to storage
-function addMove(cell, player) {
-    previousPlayerStorage.push(player); //adds player to previousPlayerStorage
-    let cellPlayed = parseInt(cell);
-    //coordinates of cell
-    if (cellPlayed === 0 || cellPlayed === 1 || cellPlayed === 2) { //if cell 0, 1, 2 was played
-        let row = 0; //set row to 0
-        if (cellPlayed === 0) { //if cell 0
-            let column = 0; //set column to 1
-            saveMove(row, column, player); //saves location and player to array
-        } else if (cellPlayed === 1) {
-            let column = 1;
-            saveMove(row, column, player);
-        } else {
-            let column = 2;
-            saveMove(row, column, player);
-        }
-    } else if (cellPlayed === 3 || cellPlayed === 4 || cellPlayed === 5) { //if cell 3, 4, 5 was played
-        let row = 1;
-        if (cellPlayed === 3) {
-            let column = 0;
-            saveMove(row, column, player);
-        } else if (cellPlayed === 4) {
-            let column = 1;
-            saveMove(row, column, player);
-        } else {
-            let column = 2;
-            saveMove(row, column, player);
-        }
-    } else { //if cell 6, 7, 8 was played
-        let row = 2;
-        if (cellPlayed === 6) {
-            let column = 0;
-            saveMove(row, column, player);
-        } else if (cellPlayed === 7) {
-            let column = 1;
-            saveMove(row, column, player);
-        } else {
-            let column = 2;
-            saveMove(row, column, player);
-        }
-    }
-}
-
-//stores each move in move array
-function saveMove(row, column, player) {
-    let move = [];
-    board[row].splice(column, 1, player); //saves move to board array
-    move.push(`[${row}][${column}], ${player}`);
-    historyLog.push(move);
+//stores each move in move object
+function saveMove(cell, player) {
+    let moveObject = {};
+    moveObject.cell = cell;
+    moveObject.player = player;
+    //add move to board
+    boardArray.push(moveObject);
 }
 
 //changes turn indicator to player's turn
@@ -212,25 +152,28 @@ function isWinner() {
         [cell2, cell4, cell6]
     ];
 
-    // //check if any winning condition is fulfilled
+    //check if any winning condition is fulfilled
     winningConditions.some((cell) => {
         if (cell[0] && cell[0] === cell[1] && cell[0] === cell[2]) {
             turnIndicator.textContent = `${cell[0]} has won!`;
+            modalHeader.textContent = 'CONGRATULATIONS!';
+            modalText.textContent = `${cell[0]} has won`;
             isGameOver(true);
             //display previous button
-            previousBtn.style.visibility = 'visible';
             return cell;
         } else {
             isDraw();
         }
-    })
+    });
 }
 
 //checks if game is a draw - all cells are occupied and no winning combination
 function isDraw() {
     if (occupiedCells === 9 && !isGameOver()) {
         turnIndicator.textContent = 'DRAW';
-        previousBtn.style.visibility = 'visible';
+        modalHeader.textContent = "IT'S A TIE!";
+        modalText.textContent = '';
+
         isGameOver(true);
     };
 }
@@ -240,18 +183,51 @@ function isGameOver(status) {
     if (!status) {
         for (let cell of cells) {
             cell.addEventListener('click', play);
-        }
+            cell.addEventListener('mouseenter', hover);
+        };
     } else {
         for (let cell of cells) {
             cell.removeEventListener('click', play);
-        }
-        console.log('Board State:');
-        console.log(board);
-        console.log('Game History:');
-        console.log(historyLog);
+            cell.removeEventListener('mouseenter', hover);
+        };
+        modalContainer.style.display = 'flex';
+    };
+
+    console.log('Board Array:');
+    console.log(boardArray);
+}
+
+function hover(e) {
+    if (xTurn) {
+        e.target.textContent = 'X';
+        e.target.style.color = 'var(--x-hover)';
+    } else {
+        e.target.textContent = 'O';
+        e.target.style.color = 'var(--o-hover)';
     }
 }
 
-
-
-
+function reset() {
+    // clear all Xs and Os
+    for (let cell of cells) {
+        let classList = cell.classList;
+        if (classList.length = 3) {
+            classList.remove(classList[2]);
+        } else {
+            return;
+        }
+    }
+    //start with x turn again
+    xTurn = true;
+    updatePlayer('X');
+    //remove previous and next buttons
+    previousBtn.style.visibility = 'hidden';
+    nextBtn.style.visibility = 'hidden';
+    isGameOver(false);
+    occupiedCells = 0;
+    boardArray = [];
+    previousMoveArray = [];
+    console.clear();
+    modalText.textContent = '';
+    modalContainer.style.display = 'none';
+}
