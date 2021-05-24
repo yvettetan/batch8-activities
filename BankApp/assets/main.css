@@ -466,6 +466,19 @@ hr {
     margin-left: 2em;
     display: none;
 }
+.confirm-delete {
+    display: none;
+    margin-left: 1em;
+}
+.confirm-delete button {
+    border: 1px solid var(--black);
+    padding: 0.2em 0.5em;
+    border-radius: 1rem;
+}
+.confirm-delete button:hover {
+    background-color: var(--black);
+    color: #ffffff;
+}
 .acc-nav {
     margin-top: 2em;
     display: flex;
