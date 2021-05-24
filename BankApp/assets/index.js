@@ -333,11 +333,25 @@ class AccountUI {
     }
 
     //make sure that target element contains the class of delete then delete the whole account row
-    static deleteAccount(target) {
-        if (target.classList.contains('delete')) {
+    static deleteAccount(target, targetAccountNumber) {
+        accAlertMessage.textContent = `Are you sure you want to delete account ${targetAccountNumber}?`;
+        accAlertMessage.style.color = 'var(--invalid)';
+        document.querySelector('.confirm-delete').style.display = 'inline';
+
+        document.querySelector('#yes-delete').addEventListener('click', () => {
             //remove parent of parent element (tr) from the DOM
             target.parentElement.parentElement.remove();
-        }
+            //remove account from storage. 
+            AccountStore.deleteAccount(targetAccountNumber);
+            accAlertMessage.innerText = `Successfully deleted account ${targetAccountNumber}`;
+            accAlertMessage.style.color = 'var(--success)';
+            accRemoveAlert.style.display = 'inline';
+            document.querySelector('.confirm-delete').style.display = 'none';
+        });
+        document.querySelector('#no-delete').addEventListener('click', () => {
+            accAlertMessage.innerText = '';
+            document.querySelector('.confirm-delete').style.display = 'none';
+        })
     }
     static clear_inputs() {
         for (let input of inputNumbers) {
@@ -681,13 +695,9 @@ document.querySelector('#account-list-data').addEventListener('click', (e) => {
     // traverse the DOM to get the targetAccountNumber
     let targetAccount = e.target.parentElement.parentElement.firstElementChild.textContent;
     //remove spaces between string target account number
-    let targetAccountNumber = Number(targetAccount.replace(/\s/g, ''))
-    //remove account from storage. 
-    AccountStore.deleteAccount(targetAccountNumber);
+    let targetAccountNumber = Number(targetAccount.replace(/\s/g, ''));
     //remove account from list
-    AccountUI.deleteAccount(e.target);
+    if (e.target.classList.contains('delete')) {
+        AccountUI.deleteAccount(e.target, targetAccountNumber);
+    }
 })
-
-
-
-
