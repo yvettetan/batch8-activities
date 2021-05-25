@@ -50,7 +50,6 @@ window.addEventListener('load', () => {
         .split(' ')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
-    //display user's name
     document.querySelector('#main-user-name').textContent = name;
     alertMessage.textContent = `Welcome, ${name}`;
     alertName = name;
@@ -186,7 +185,6 @@ function checkBalance(currentBalance, amount) {
 function displayToCard(newBalance) {
     newBalance.indexOf('.') ? balanceDisplay.innerText = `₱${newBalance}` : balanceDisplay.innerText = `₱${newBalance}.00`;
 }
-//for alert box
 function success() {
     removeAlert.style.display = 'block';
     alertBox.style.backgroundColor = 'var(--success)';
@@ -206,11 +204,6 @@ class Account {
 }
 
 //* STORAGE 
-//local storage stores key value pairs
-/*cant store objects in local storage. it has to be a string so need to stringify 
-before adding to storage and parse when pulling it out*/
-//'static' used to be able to call them directly without having to instantiate the store class
-//accounts will be a string version of the entire array of accounts list
 class AccountStore {
     static getAccouts() {
         let accounts;
@@ -270,7 +263,6 @@ class AccountStore {
                 accounts.splice(index, 1);
             }
         });
-        //reset to local storage
         localStorage.setItem('accounts', JSON.stringify(accounts));
     }
 }
@@ -289,7 +281,7 @@ class AccountUI {
         const accountlist = document.querySelector('#account-list-data');
         //create trow to insert to tbody
         const row = document.createElement('tr');
-        //create unique id for balance to access when acount table UI
+        //create unique id for balance to access when balance is updated
         row.innerHTML = `
                 <td>${account.accountNumber.toString().match(/.{1,4}/g).join(' ')}</td>
                 <td>${account.name}</td>
@@ -297,8 +289,6 @@ class AccountUI {
                 <td>Delete Account <button class="fas fa-trash delete"></button></td>`;
         accountlist.appendChild(row);
     }
-
-    // AccountUI.deposit(accountNumber, amount, previousBalance, newBalance);
     static depositOrWithdraw(accountNumber, amount, newBalance, action) {
         //turn amount to string and add commas
         amount = amount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
@@ -418,7 +408,6 @@ create_user = (accountNumber, name, initialDeposit) => {
 const balanceDisplay = document.querySelector('#account-balance');
 const nameDisplay = document.querySelector('#account-name');
 const displayAccountInput = document.querySelector('#account-number-input');
-
 const clearInput = document.querySelector('.clear-input');
 //deposit form elements
 const depositForm = document.querySelector('#deposit-modal-form');
@@ -540,10 +529,8 @@ Account.deposit = (accountNumber, amount) => {
         AccountUI.depositOrWithdraw(accountNumber, amount, newBalance, 'Deposited');
         document.querySelector('#deposit-amount-input').value = '';
     } else {
-        //check if length is just wrong or if account really does not exist
         checkNumberLength(accountNumber);
     }
-    //to not override
     depositAccount = undefined;
 }
 
@@ -580,7 +567,6 @@ withdrawForm.addEventListener('submit', (e) => {
 Account.withdraw = (accountNumber, amount) => {
     accountNumber = Number(accountNumber);
     amount = parseFloat(amount);
-    // const accounts = AccountStore.getAccouts();
     let withdrawAccount = findAccount(accountNumber, 'number');
     let previousBalance = findAccount(accountNumber, 'balance');
     let newBalance = previousBalance - amount;
@@ -593,10 +579,8 @@ Account.withdraw = (accountNumber, amount) => {
             document.querySelector('#withdraw-amount-input').value = '';
         }
     } else {
-        //check if length is just wrong or if account really does not exist
         checkNumberLength(accountNumber);
     }
-    //to not override
     withdrawAccount = undefined;
 }
 
@@ -684,7 +668,6 @@ Account.send = (from_accountNumber, to_accountNumber, amount) => {
         alertMessage.textContent = 'INVALID ACCOUNTS';
         invalid();
     }
-    //reset sender and receiver details to prevent override
     senderAccount = undefined;
     receiverAccount = undefined;
 }
