@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/main.css">
+    <title>Bank App Signup Form</title>
+</head>
+
+<body>
+    <img id="login-logo" src="./assets/images/logo.svg" alt="logo">
+    <div class="login-container">
+        <div class="login-image-container">
+            <img class="login-image" src="./assets/images/login-image.svg" alt="teamwork">
+        </div>
+        <!-- signup form -->
+        <div class="signup">
+            <h1>Create an Account</h1>
+            <form method="GET" class="signup-form">
+                <div class="signup-input-group">
+                    <label for="user-name"><img src="./assets/images/login-user.svg" alt="user"></label>
+                    <input type="text" autocomplete="off" id="user-name" name="name" placeholder="Enter Name*" required>
+                </div>
+                <div class="signup-input-group">
+                    <label for="user-email"><img src="./assets/images/email.svg" alt="email"></label>
+                    <input type="email" autocomplete="off" id="user-email" name="email" placeholder="Enter Email*"
+                        required>
+                </div>
+                <div class="signup-input-group">
+                    <label for="user-password"><img src="./assets/images/padlock.svg" alt="padlock"></label>
+                    <input type="password" id="user-password" name="password" placeholder="Enter Password*" required>
+                </div>
+                <div class="input-group">
+                    <input id="signup-submit" type="submit" value="Sign Up">
+                </div>
+                <p>Already have an account?
+                    <a href="./login.html">Login to your account</a>
+                </p>
+            </form>
+        </div>
+    </div>
+    <script src="./assets/signup.js"></script>
+</body>
+
+</html>
