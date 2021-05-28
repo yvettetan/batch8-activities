@@ -734,12 +734,30 @@ class UserStore {
         const users = UserStore.getUsers();
         let newBalance;
         users.some(user => {
-            if (user.email = userEmail) {
+            if (user.email === userEmail) {
                 newBalance = user.balance -= Number(cost);
             }
         })
         localStorage.setItem('users', JSON.stringify(users));
         UserUI.updateBalance(newBalance);
+    }
+    static deleteExpense(userEmail, targetExpense) {
+        //target expense is the target row
+        let expenseDate = targetExpense.children[0].textContent;
+        let expenseTitle = targetExpense.children[1].textContent;
+        //remove peso sign and convert string textcontent to number
+        let expenseCost = parseFloat(targetExpense.children[2].textContent.toString().substring(1));
+        const users = UserStore.getUsers();
+        users.forEach((user => {
+            if (user.email === userEmail) {
+                user.expenses.forEach((expense, index) => {
+                    if (expense.date === expenseDate && expense.title === expenseTitle && expense.cost === expenseCost) {
+                        user.expenses.splice(index, 1);
+                    }
+                })
+            }
+        }))
+        localStorage.setItem('users', JSON.stringify(users));
     }
 }
 //*USER EXPENSE UI 
@@ -790,6 +808,10 @@ class UserUI {
             balance.style.color = 'var(--success)';
         }
     }
+    static deleteExpense(userEmail, targetExpense) {
+        targetExpense.remove();
+        UserStore.deleteExpense(userEmail, targetExpense);
+    }
 }
 //*LIST EXPENSES
 document.addEventListener('DOMContentLoaded', UserUI.list_expenses);
@@ -814,9 +836,17 @@ expenseForm.addEventListener('submit', (e) => {
     UserStore.updateBalance(loggedInEmail, expenseCost);
 })
 create_expense = (date, title, cost) => {
-    let expense = new ExpenseItem(date, title, cost);
+    let expense = new ExpenseItem(date, title, parseFloat(cost));
     UserUI.addExpense(expense);
-    UserUI.updateBalance();
     //add expense to current user's expense list
     UserStore.addExpense(loggedInEmail, expense);
 }
+
+//*delete an expense 
+document.querySelector('#expense-list-data').addEventListener('click', (e) => {
+    //target table row and remove from table
+    let targetExpenseItem = e.target.parentElement.parentElement;
+    if (e.target.classList.contains('delete')) {
+        UserUI.deleteExpense(loggedInEmail, targetExpenseItem);
+    }
+})
