@@ -17,27 +17,29 @@
         <div class="login-image-container">
             <img class="login-image" src="./assets/images/login-image.svg" alt="teamwork">
         </div>
+        <!-- login form -->
         <div class="login">
-            <h1 class="login-message">Welcome to Bank</h1>
-            <form action="./index.html" method="GET" class="login-form">
+            <h1>Welcome to Bank</h1>
+            <form class="login-form">
                 <div class="login-input-group">
-                    <label for="user"><img src="./assets/images/login-user.svg" alt="user"></label>
-                    <input type="text" autocomplete="off" id="user" name="name" placeholder="Enter Name" required>
+                    <label for="login-user-email"><img src="./assets/images/email.svg" alt="mail"></label>
+                    <input type="email" id="login-user-email" name="email" placeholder="Enter Email" required>
                 </div>
                 <div class="login-input-group">
-                    <label for="user-password"><img src="./assets/images/padlock.svg" alt="padlock"></label>
-                    <input type="password" id="user-password" placeholder="Enter Password" required>
+                    <label for="login-user-password"><img src="./assets/images/padlock.svg" alt="padlock"></label>
+                    <input type="password" id="login-user-password" placeholder="Enter Password" required>
                 </div>
                 <a href="#" class="forgot-password">Forgot Password?</a>
                 <div class="input-group">
                     <input id="login-submit" type="submit" value="Login">
                 </div>
                 <p>Dont have an account yet?
-                    <a href="#">Create an Account</a>
+                    <a href="./signup.html">Create an Account</a>
                 </p>
             </form>
         </div>
     </div>
+    <script src="./assets/login.js"></script>
 </body>
 
 </html>

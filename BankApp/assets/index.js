@@ -37,22 +37,22 @@ userIcon.addEventListener('click', () => {
 })
 
 //date display
-const today = new Date();
+let today = new Date();
 var months = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 currentDate.textContent = `${months[today.getMonth()]} ${today.getDate()}, ${today.getFullYear()}`;
 
 let alertName;
+let loggedInEmail;
 //display user's name on page load
 window.addEventListener('load', () => {
     let params = (new URL(document.location)).searchParams;
-    //capitalize name
-    const name = params.get('name').toLowerCase()
-        .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
+    //find email in storage and return capitalize name
+    const useremail = params.get('email');
+    const name = capitalize(findUser(useremail, 'name'));
     document.querySelector('#main-user-name').textContent = name;
     alertMessage.textContent = `Welcome, ${name}`;
     alertName = name;
+    loggedInEmail = useremail;
 })
 
 //*DASHBOARD TAB 
@@ -148,6 +148,18 @@ hideModal = elementsArr => {
     });
 }
 //*HELPER FUNCTIONS 
+function findUser(email, type) {
+    const users = JSON.parse(localStorage.getItem('users'));;
+    for (let i = 0; i < users.length; i++) {
+        if (users[i].email === email) {
+            if (type === 'name') {
+                return users[i].username;
+            } else if (type === 'balance') {
+                return users[i].balance;
+            };
+        };
+    };
+}
 //look for account number is in storage, return number or balance or name
 function findAccount(accountNumber, type) {
     const accounts = AccountStore.getAccouts();
@@ -193,8 +205,14 @@ function invalid() {
     removeAlert.style.display = 'block';
     alertBox.style.backgroundColor = 'var(--invalid)';
 }
+function capitalize(words) {
+    return words.toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+}
 
-//*USER CLASS 
+//*ACCOUNT CLASS 
 class Account {
     constructor(accountNumber, name, balance) {
         this.accountNumber = accountNumber;
@@ -202,8 +220,7 @@ class Account {
         this.balance = balance;
     };
 }
-
-//* STORAGE 
+//*ACCOUNTS STORAGE 
 class AccountStore {
     static getAccouts() {
         let accounts;
@@ -266,7 +283,7 @@ class AccountStore {
         localStorage.setItem('accounts', JSON.stringify(accounts));
     }
 }
-
+//Handles list table and alert UI for accounts
 //* ACCOUNT UI 
 class AccountUI {
     static list_users() {
@@ -384,12 +401,12 @@ addAccountForm.addEventListener('submit', (e) => {
         accAlertMessage.innerText = 'INVALID: Account Already Exists!';
         accAlertMessage.style.color = 'var(--invalid)';
     } else {
-        create_user(randNumber, fullName, initialDeposit);
+        create_account(randNumber, fullName, initialDeposit);
     }
     existingAccount = false;
 });
 
-create_user = (accountNumber, name, initialDeposit) => {
+create_account = (accountNumber, name, initialDeposit) => {
     //instantiate a new account from the Account class
     const account = new Account(accountNumber, name.toUpperCase(), initialDeposit);
     accRemoveAlert.style.display = 'block';
@@ -684,3 +701,118 @@ document.querySelector('#account-list-data').addEventListener('click', (e) => {
         AccountUI.deleteAccount(e.target, targetAccountNumber);
     }
 })
+
+//*BUDGET - expense tracker 
+class ExpenseItem {
+    constructor(date, title, cost) {
+        this.date = date;
+        this.title = title;
+        this.cost = cost;
+    }
+}
+//*USER EXPENSE STORAGE 
+class UserStore {
+    static getUsers() {
+        let users;
+        if (localStorage.getItem('users') === null) {
+            users = [];
+        } else {
+            users = JSON.parse(localStorage.getItem('users'));
+        }
+        return users;
+    }
+    static addExpense(userEmail, expenseItem) {
+        const users = UserStore.getUsers();
+        users.some(user => {
+            if (user.email === userEmail) {
+                user.expenses.push(expenseItem);
+            }
+        })
+        localStorage.setItem('users', JSON.stringify(users));
+    }
+    static updateBalance(userEmail, cost) {
+        const users = UserStore.getUsers();
+        let newBalance;
+        users.some(user => {
+            if (user.email = userEmail) {
+                console.log(typeof user.balance);
+                console.log(typeof cost);
+                newBalance = user.balance -= Number(cost);
+            }
+        })
+        localStorage.setItem('users', JSON.stringify(users));
+        UserUI.updateBalance(newBalance);
+    }
+}
+//*USER EXPENSE UI 
+class UserUI {
+    static list_expenses() {
+        let params = (new URL(document.location)).searchParams;
+        //find email in storage and return capitalize name
+        let email = params.get('email');
+        const users = UserStore.getUsers();
+        let name = findUser(email, 'name');
+        users.some(user => {
+            if (user.email === email) {
+                let balance = document.querySelector('#user-balance');
+                if (user.balance < 0) {
+                    balance.textContent = `(₱${user.balance.toString().substring(1)})`;
+                    balance.style.color = 'var(--invalid)';
+                } else {
+                    balance.textContent += user.balance;
+                }
+                user.expenses.forEach(expense => {
+                    UserUI.addExpense(name, expense);
+                })
+            }
+        })
+        localStorage.setItem('users', JSON.stringify(users));
+    }
+    static addExpense(name, expenseItem) {
+        document.querySelector('#expense-title').value = '';
+        document.querySelector('#expense-cost').value = '';
+        const expenseList = document.querySelector('#expense-list-data');
+        //create trow to insert to tbody
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${expenseItem.date}</td>
+            <td>${expenseItem.title}</td>
+            <td>₱${expenseItem.cost}</td>
+            <td><button class="fas fa-edit edit"></button><button class="fas fa-trash delete"></button></td>`;
+        expenseList.appendChild(row);
+    }
+    static updateBalance(newBalance) {
+        console.log(newBalance);
+        console.log(typeof newBalance)
+        let balance = document.querySelector('#user-balance');
+        balance.textContent = newBalance;
+    }
+}
+//*LIST EXPENSES
+document.addEventListener('DOMContentLoaded', UserUI.list_expenses);
+//*ADD EXPENSE FORM 
+const expenseForm = document.querySelector('#expense-form');
+expenseForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let expenseTitle = document.querySelector('#expense-title').value;
+    let expenseCost = document.querySelector('#expense-cost').value;
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1;
+    let yyyy = today.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+    today = yyyy + '-' + mm + '-' + dd;
+    create_expense(today, expenseTitle, expenseCost);
+    UserStore.updateBalance(loggedInEmail, expenseCost);
+})
+create_expense = (date, title, cost) => {
+    let expense = new ExpenseItem(date, title, cost);
+    UserUI.addExpense(expense);
+    //add expense to current user's expense list
+    UserStore.addExpense(loggedInEmail, expense);
+}

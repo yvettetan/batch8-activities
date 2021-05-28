@@ -25,9 +25,9 @@
                         Logout</a>
                 </div>
             </button>
-            <span id="main-user-name">User</span>
+            <span id="main-user-name"></span>
             <button><img class="notification" src="./assets/images/notification.svg" alt="notificaton bell"></button>
-            <button><img class="email" src="./assets/images/email.svg" alt="mail icon"></button>
+            <button><img class="email" src="./assets/images/mail.svg" alt="mail icon"></button>
             <button><img class="plant" src="./assets/images/plant.svg" alt="plant"></button>
         </div>
         <nav>
@@ -195,7 +195,7 @@
         </div>
         <!-- add account -->
         <div id="add-account-container" class="hide">
-            <form action="" id="add-account-form">
+            <form id="add-account-form">
                 <div class="input-group">
                     <label for="firstName">First Name</label>
                     <input type="text" id="firstName" autocomplete="off" required>
@@ -220,7 +220,29 @@
 
     <!-- *budget -->
     <div id="budget" class="hide">
-        <h2>Budget</h2>
+        <h2>Expense Tracker</h2>
+        <div class="expense-form-container">
+            <p>Current Balance: <strong id="user-balance">₱</strong></p>
+            <form id="expense-form">
+                <input type="text" id="expense-title" placeholder="Exense Title" required>
+                <input type="number" id="expense-cost" placeholder="Amount" required>
+                <input type="submit" value='Add Expense'>
+            </form>
+        </div>
+        <div id="expense-list">
+            <table id="expense-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Expense Title</th>
+                        <th>Cost</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <!-- insert new expenses-->
+                <tbody id="expense-list-data"></tbody>
+            </table>
+        </div>
     </div>
 
     <script src="./assets/index.js"></script>
