@@ -735,8 +735,6 @@ class UserStore {
         let newBalance;
         users.some(user => {
             if (user.email = userEmail) {
-                console.log(typeof user.balance);
-                console.log(typeof cost);
                 newBalance = user.balance -= Number(cost);
             }
         })
@@ -760,15 +758,16 @@ class UserUI {
                     balance.style.color = 'var(--invalid)';
                 } else {
                     balance.textContent += user.balance;
+                    balance.style.color = 'var(--success)';
                 }
                 user.expenses.forEach(expense => {
-                    UserUI.addExpense(name, expense);
+                    UserUI.addExpense(expense);
                 })
             }
         })
         localStorage.setItem('users', JSON.stringify(users));
     }
-    static addExpense(name, expenseItem) {
+    static addExpense(expenseItem) {
         document.querySelector('#expense-title').value = '';
         document.querySelector('#expense-cost').value = '';
         const expenseList = document.querySelector('#expense-list-data');
@@ -782,10 +781,14 @@ class UserUI {
         expenseList.appendChild(row);
     }
     static updateBalance(newBalance) {
-        console.log(newBalance);
-        console.log(typeof newBalance)
         let balance = document.querySelector('#user-balance');
-        balance.textContent = newBalance;
+        if (newBalance < 0) {
+            balance.textContent = `(₱${newBalance.toString().substring(1)})`;
+            balance.style.color = 'var(--invalid)';
+        } else {
+            balance.textContent += newBalance;
+            balance.style.color = 'var(--success)';
+        }
     }
 }
 //*LIST EXPENSES
@@ -795,7 +798,7 @@ const expenseForm = document.querySelector('#expense-form');
 expenseForm.addEventListener('submit', (e) => {
     e.preventDefault();
     let expenseTitle = document.querySelector('#expense-title').value;
-    let expenseCost = document.querySelector('#expense-cost').value;
+    let expenseCost = parseFloat(document.querySelector('#expense-cost').value);
     let today = new Date();
     let dd = today.getDate();
     let mm = today.getMonth() + 1;
@@ -813,6 +816,7 @@ expenseForm.addEventListener('submit', (e) => {
 create_expense = (date, title, cost) => {
     let expense = new ExpenseItem(date, title, cost);
     UserUI.addExpense(expense);
+    UserUI.updateBalance();
     //add expense to current user's expense list
     UserStore.addExpense(loggedInEmail, expense);
 }
