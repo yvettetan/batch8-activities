@@ -55,7 +55,7 @@ window.addEventListener('load', () => {
     loggedInEmail = useremail;
 })
 
-//*DASHBOARD TAB 
+//*DASHBOARD TAB - display toggle 
 const dbDeposit = document.querySelector('#db-deposit');
 const depositModal = document.querySelector('.deposit-modal-bg');
 const dbWithdraw = document.querySelector('#db-withdraw');
@@ -121,6 +121,25 @@ accRemoveAlert.addEventListener('click', () => {
     accRemoveAlert.style.display = 'none';
 
 })
+//*BUDGET TAB 
+const incomeBtn = document.querySelector('#income-button');
+const expenseBtn = document.querySelector('#expense-button');
+const incomeForm = document.querySelector('#income-form');
+const expenseForm = document.querySelector('#expense-form');
+
+incomeBtn.addEventListener('click', () => {
+    activeBudget(incomeBtn);
+    inactiveBudget(expenseBtn);
+    show(incomeForm);
+    hide([expenseForm]);
+})
+expenseBtn.addEventListener('click', () => {
+    activeBudget(expenseBtn);
+    inactiveBudget(incomeBtn);
+    show(expenseForm);
+    hide([incomeForm]);
+})
+
 
 //* TOGGLE DISPLAYS 
 active = (element) => {
@@ -146,6 +165,12 @@ hideModal = elementsArr => {
     elementsArr.forEach(element => {
         element.style.display = 'none';
     });
+}
+activeBudget = (element) => {
+    element.classList.add('active-budget');
+}
+inactiveBudget = (element) => {
+    element.classList.remove('active-budget');
 }
 //*HELPER FUNCTIONS 
 function findUser(email, type) {
@@ -210,6 +235,20 @@ function capitalize(words) {
         .split(' ')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
+}
+function getDate() {
+    today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1;
+    let yyyy = today.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+    today = yyyy + '-' + mm + '-' + dd;
+    return today;
 }
 
 //*ACCOUNT CLASS 
@@ -418,6 +457,8 @@ create_account = (accountNumber, name, initialDeposit) => {
     AccountStore.addAccount(account);
     //clear input fields
     AccountUI.clear_inputs();
+    balanceDisplay.innerText = '₱0.00';
+    nameDisplay.innerText = '';
 }
 
 //*FORM ELEMENTS 
@@ -480,7 +521,7 @@ Account.get_balance = (accountNumber) => {
     })
     if (getAccountNumber) {
         //check if balance is an integer or not
-        balance.indexOf('.') ? balanceDisplay.innerText = `₱${balance}` : balanceDisplay.innerText = `₱${balance}.00`;
+        balance.includes('.') ? balanceDisplay.innerText = `₱${balance}` : balanceDisplay.innerText = `₱${balance}.00`;
         nameDisplay.innerText = name;
         depositName.innerText = name;
         withdrawName.innerText = name;
@@ -702,12 +743,17 @@ document.querySelector('#account-list-data').addEventListener('click', (e) => {
     }
 })
 
-//*BUDGET - expense tracker 
-class ExpenseItem {
+//*BUDGET TRACKER 
+class incomeItem {
     constructor(date, title, cost) {
         this.date = date;
         this.title = title;
         this.cost = cost;
+    }
+}
+class ExpenseItem extends incomeItem {
+    constructor(date, title, cost) {
+        super(date, title, cost);
     }
 }
 //*USER EXPENSE STORAGE 
@@ -721,6 +767,15 @@ class UserStore {
         }
         return users;
     }
+    static addIncome(userEmail, incomeItem) {
+        const users = UserStore.getUsers();
+        users.some(user => {
+            if (user.email === userEmail) {
+                user.income.push(incomeItem);
+            }
+        })
+        localStorage.setItem('users', JSON.stringify(users));
+    }
     static addExpense(userEmail, expenseItem) {
         const users = UserStore.getUsers();
         users.some(user => {
@@ -730,60 +785,107 @@ class UserStore {
         })
         localStorage.setItem('users', JSON.stringify(users));
     }
-    static updateBalance(userEmail, cost) {
+    static updateBalance(userEmail, cost, type) {
         const users = UserStore.getUsers();
         let newBalance;
         users.some(user => {
             if (user.email === userEmail) {
-                newBalance = user.balance -= Number(cost);
+                if (type === 'add') {
+                    newBalance = user.balance += Number(cost);
+                } else {
+                    newBalance = user.balance -= Number(cost);
+                }
+            }
+            localStorage.setItem('users', JSON.stringify(users));
+            UserUI.updateBalance(newBalance);
+        })
+    }
+    static deleteIncome(userEmail, targetIncome) {
+        //target expense is the target row
+        let incomeDate = targetIncome.children[0].textContent;
+        let incomeTitle = targetIncome.children[1].textContent;
+        //remove peso sign and convert string cost to number
+        let incomeCost = parseFloat(targetIncome.children[2].textContent.toString().substring(1));
+        let newBalance;
+        const users = UserStore.getUsers();
+        users.forEach(user => {
+            if (user.email === userEmail) {
+                newBalance = user.balance -= incomeCost;
+                user.income.forEach((income, index) => {
+                    if (income.date === incomeDate && income.title === incomeTitle && income.cost === incomeCost) {
+                        user.income.splice(index, 1);
+                    }
+                })
             }
         })
-        localStorage.setItem('users', JSON.stringify(users));
         UserUI.updateBalance(newBalance);
+        localStorage.setItem('users', JSON.stringify(users));
     }
     static deleteExpense(userEmail, targetExpense) {
         //target expense is the target row
         let expenseDate = targetExpense.children[0].textContent;
         let expenseTitle = targetExpense.children[1].textContent;
-        //remove peso sign and convert string textcontent to number
+        //remove peso sign and convert string cost to number
         let expenseCost = parseFloat(targetExpense.children[2].textContent.toString().substring(1));
+        let newBalance;
         const users = UserStore.getUsers();
-        users.forEach((user => {
+        users.forEach(user => {
             if (user.email === userEmail) {
+                newBalance = user.balance += expenseCost;
                 user.expenses.forEach((expense, index) => {
                     if (expense.date === expenseDate && expense.title === expenseTitle && expense.cost === expenseCost) {
                         user.expenses.splice(index, 1);
                     }
                 })
             }
-        }))
+        })
+        UserUI.updateBalance(newBalance);
         localStorage.setItem('users', JSON.stringify(users));
     }
 }
 //*USER EXPENSE UI 
 class UserUI {
+    static list_income() {
+        let params = (new URL(document.location)).searchParams;
+        //find email in storage and return capitalize name
+        let email = params.get('email');
+        const users = UserStore.getUsers();
+        users.some(user => {
+            if (user.email === email) {
+                UserUI.updateBalance(user.balance);
+                user.income.forEach(income => {
+                    UserUI.addIncome(income);
+                })
+            }
+        })
+        localStorage.setItem('users', JSON.stringify(users));
+    }
     static list_expenses() {
         let params = (new URL(document.location)).searchParams;
         //find email in storage and return capitalize name
         let email = params.get('email');
         const users = UserStore.getUsers();
-        let name = findUser(email, 'name');
         users.some(user => {
             if (user.email === email) {
-                let balance = document.querySelector('#user-balance');
-                if (user.balance < 0) {
-                    balance.textContent = `(₱${user.balance.toString().substring(1)})`;
-                    balance.style.color = 'var(--invalid)';
-                } else {
-                    balance.textContent += user.balance;
-                    balance.style.color = 'var(--success)';
-                }
                 user.expenses.forEach(expense => {
                     UserUI.addExpense(expense);
                 })
             }
         })
         localStorage.setItem('users', JSON.stringify(users));
+    }
+    static addIncome(incomeItem) {
+        document.querySelector('#income-title').value = '';
+        document.querySelector('#income-amount').value = '';
+        const incomeList = document.querySelector('#income-list-data');
+        //create trow to insert to tbody
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${incomeItem.date}</td>
+            <td>${incomeItem.title}</td>
+            <td>₱${incomeItem.cost}</td>
+            <td><button class="fas fa-edit edit"></button><button class="fas fa-trash delete"></button></td>`;
+        incomeList.prepend(row);
     }
     static addExpense(expenseItem) {
         document.querySelector('#expense-title').value = '';
@@ -796,57 +898,119 @@ class UserUI {
             <td>${expenseItem.title}</td>
             <td>₱${expenseItem.cost}</td>
             <td><button class="fas fa-edit edit"></button><button class="fas fa-trash delete"></button></td>`;
-        expenseList.appendChild(row);
+        expenseList.prepend(row);
     }
     static updateBalance(newBalance) {
         let balance = document.querySelector('#user-balance');
+        let newBalanceText = newBalance.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
         if (newBalance < 0) {
-            balance.textContent = `(₱${newBalance.toString().substring(1)})`;
+            //remove - character to display negative balance
+            let newNegativeBalance = newBalanceText.substring(1);
+            console.log(newNegativeBalance.indexOf('.'));
+            Number.isInteger(newBalance) ? balance.textContent = `(₱${newNegativeBalance}.00)` : balance.innerText = `(₱${newNegativeBalance})`;
             balance.style.color = 'var(--invalid)';
         } else {
-            balance.textContent += newBalance;
+            Number.isInteger(newBalance) ? balance.textContent = `₱${newBalanceText}.00` : balance.innerText = `₱${newBalanceText}`;
             balance.style.color = 'var(--success)';
         }
     }
-    static deleteExpense(userEmail, targetExpense) {
-        targetExpense.remove();
-        UserStore.deleteExpense(userEmail, targetExpense);
+    static deleteOrEditIncome(userEmail, targetIncome, type) {
+        if (type === 'delete') {
+            targetIncome.remove();
+            UserStore.deleteIncome(userEmail, targetIncome);
+        } else {
+            let incomeTitle = targetIncome.children[1].innerHTML;
+            //remove peso sign and convert string textcontent to number
+            let incomeCost = parseFloat(targetIncome.children[2].innerHTML.substring(1));
+            activeBudget(incomeBtn);
+            inactiveBudget(expenseBtn);
+            hide([expenseForm]);
+            show(incomeForm);
+            document.querySelector('#income-title').value = incomeTitle;
+            document.querySelector('#income-amount').value = incomeCost;
+            targetIncome.remove();
+            UserStore.deleteIncome(userEmail, targetIncome);
+        }
+    }
+    static deleteOrEditExpense(userEmail, targetExpense, type) {
+        if (type === 'delete') {
+            targetExpense.remove();
+            UserStore.deleteExpense(userEmail, targetExpense);
+        } else {
+            let expenseTitle = targetExpense.children[1].innerHTML;
+            //remove peso sign and convert string textcontent to number
+            let expenseCost = parseFloat(targetExpense.children[2].innerHTML.substring(1));
+            //place title and cost back to input and remove from list
+            activeBudget(expenseBtn);
+            inactiveBudget(incomeBtn);
+            hide([incomeForm]);
+            show(expenseForm);
+            document.querySelector('#expense-title').value = expenseTitle;
+            document.querySelector('#expense-cost').value = expenseCost;
+            targetExpense.remove();
+            UserStore.deleteExpense(userEmail, targetExpense);
+        }
+
     }
 }
-//*LIST EXPENSES
+//*LIST INCOME / EXPENSES 
 document.addEventListener('DOMContentLoaded', UserUI.list_expenses);
+document.addEventListener('DOMContentLoaded', UserUI.list_income);
+
+//*ADD INCOME FORM 
+incomeForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let incomeTitle = capitalize(document.querySelector('#income-title').value);
+    let incomeAmount = parseFloat(document.querySelector('#income-amount').value);
+    date = getDate();
+    create_income(date, incomeTitle, incomeAmount);
+    UserStore.updateBalance(loggedInEmail, incomeAmount, 'add');
+})
+create_income = (date, title, cost) => {
+    let income = new incomeItem(date, title, cost);
+    UserUI.addIncome(income);
+    //add expense to current user's expense list
+    UserStore.addIncome(loggedInEmail, income);
+}
 //*ADD EXPENSE FORM 
-const expenseForm = document.querySelector('#expense-form');
 expenseForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    let expenseTitle = document.querySelector('#expense-title').value;
+    let expenseTitle = capitalize(document.querySelector('#expense-title').value);
     let expenseCost = parseFloat(document.querySelector('#expense-cost').value);
-    let today = new Date();
-    let dd = today.getDate();
-    let mm = today.getMonth() + 1;
-    let yyyy = today.getFullYear();
-    if (dd < 10) {
-        dd = '0' + dd;
-    }
-    if (mm < 10) {
-        mm = '0' + mm;
-    }
-    today = yyyy + '-' + mm + '-' + dd;
-    create_expense(today, expenseTitle, expenseCost);
-    UserStore.updateBalance(loggedInEmail, expenseCost);
+    date = getDate();
+    create_expense(date, expenseTitle, expenseCost);
+    UserStore.updateBalance(loggedInEmail, expenseCost, 'subtract');
 })
 create_expense = (date, title, cost) => {
-    let expense = new ExpenseItem(date, title, parseFloat(cost));
+    let expense = new ExpenseItem(date, title, cost);
     UserUI.addExpense(expense);
     //add expense to current user's expense list
     UserStore.addExpense(loggedInEmail, expense);
 }
 
-//*delete an expense 
+//*DELETE / EDIT INCOME 
+document.querySelector('#income-list-data').addEventListener('click', (e) => {
+    //target table row and remove from table
+    let targetIncomeItem = e.target.parentElement.parentElement;
+    if (e.target.classList.contains('delete')) {
+        let deleteButton = e.target;
+        UserUI.deleteOrEditIncome(loggedInEmail, targetIncomeItem, 'delete');
+    }
+    if (e.target.classList.contains('edit')) {
+        let editButton = e.target;
+        UserUI.deleteOrEditIncome(loggedInEmail, targetIncomeItem, 'edit');
+    }
+})
+//*DELETE / EDIT EXPENSE 
 document.querySelector('#expense-list-data').addEventListener('click', (e) => {
     //target table row and remove from table
     let targetExpenseItem = e.target.parentElement.parentElement;
     if (e.target.classList.contains('delete')) {
-        UserUI.deleteExpense(loggedInEmail, targetExpenseItem);
+        let deleteButton = e.target;
+        UserUI.deleteOrEditExpense(loggedInEmail, targetExpenseItem, 'delete');
+    }
+    if (e.target.classList.contains('edit')) {
+        let editButton = e.target;
+        UserUI.deleteOrEditExpense(loggedInEmail, targetExpenseItem, 'edit');
     }
 })

@@ -1,11 +1,12 @@
 //*USER CLASS 
 class User {
-    constructor(userName, email, password, balance = 0, expenseItems = []) {
+    constructor(userName, email, password, balance = 0, expenseItems = [], incomeItems = []) {
         this.username = userName;
         this.email = email;
         this.password = password;
         this.balance = balance;
         this.expenses = expenseItems;
+        this.income = incomeItems;
     }
 }
 //*USERS STORAGE 
