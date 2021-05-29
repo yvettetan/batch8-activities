@@ -26,6 +26,7 @@ body {
 }
 a {
     text-decoration: none;
+    color: #092a3d;
 }
 button {
     background-color: transparent;
@@ -151,7 +152,9 @@ nav-link:active {
     outline: none;
     box-shadow: none;
 }
-.signup-form input[type="text"] {
+.signup-form input[type="text"],
+#income-title,
+#expense-title {
     text-transform: capitalize;
 }
 .login-input-group,
@@ -228,7 +231,6 @@ header {
 #main-user-icon {
     height: 40px;
 }
-
 nav,
 .header-right {
     height: 100%;
@@ -541,8 +543,7 @@ hr {
 .account-list {
     height: 100%;
 }
-#accounts-table,
-#expense-table {
+#accounts-table {
     margin: 0 auto;
     text-align: center;
     width: 90%;
@@ -573,12 +574,50 @@ td:last-child {
 }
 .fa-trash,
 .fa-edit {
-    margin-left: 1em;
+    margin: 0 1em;
     color: var(--black);
 }
-.expense-form-container {
+/** budget */
+#total {
+    font-size: 1rem;
+    margin-top: 0.2em;
+}
+.form-container {
     display: flex;
     justify-content: space-around;
     align-items: center;
     font-size: 1.5rem;
+    padding: 1em 0;
+}
+.income-expense-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+#income-button,
+#expense-button {
+    padding: 0.5em 1em;
+    border-radius: 0.5rem;
+}
+.active-budget {
+    background-color: var(--blue);
+    color: #ffffff;
+    transition: 0.3s ease-in-out;
+}
+#add-income {
+    background-color: var(--success);
+    color: #ffffff;
+    border: none;
+}
+#add-expense {
+    background-color: var(--invalid);
+    color: #ffffff;
+    border: none;
+}
+#income-table,
+#expense-table {
+    border-collapse: collapse;
+}
+#income-table td,
+#expense-table td {
+    padding-left: 0.5em;
 }
