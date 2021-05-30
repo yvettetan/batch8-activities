@@ -95,6 +95,7 @@ dbAddAccount.addEventListener('click', () => {
     show(addAccountContainer);
     hide([dashboard, accountList]);
     hideModal([sendModal]);
+    accListAccounts.classList.remove('acc-active');
 })
 //*ACCOUNTS TAB 
 const accListAccounts = document.querySelector('#acc-list-accounts');
@@ -250,7 +251,9 @@ function getDate() {
     today = yyyy + '-' + mm + '-' + dd;
     return today;
 }
-
+function numToString(num) {
+    return num.toFixed(2).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+}
 //*ACCOUNT CLASS 
 class Account {
     constructor(accountNumber, name, balance) {
@@ -341,14 +344,14 @@ class AccountUI {
         row.innerHTML = `
                 <td>${account.accountNumber.toString().match(/.{1,4}/g).join(' ')}</td>
                 <td>${account.name}</td>
-                <td id="b-${String(account.accountNumber)}">₱${account.balance.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</td>
+                <td id="b-${String(account.accountNumber)}">₱${numToString(account.balance)}</td>
                 <td>Delete Account <button class="fas fa-trash delete"></button></td>`;
         accountlist.appendChild(row);
     }
     static depositOrWithdraw(accountNumber, amount, newBalance, action) {
         //turn amount to string and add commas
-        amount = amount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-        newBalance = newBalance.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        amount = numToString(amount);
+        newBalance = numToString(newBalance);
         let toOrFrom;
         if (action === 'Deposited') {
             toOrFrom = 'to'
@@ -365,9 +368,9 @@ class AccountUI {
     }
 
     static send(senderAccountName, senderAccountNumber, newSenderBalance, receiverAccountName, receiverAccountNumber, newReceiverBalance, amount) {
-        amount = amount.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-        newSenderBalance = newSenderBalance.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-        newReceiverBalance = newReceiverBalance.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        amount = numToString(amount);
+        newSenderBalance = numToString(newSenderBalance);
+        newReceiverBalance = numToString(newReceiverBalance);
 
         document.getElementById(`b-${String(senderAccountNumber)}`).innerHTML = `₱${newSenderBalance}`;
         document.getElementById(`b-${String(receiverAccountNumber)}`).innerHTML = `₱${newReceiverBalance}`;
@@ -513,15 +516,12 @@ Account.get_balance = (accountNumber) => {
     accounts.forEach(account => {
         if (account.accountNumber === accountNumber) {
             getAccountNumber = accountNumber;
-            balance = account.balance;
-            //display balance with comma
-            balance = account.balance.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+            balance = numToString(account.balance);
             name = account.name;
         };
     })
     if (getAccountNumber) {
-        //check if balance is an integer or not
-        balance.includes('.') ? balanceDisplay.innerText = `₱${balance}` : balanceDisplay.innerText = `₱${balance}.00`;
+        balanceDisplay.innerText = `₱${balance}`;
         nameDisplay.innerText = name;
         depositName.innerText = name;
         withdrawName.innerText = name;
@@ -550,7 +550,6 @@ Account.get_balance = (accountNumber) => {
 //event listener on user input: display account name if valid
 depositAccountInput.addEventListener('input', () => {
     let depositAccountName;
-    //if input has no value
     if (!depositAccountInput.value) {
         depositName.innerText = "";
     } else {
@@ -798,6 +797,8 @@ class UserStore {
             }
             localStorage.setItem('users', JSON.stringify(users));
             UserUI.updateBalance(newBalance);
+            UserUI.showTotal(userEmail, 'income');
+            UserUI.showTotal(userEmail, 'expense');
         })
     }
     static deleteIncome(userEmail, targetIncome) {
@@ -853,6 +854,7 @@ class UserUI {
         users.some(user => {
             if (user.email === email) {
                 UserUI.updateBalance(user.balance);
+                UserUI.showTotal(email, 'income');
                 user.income.forEach(income => {
                     UserUI.addIncome(income);
                 })
@@ -867,6 +869,7 @@ class UserUI {
         const users = UserStore.getUsers();
         users.some(user => {
             if (user.email === email) {
+                UserUI.showTotal(email, 'expense');
                 user.expenses.forEach(expense => {
                     UserUI.addExpense(expense);
                 })
@@ -902,16 +905,18 @@ class UserUI {
     }
     static updateBalance(newBalance) {
         let balance = document.querySelector('#user-balance');
-        let newBalanceText = newBalance.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        let newBalanceText = numToString(newBalance);
         if (newBalance < 0) {
             //remove - character to display negative balance
             let newNegativeBalance = newBalanceText.substring(1);
-            console.log(newNegativeBalance.indexOf('.'));
-            Number.isInteger(newBalance) ? balance.textContent = `(₱${newNegativeBalance}.00)` : balance.innerText = `(₱${newNegativeBalance})`;
+            balance.innerText = `(₱${newNegativeBalance})`;
             balance.style.color = 'var(--invalid)';
-        } else {
-            Number.isInteger(newBalance) ? balance.textContent = `₱${newBalanceText}.00` : balance.innerText = `₱${newBalanceText}`;
+        } else if (newBalance > 0) {
+            balance.innerText = `₱${newBalanceText}`;
             balance.style.color = 'var(--success)';
+        } else {
+            balance.innerText = '₱0.00';
+            balance.style.color = 'var(--blue)';
         }
     }
     static deleteOrEditIncome(userEmail, targetIncome, type) {
@@ -931,6 +936,7 @@ class UserUI {
             targetIncome.remove();
             UserStore.deleteIncome(userEmail, targetIncome);
         }
+        UserUI.showTotal(userEmail);
     }
     static deleteOrEditExpense(userEmail, targetExpense, type) {
         if (type === 'delete') {
@@ -950,7 +956,24 @@ class UserUI {
             targetExpense.remove();
             UserStore.deleteExpense(userEmail, targetExpense);
         }
-
+        UserUI.showTotal(userEmail);
+    }
+    static showTotal(email) {
+        let incomeTotal = 0;
+        let expenseTotal = 0;
+        const users = UserStore.getUsers();
+        users.some(user => {
+            if (user.email === email) {
+                user.income.forEach(income => {
+                    incomeTotal += income.cost;
+                });
+                user.expenses.forEach(expense => {
+                    expenseTotal += expense.cost;
+                });
+            }
+        })
+        document.querySelector('#total-income').textContent = `₱${numToString(incomeTotal)}`;
+        document.querySelector('#total-expense').textContent = `₱${numToString(expenseTotal)}`;
     }
 }
 //*LIST INCOME / EXPENSES 
@@ -969,7 +992,7 @@ incomeForm.addEventListener('submit', (e) => {
 create_income = (date, title, cost) => {
     let income = new incomeItem(date, title, cost);
     UserUI.addIncome(income);
-    //add expense to current user's expense list
+    //add expense to current user's income list
     UserStore.addIncome(loggedInEmail, income);
 }
 //*ADD EXPENSE FORM 
@@ -1006,11 +1029,9 @@ document.querySelector('#expense-list-data').addEventListener('click', (e) => {
     //target table row and remove from table
     let targetExpenseItem = e.target.parentElement.parentElement;
     if (e.target.classList.contains('delete')) {
-        let deleteButton = e.target;
         UserUI.deleteOrEditExpense(loggedInEmail, targetExpenseItem, 'delete');
     }
     if (e.target.classList.contains('edit')) {
-        let editButton = e.target;
         UserUI.deleteOrEditExpense(loggedInEmail, targetExpenseItem, 'edit');
     }
 })

@@ -68,6 +68,7 @@
                             <p id="account-balance">₱0.00</p>
                             <p id="account-name"></p>
                         </div>
+                        <img id="card-logo" src="./assets/images/logo.svg" alt="logo">
                     </div>
                 </div>
             </div>
@@ -196,6 +197,7 @@
         <!-- add account -->
         <div id="add-account-container" class="hide">
             <form id="add-account-form">
+                <h3>NEW ACCOUNT FORM</h3>
                 <div class="input-group">
                     <label for="firstName">First Name</label>
                     <input type="text" id="firstName" autocomplete="off" required>
@@ -221,27 +223,29 @@
     <!-- *budget -->
     <div id="budget" class="hide">
         <div class="form-container">
-            <div>
-                <p>Current Balance: <strong id="user-balance">₱</strong></p>
+            <div class="budget-summary">
+                <p>Current Balance: <strong id="user-balance"></strong></p>
                 <div id="total">
-                    <p>Total Income: <strong id="total-income"></strong></p>
-                    <p>Total Expense: <strong id="total-expense"></strong></p>
+                    <em>Total Income: <strong id="total-income"></strong></em>
+                    <em>Total Expense: <strong id="total-expense"></strong></em>
                 </div>
             </div>
-            <div>
-                <button id="income-button" class="active-budget">Income</button>
-                <button id="expense-button">Expense</button>
+            <div class="budget-input">
+                <div>
+                    <button id="income-button" class="active-budget">Income</button>
+                    <button id="expense-button">Expense</button>
+                </div>
+                <form id="income-form">
+                    <input type="text" id="income-title" placeholder="Income Title" required>
+                    <input type="number" id="income-amount" placeholder="₱0" step="0.01" min="1" required>
+                    <input id="add-income" type="submit" value='Add Income'>
+                </form>
+                <form id="expense-form" class="hide">
+                    <input type="text" id="expense-title" placeholder="Expense Title" required>
+                    <input type="number" id="expense-cost" placeholder="₱0" step="0.01" min="1" required>
+                    <input id="add-expense" type="submit" value='Add Expense'>
+                </form>
             </div>
-            <form id="income-form">
-                <input type="text" id="income-title" placeholder="Income Title" required>
-                <input type="number" id="income-amount" placeholder="Amount" step="0.01" min="1" required>
-                <input id="add-income" type="submit" value='Add Income'>
-            </form>
-            <form id="expense-form" class="hide">
-                <input type="text" id="expense-title" placeholder="Exense Title" required>
-                <input type="number" id="expense-cost" placeholder="Amount" step="0.01" min="1" required>
-                <input id="add-expense" type="submit" value='Add Expense'>
-            </form>
         </div>
         <div class="income-expense-container">
             <div id="income-list">
@@ -254,7 +258,6 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <!-- insert new expenses-->
                     <tbody id="income-list-data"></tbody>
                 </table>
             </div>
@@ -268,7 +271,6 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <!-- insert new expenses-->
                     <tbody id="expense-list-data"></tbody>
                 </table>
             </div>
