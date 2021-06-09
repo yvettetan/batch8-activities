@@ -76,25 +76,85 @@
                     fill="black" />
             </svg>
         </div>
+        <div id="today">
+            <label for="">Daily No Waste</label>
+            <input type="checkbox">
+        </div>
     </section>
     <!--* recipes section -->
     <section id="recipes" class="hide">
         <form id="recipes-form">
             <div id="recipes-search-bar">
-                <input id="recipe-search-box" type="text" placeholder='Search Recipe'>
+                <input id="recipe-search-box" type="text" placeholder='Enter recipe or ingredients' required>
                 <input type="image" src="./assets/images/search.svg" alt="search">
             </div>
-            <div id="recipes-list"></div>
         </form>
+        <div id="start-cooking" class="">
+            <h2>Let's start cooking!</h2>
+            <br>
+            <img src="./assets/images/chef.svg" alt="chef">
+        </div>
+        <div id="recipes-list"></div>
+        </div>
     </section>
+    <!--* fridge section -->
     <section id="fridge" class="hide">
         <div id="location-buttons">
             <button id="pantry-button" class="location-button">Pantry</button>
-            <button id="fridge-button" class="location-button">Fridge</button>
+            <button id="fridge-button" class="location-button location-active">Fridge</button>
             <button id="freezer-button" class="location-button">Freezer</button>
         </div>
+        <div id="pantry-content" class="hide">pantry items
+            <table id="pantry-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Available</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="pantry-items-list"></tbody>
+            </table>
+        </div>
+        <div id="fridge-content" class="">fridge items
+            <table id="fridge-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Available</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="fridge-items-list"></tbody>
+            </table>
+        </div>
+        <div id="freezer-content" class="hide">freezer items
+            <table id="freezer-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Available</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="freezer-items-list"></tbody>
+            </table>
+        </div>
     </section>
-    <section id="shopping-list" class="hide">shopping-list</section>
+    <section id="shopping-list" class="hide">shopping-list
+        <form id="shopping-form">
+            <div id="add-shopping-bar">
+                <input id="add-shopping-item" type="text" placeholder='Add Item'>
+                <button type="submit"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 0C5.376 0 0 5.376 0 12C0 18.624 5.376 24 12 24C18.624 24 24 18.624 24 12C24 5.376 18.624 0 12 0ZM16.8 13.2H13.2V16.8C13.2 17.46 12.66 18 12 18C11.34 18 10.8 17.46 10.8 16.8V13.2H7.2C6.54 13.2 6 12.66 6 12C6 11.34 6.54 10.8 7.2 10.8H10.8V7.2C10.8 6.54 11.34 6 12 6C12.66 6 13.2 6.54 13.2 7.2V10.8H16.8C17.46 10.8 18 11.34 18 12C18 12.66 17.46 13.2 16.8 13.2Z"
+                            fill="#3d806d" />
+                    </svg>
+                </button>
+            </div>
+        </form>
+    </section>
     <!--* add item section -->
     <section id="add-item" class="hide">
         <form action="#" id="add-item-form">
@@ -102,7 +162,7 @@
             <label for="">Details</label>
             <input id="item-count" type="number" min="0.5" step="0.01" placeholder="Enter Count" required>
             <select name="item-unit" id="item-unit" required>
-                <option disabled selected> Select Unit</option>
+                <option selected> Select Unit</option>
                 <option value="bags">bag/s</option>
                 <option value="bottle">bottle/s</option>
                 <option value="can">can/s</option>
@@ -112,8 +172,9 @@
                 <option value="pieces">piece/s</option>
             </select>
             <select name="item-category" id="item-category" required>
-                <option disabled selected>Select Category</option>
+                <option selected>Select Category</option>
                 <option value="baking">Baking</option>
+                <option value="canned">Beverage</option>
                 <option value="canned">Canned</option>
                 <option value="condiments">Condiments</option>
                 <option value="dairy">Dairy</option>
@@ -125,7 +186,7 @@
                 <option value="others">Others</option>
             </select>
             <select name="item-location" id="item-location" required>
-                <option disabled selected>Select Location</option>
+                <option selected>Select Location</option>
                 <option value="freezer">Freezer</option>Freezer</option>
                 <option value="fridge">Fridge</option>
                 <option value="pantry">Pantry</option>
