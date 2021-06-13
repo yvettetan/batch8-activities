@@ -1,7 +1,8 @@
-//todo localStorage update data
+//todo localStorage edit data
 //todo profile page
 //todo grocery list page
 //todo display expiring items
+//todo filter search items per location
 //helper functions
 capitalize = (words) => {
     wordsArr = words.split(' ');
@@ -11,13 +12,29 @@ capitalize = (words) => {
     capitalized = wordsArr.join(' ');
     return capitalized;
 }
-create_row = (item) => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-        <td>${item.name}</td>
-        <td>${item.count}</td>
-        <td><button class="fa fa-edit edit"></button><button class="fa fa-trash delete"></button></td>`;
-    return row;
+//creates card container for new items added to pantry, fridge or freezer
+create_item_card = (item) => {
+    const card = document.createElement('div');
+    card.className = 'item-card';
+    card.innerHTML =
+        `<div class="item">
+            <p class="item-name">${item.name}</p>
+            <div class="amount">
+                <span class="item-count">${item.count}</span>
+                <span class="item-unit">${item.unit}</span>
+            </div>
+        </div>
+        <div class="item-actions">
+            <p class="item-expiry">
+                <i class="fa fa-bell"></i>
+                <span>${item.expiryDate}</span>
+            </p>
+                <div class="item-action-btn">
+                    <button class="fa fa-edit item-edit"></button>
+                    <button class="fa fa-trash item-delete"></button>
+                </div>
+        </div>`
+    return card;
 }
 // nav buttons
 const navProfileBtn = document.querySelector('#nav-profile');
@@ -41,31 +58,31 @@ const inputDate = document.querySelectorAll('input[type=date]');
 navProfileBtn.addEventListener('click', () => {
     nav_active(navProfileBtn);
     nav_inactive([navRecipesBtn, navFridgeBtn, navCartBtn, navAddBtn]);
-    show(profileContainer);
+    show([profileContainer]);
     hide([recipesContainer, fridgeContainer, shoppingContainer, addItemContainer]);
 })
 navRecipesBtn.addEventListener('click', () => {
     nav_active(navRecipesBtn);
     nav_inactive([navProfileBtn, navFridgeBtn, navCartBtn, navAddBtn]);
-    show(recipesContainer);
+    show([recipesContainer]);
     hide([profileContainer, fridgeContainer, shoppingContainer, addItemContainer]);
 })
 navFridgeBtn.addEventListener('click', () => {
     nav_active(navFridgeBtn);
     nav_inactive([navProfileBtn, navRecipesBtn, navCartBtn, navAddBtn]);
-    show(fridgeContainer);
+    show([fridgeContainer]);
     hide([profileContainer, recipesContainer, shoppingContainer, addItemContainer]);
 })
 navCartBtn.addEventListener('click', () => {
     nav_active(navCartBtn);
     nav_inactive([navProfileBtn, navRecipesBtn, navFridgeBtn, navAddBtn]);
-    show(shoppingContainer);
+    show([shoppingContainer]);
     hide([profileContainer, recipesContainer, fridgeContainer, addItemContainer]);
 })
 navAddBtn.addEventListener('click', () => {
     nav_active(navAddBtn);
     nav_inactive([navProfileBtn, navRecipesBtn, navFridgeBtn, navCartBtn]);
-    show(addItemContainer);
+    show([addItemContainer]);
     hide([profileContainer, recipesContainer, fridgeContainer, shoppingContainer]);
 })
 nav_active = (element) => {
@@ -76,8 +93,11 @@ nav_inactive = elementsArr => {
         element.classList.remove('nav-active');
     });
 }
-show = element => {
-    element.classList.remove('hide');
+show = elementsArr => {
+    // element.classList.remove('hide');
+    elementsArr.forEach(element => {
+        element.classList.remove('hide');
+    });
 }
 hide = elementsArr => {
     elementsArr.forEach(element => {
@@ -93,13 +113,107 @@ location_inactive = elementsArr => {
     });
 }
 //* PROFILE SECTON 
+const about = document.querySelector('#about');
+const dashboard = document.querySelector('#dashboard');
+const tracker = document.querySelector('#tracker');
+const expiry = document.querySelector('#expiry');
+const tipsHeader = document.querySelector('#tips-header');
+const summaryTips = document.querySelector('#summary-tips');
+const allTipsBtn = document.querySelector('#all-tips-btn');
+const allTips = document.querySelector('.all-tips');
+const allTipsList = document.querySelector('#all-tips-list');
+const backBtn = document.querySelector('#back-btn');
 
+
+const foodWasteTips = [
+    {
+        title: 'Buy only what you need',
+        description: 'Plan your meals. Make a shopping list and stick to it, and avoid impulse buys. Not only will you waste less food, you’ll also save money!'
+    },
+    {
+        title: 'Store food wisely',
+        description: 'Move older products to the front of your cupboard or fridge and new ones to the back. Use airtight containers to keep open food fresh in the fridge and ensure packets are closed to stop insects from getting in.'
+    },
+    {
+        title: 'Don’t judge food by its appearance!',
+        description: 'Oddly-shaped or bruised fruits and vegetables are often thrown away because they don’t meet arbitrary cosmetic standards. Don’t worry - they taste the same! Use mature fruit for smoothies, juices and desserts.'
+    },
+    {
+        title: 'Love your leftovers',
+        description: 'If you don’t eat everything you make, freeze it for later or use the leftovers as an ingredient in another meal.'
+    }
+]
+
+allTipsBtn.addEventListener('click', () => {
+    hide([about, tracker, expiry, tipsHeader, summaryTips]);
+    show([allTips]);
+    display_tips(foodWasteTips);
+})
+
+backBtn.addEventListener('click', () => {
+    hide([allTips]);
+    show([about, tracker, expiry, tipsHeader, summaryTips])
+})
+
+display_tips = tipsArr => {
+    allTipsList.innerHTML = '';
+    tipsArr.forEach(tip => {
+        const div = document.createElement('div');
+        div.className = 'tip-container';
+        div.innerHTML =
+            `<strong class="tip-title">${tip.title}</strong>
+        <p class="tip-description">${tip.description}</p>
+        `
+        allTipsList.appendChild(div);
+    })
+}
 
 //* RECIPES SECTION 
 const recipesForm = document.querySelector('#recipes-form');
 const recipesList = document.querySelector('#recipes-list');
 const searchItem = document.querySelector('#recipe-search-box');
 const startCookingContainer = document.querySelector('#start-cooking');
+const ingredientsModalBg = document.querySelector('.ingredients-modal-bg');
+const ingredientsModal = document.querySelector('.ingredients-modal');
+const nameModal = document.querySelector('.modal-name');
+const ingredientsList = document.querySelector('.ingredients-list');
+const closeIngredientsBtn = document.querySelector('.close-ingredients');
+
+class Recipe {
+    constructor(title, ingredients) {
+        this.title = title;
+        this.ingredients = ingredients;
+    }
+}
+class RecipeStore {
+    static get_recipes() {
+        let recipes;
+        if (localStorage.getItem('recipes') === null) {
+            recipes = [];
+        } else {
+            recipes = JSON.parse(localStorage.getItem('recipes'));
+        }
+        return recipes;
+    }
+    static add_recipe(recipe) {
+        const recipes = RecipeStore.get_recipes();
+        recipes.push(recipe);
+        localStorage.setItem('recipes', JSON.stringify(recipes));
+    }
+    static get_ingredients(title) {
+        const recipes = RecipeStore.get_recipes();
+        for (let i = 0; i < recipes.length; i++) {
+            if (recipes[i].title === title) {
+                show_ingredients(title, recipes[i].ingredients);
+            }
+        }
+    }
+    static clear_recipes() {
+        let recipes = RecipeStore.get_recipes();
+        recipes = [];
+        localStorage.setItem('recipes', JSON.stringify(recipes));
+    }
+}
 
 add_recipe = async (e) => {
     e.preventDefault();
@@ -115,6 +229,7 @@ add_recipe = async (e) => {
 recipesForm.addEventListener('submit', add_recipe)
 
 display_recipes = (data) => {
+    RecipeStore.clear_recipes();
     searchItem.value = '';
     hide([startCookingContainer]);
     let recipesArr = [];
@@ -124,24 +239,47 @@ display_recipes = (data) => {
         recipe.title = recipeItem.recipe.label;
         recipe.url = recipeItem.recipe.url;
         recipe.photo = recipeItem.recipe.image;
-        recipe.cuisineType = recipeItem.recipe.cuisineType;
         recipe.ingredients = recipeItem.recipe.ingredientLines;
         recipesArr.push(recipe);
+        RecipeStore.add_recipe(recipe);
     })
     recipesList.innerHTML = '';
     recipesArr.forEach(recipe => {
         recipesList.innerHTML +=
             `<div class="recipe-item-container">
-                <strong>${recipe.title}</strong>
                 <div class="image-item-container">
                     <img class="recipe-image" src="${recipe.photo}" alt="${recipe.title}">
                 </div>
                 <div class="recipe-info">
-                    <button>View Ingredients</button>
-                    <a href="${recipe.url}" target='_blank'><button>View Full Recipe</button></a>
+                    <strong class="recipe-name">${recipe.title}</strong>
+                    <div class="recipe-buttons">
+                        <button onclick="get_ingredients('${recipe.title}')">View Ingredients</button>
+                        <button><a href="${recipe.url}" target='_blank'>View Full Recipe</a></button>
+                    </div>
                 </div>
             </div>`;
     })
+    get_ingredients = (title) => {
+        RecipeStore.get_ingredients(title);
+    }
+}
+show_ingredients = (name, ingredients) => {
+    ingredientsList.innerHTML = '';
+    show([ingredientsModalBg]);
+    document.body.style.position = 'fixed';
+    nameModal.innerText = name;
+    ingredients.forEach(ingredient => {
+        const li = document.createElement('li');
+        li.innerText = ingredient;
+        ingredientsList.appendChild(li);
+    })
+}
+closeIngredientsBtn.addEventListener('click', () => {
+    hide([ingredientsModalBg]);
+    document.body.style.position = 'relative';
+})
+if (!recipesList.innerHTML) {
+    RecipeStore.clear_recipes();
 }
 //*FRIDGE SECTION 
 const pantryBtn = document.querySelector('#pantry-button');
@@ -152,28 +290,28 @@ const fridgeContent = document.querySelector('#fridge-content');
 const freezerContent = document.querySelector('#freezer-content');
 
 pantryBtn.addEventListener('click', () => {
-    show(pantryContent);
+    show([pantryContent]);
     hide([fridgeContent, freezerContent]);
     location_active(pantryBtn);
     location_inactive([fridgeBtn, freezerBtn]);
 })
 fridgeBtn.addEventListener('click', () => {
-    show(fridgeContent);
+    show([fridgeContent]);
     hide([pantryContent, freezerContent]);
     location_active(fridgeBtn);
     location_inactive([pantryBtn, freezerBtn]);
 })
 freezerBtn.addEventListener('click', () => {
-    show(freezerContent);
+    show([freezerContent]);
     hide([pantryContent, fridgeContent]);
     location_active(freezerBtn);
     location_inactive([pantryBtn, fridgeBtn]);
 })
 
-
 //*ADD ITEM SECTION 
 class Item {
-    constructor(name, count, unit, category, expiryDate) {
+    constructor(id, name, count, unit, category, expiryDate) {
+        this.id = id;
         this.name = capitalize(name);
         this.count = parseFloat(count);
         this.unit = unit;
@@ -198,11 +336,25 @@ class ItemStore {
         items.push(item);
         localStorage.setItem(`${location}-items`, JSON.stringify(items));
     }
+    static delete_item(itemCard, location) {
+        const itemName = itemCard.children[0].children[0].innerText;
+        const itemExpiry = itemCard.children[1].children[0].children[1].innerText;
+        const id = `${itemName}-${itemExpiry}`;
+        location = capitalize(location);
+        const items = ItemStore.get_items(location);
+        items.forEach((item, index) => {
+            if (item.id === id) {
+                items.splice(index, 1);
+            }
+        })
+        localStorage.setItem(`${location}-items`, JSON.stringify(items));
+    }
 }
 
 const pantryItems = ItemStore.get_items('Pantry');
 const fridgeItems = ItemStore.get_items('Fridge');
 const freezerItems = ItemStore.get_items('Freezer');
+
 class ItemUI {
     static get_stocks() {
         const pantryList = document.querySelector('#pantry-items-list');
@@ -211,23 +363,35 @@ class ItemUI {
         ItemUI.display_items(pantryItems, pantryList);
         ItemUI.display_items(fridgeItems, fridgeList);
         ItemUI.display_items(freezerItems, freezerList);
+
     };
-    static display_items(items, listlocation) {
-        let row;
+    static display_items(items, listLocation) {
+        let card;
         items.forEach(item => {
-            row = create_row(item);
-            listlocation.appendChild(row);
+            card = create_item_card(item);
+            listLocation.appendChild(card);
         })
     }
+
     static add_item(item, location) {
         let exactLocation = document.getElementById(`${location.toLowerCase()}-items-list`);
-        let row = create_row(item);
-        exactLocation.appendChild(row);
+        let card = create_item_card(item);
+        exactLocation.appendChild(card);
     }
 
+    static delete_item_card(card) {
+        card.remove();
+    }
+
+    static display_expiry() {
+        const today = new Date();
+        const nextweek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7);
+        console.log(nextweek);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', ItemUI.get_stocks);
+document.addEventListener('DOMContentLoaded', ItemUI.display_expiry);
 
 const addItemForm = document.querySelector('#add-item-form');
 //default date value format: yyyy-mm-dd
@@ -252,16 +416,18 @@ addItemForm.addEventListener('submit', (e) => {
     const selectedCategory = category.options[category.selectedIndex].innerText;
     const location = document.querySelector('#item-location');
     const selectedLocation = location.options[location.selectedIndex].innerText;
-    noExpiryDate.checked = !noExpiryDate.checked;
     //set expiry date to either date or none (if checkbox selected)
     let expiryDate;
-    noExpiryDate.checked && !itemExpiryDate.value ? expiryDate = 'none' : expiryDate = itemExpiryDate.value;
-    create_item(name, count, selectedUnit, selectedCategory, expiryDate, selectedLocation);
+    noExpiryDate.checked ? expiryDate = '–' : expiryDate = itemExpiryDate.value;
+    let id = `${capitalize(name)}-${expiryDate}`;
+    let finalUnit;
+    selectedUnit === 'Select Unit' ? finalUnit = ' ' : finalUnit = selectedUnit;
+    Item.create_item(id, name, count, finalUnit, selectedCategory, expiryDate, selectedLocation);
 })
 
 //instantiate new item, add to storage and display in table location
-function create_item(name, count, unit, category, date, location) {
-    let newItem = new Item(name, count, unit, category, date, location);
+Item.create_item = (id, name, count, unit, category, date, location) => {
+    let newItem = new Item(id, name, count, unit, category, date, location);
     ItemStore.add_item(newItem, location);
     ItemUI.add_item(newItem, location);
     for (let input of inputTexts) {
@@ -274,4 +440,25 @@ function create_item(name, count, unit, category, date, location) {
         input.value = '';
     }
     noExpiryDate.checked = false;
+}
+
+//traverse DOM to target each item card to update location content
+const locationContent = [pantryContent, fridgeContent, freezerContent];
+locationContent.forEach(content => {
+    content.addEventListener('click', (e) => {
+        let targetElement = e.target;
+        Item.update_item(targetElement);
+    })
+})
+
+Item.update_item = (targetElement) => {
+    if (targetElement.classList.contains('item-delete')) {
+        const targetCard = targetElement.parentElement.parentElement.parentElement;
+        //targetLocation returns pantry, fridge, or freezer string
+        const targetLocation = targetCard.parentElement.id.split('-')[0];
+        ItemUI.delete_item_card(targetCard);
+        ItemStore.delete_item(targetCard, targetLocation);
+    } else if (targetElement.classList.contains('item-edit')) {
+        console.log('edit');
+    }
 }
