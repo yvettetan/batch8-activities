@@ -1,8 +1,8 @@
+//todo add or remove expiring items once new expiring item added or deleted
 //todo localStorage edit data
-//todo profile page
+//todo profile page responsive - add geolocation api?
 //todo grocery list page
-//todo display expiring items
-//todo filter search items per location
+
 //helper functions
 capitalize = (words) => {
     wordsArr = words.split(' ');
@@ -29,10 +29,10 @@ create_item_card = (item) => {
                 <i class="fa fa-bell"></i>
                 <span>${item.expiryDate}</span>
             </p>
-                <div class="item-action-btn">
-                    <button class="fa fa-edit item-edit"></button>
-                    <button class="fa fa-trash item-delete"></button>
-                </div>
+            <div class="item-action-btn">
+                <button class="fa fa-edit item-edit"></button>
+                <button class="fa fa-trash item-delete"></button>
+            </div>
         </div>`
     return card;
 }
@@ -285,6 +285,11 @@ if (!recipesList.innerHTML) {
 const pantryBtn = document.querySelector('#pantry-button');
 const fridgeBtn = document.querySelector('#fridge-button');
 const freezerBtn = document.querySelector('#freezer-button');
+
+const pantrySearchBarInput = document.querySelector('#pantry-searchbar-input');
+const fridgeSearchBarInput = document.querySelector('#fridge-searchbar-input');
+const freezerSearchBarInput = document.querySelector('#freezer-searchbar-input');
+
 const pantryContent = document.querySelector('#pantry-content');
 const fridgeContent = document.querySelector('#fridge-content');
 const freezerContent = document.querySelector('#freezer-content');
@@ -319,6 +324,7 @@ class Item {
         this.expiryDate = expiryDate;
     };
 }
+//handles local storage for location items
 class ItemStore {
     //get items of selected location
     static get_items(location) {
@@ -350,29 +356,30 @@ class ItemStore {
         localStorage.setItem(`${location}-items`, JSON.stringify(items));
     }
 }
-
-const pantryItems = ItemStore.get_items('Pantry');
-const fridgeItems = ItemStore.get_items('Fridge');
-const freezerItems = ItemStore.get_items('Freezer');
-
+//handles UI for location items
 class ItemUI {
     static get_stocks() {
+        const pantryItems = ItemStore.get_items('Pantry');
+        const fridgeItems = ItemStore.get_items('Fridge');
+        const freezerItems = ItemStore.get_items('Freezer');
         const pantryList = document.querySelector('#pantry-items-list');
         const fridgeList = document.querySelector('#fridge-items-list');
         const freezerList = document.querySelector('#freezer-items-list');
         ItemUI.display_items(pantryItems, pantryList);
         ItemUI.display_items(fridgeItems, fridgeList);
         ItemUI.display_items(freezerItems, freezerList);
-
+        Item.check_expiry(pantryItems, 'Pantry');
+        Item.check_expiry(fridgeItems, 'Fridge');
+        Item.check_expiry(freezerItems, 'Freezer');
     };
     static display_items(items, listLocation) {
+        listLocation.innerHTML = '';
         let card;
         items.forEach(item => {
             card = create_item_card(item);
             listLocation.appendChild(card);
         })
     }
-
     static add_item(item, location) {
         let exactLocation = document.getElementById(`${location.toLowerCase()}-items-list`);
         let card = create_item_card(item);
@@ -383,11 +390,6 @@ class ItemUI {
         card.remove();
     }
 
-    static display_expiry() {
-        const today = new Date();
-        const nextweek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7);
-        console.log(nextweek);
-    }
 }
 
 document.addEventListener('DOMContentLoaded', ItemUI.get_stocks);
@@ -456,9 +458,68 @@ Item.update_item = (targetElement) => {
         const targetCard = targetElement.parentElement.parentElement.parentElement;
         //targetLocation returns pantry, fridge, or freezer string
         const targetLocation = targetCard.parentElement.id.split('-')[0];
-        ItemUI.delete_item_card(targetCard);
         ItemStore.delete_item(targetCard, targetLocation);
+        ItemUI.delete_item_card(targetCard);
     } else if (targetElement.classList.contains('item-edit')) {
         console.log('edit');
     }
 }
+//*location  filtered search 
+//get user input when typing and filter through storage
+fridgeSearchBarInput.addEventListener('keyup', (e) => {
+    const fridgeItems = ItemStore.get_items('Fridge');
+    const fridgeList = document.querySelector('#fridge-items-list');
+    const searchString = e.target.value.toLowerCase();
+    //returns new array of filtered search items based on item name
+    const filteredFridgeItems = fridgeItems.filter(item => {
+        return item.name.toLowerCase().includes(searchString);
+    })
+    ItemUI.display_items(filteredFridgeItems, fridgeList);
+})
+pantrySearchBarInput.addEventListener('keyup', (e) => {
+    const pantryItems = ItemStore.get_items('Pantry');
+    const pantryList = document.querySelector('#pantry-items-list');
+    const searchString = e.target.value.toLowerCase();
+    const filteredPantryItems = pantryItems.filter(item => {
+        return item.name.toLowerCase().includes(searchString);
+    })
+    ItemUI.display_items(filteredPantryItems, pantryList);
+})
+freezerSearchBarInput.addEventListener('keyup', (e) => {
+    const freezerItems = ItemStore.get_items('Freezer');
+    const freezerList = document.querySelector('#freezer-items-list');
+    const searchString = e.target.value.toLowerCase();
+    const filteredFreezerItems = freezerItems.filter(item => {
+        return item.name.toLowerCase().includes(searchString);
+    })
+    ItemUI.display_items(filteredFreezerItems, freezerList);
+})
+//*check expiring items
+//check expiring items within a week and sort by earliest expiring
+Item.check_expiry = (items, location) => {
+    const today = new Date();
+    const nextWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7);
+    const nextWeekFormatted = nextWeek.toISOString().split('T')[0];
+    const expiringItems = items
+        .filter(item => {
+            return item.expiryDate <= nextWeekFormatted;
+        }).sort((a, b) => (a.expiryDate > b.expiryDate) ? 1 : -1);
+    console.log(expiringItems);
+    show_expiring_items(expiringItems, location);
+}
+
+show_expiring_items = (items, location) => {
+    const expiryList = document.querySelector('#expiry-list');
+    items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'alert-item-card';
+        card.innerHTML =
+            `<div class="alert-item">
+                <strong class="alert-item-name">${item.name}</strong>
+                <span class="alert-item-date">${item.expiryDate.split('-')[1] + '-' + item.expiryDate.split('-')[2]}</span>
+            </div>
+            <p class="alert-location">${location}</p>`
+        expiryList.appendChild(card);
+    })
+}
+

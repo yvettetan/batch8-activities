@@ -71,17 +71,7 @@
             <!-- tracker -->
             <div id="tracker">
                 Weekly Goal
-                <div class="tracker-row1">
-                    <div class="daily-checkbox"></div>
-                    <div class="daily-checkbox"></div>
-                    <div class="daily-checkbox"></div>
-                    <div class="daily-checkbox"></div>
-                </div>
-                <div class="tracker-row2">
-                    <div class="daily-checkbox"></div>
-                    <div class="daily-checkbox"></div>
-                    <div class="daily-checkbox"></div>
-                </div>
+
             </div>
             <!-- tips -->
             <div id="tips">
@@ -107,15 +97,14 @@
                             <div id="all-tips-list">
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
             <!-- expiry -->
             <div id="expiry">
                 <img id="alert" src="./assets/images/alert.svg" alt="alert">
+                <span>Expiring Items</span>
                 <div id="expiry-list">
-
                 </div>
             </div>
         </div>
@@ -154,21 +143,15 @@
             <button id="freezer-button" class="location-button">Freezer</button>
         </div>
         <div id="pantry-content" class="location-content hide">
-            <form action="">
-                Search your pantry
-            </form>
+            <input type="text" id="pantry-searchbar-input" class="location-input" placeholder="Search Pantry">
             <div id="pantry-items-list" class="item-list"></div>
         </div>
         <div id="fridge-content" class="location-content">
-            <form action="">
-                Search your fridge
-            </form>
+            <input type="text" id="fridge-searchbar-input" class="location-input" placeholder="Search Fridge">
             <div id="fridge-items-list" class="item-list"></div>
         </div>
         <div id="freezer-content" class="location-content hide">
-            <form action="">
-                Search your freezer
-            </form>
+            <input type="text" id="freezer-searchbar-input" class="location-input" placeholder="Search Freezer">
             <div id="freezer-items-list" class="item-list"></div>
         </div>
     </section>
