@@ -5,6 +5,7 @@
     --accentColor2: #e4ae96;
     --accentColor3: #84c1dd;
     --black: #282828;
+    --gray: #d4cccc;
     --warning: #d46666;
     --backgroundColor: #edece8;
     --ff-heading: "Sen", sans-serif;
@@ -112,7 +113,7 @@ a {
     display: none !important;
 }
 /** profile */
-#profile-img {
+/* #profile-img {
     width: 2rem;
     height: 2rem;
     border-radius: 50%;
@@ -120,6 +121,9 @@ a {
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
+} */
+#dashboard {
+    margin-bottom: 4em;
 }
 #summary-tips {
     display: grid;
@@ -183,6 +187,29 @@ a {
 #all-tips-btn {
     font-size: 0.8rem;
     font-weight: 500;
+}
+#alert {
+    display: inline;
+}
+.alert-item-card {
+    width: 100%;
+    background-color: #ffffff;
+    border: 1px solid var(--gray);
+    /* box-shadow: 1px 1px 8px 2px #55555536; */
+    border-radius: 0.3rem;
+    padding: 0.3em 1em;
+    margin: 0.5em 0;
+}
+.alert-item {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.alert-item-date {
+    color: var(--warning);
+}
+.alert-location {
+    font-size: 0.8rem;
 }
 @media (min-width: 768px) {
     #dashboard {
@@ -415,14 +442,21 @@ select:focus {
     background-color: var(--primaryColor);
     color: #ffffff;
 }
+.location-content {
+    margin-bottom: 4em;
+}
+.location-input {
+    width: 100%;
+}
 .item-card {
     width: 100%;
-    margin-top: 1em;
+    margin-top: 0.5em;
     background-color: #ffffff;
     color: var(--black);
     border-radius: 0.3rem;
     padding: 1em;
-    box-shadow: 1px 1px 8px 2px #55555536;
+    border: 1px solid var(--gray);
+    /* box-shadow: 1px 1px 10px 2px #55555536; */
 }
 .item {
     display: flex;
