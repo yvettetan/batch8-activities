@@ -1,8 +1,3 @@
-//todo add or remove expiring items once new expiring item added or deleted
-//todo localStorage edit data
-//todo profile page responsive - add geolocation api?
-//todo grocery list page
-
 //helper functions
 capitalize = (words) => {
     wordsArr = words.split(' ');
@@ -20,7 +15,7 @@ create_item_card = (item) => {
         `<div class="item">
             <p class="item-name">${item.name}</p>
             <div class="amount">
-                <span class="item-count">${item.count}</span>
+                <strong class="item-count">${item.count}</strong>
                 <span class="item-unit">${item.unit}</span>
             </div>
         </div>
@@ -30,11 +25,23 @@ create_item_card = (item) => {
                 <span>${item.expiryDate}</span>
             </p>
             <div class="item-action-btn">
-                <button class="fa fa-edit item-edit"></button>
-                <button class="fa fa-trash item-delete"></button>
+                <button class="fa fa-minus-circle item-minus"></button>
+                <button class="fa fa-plus-circle item-plus"></button>
+                <button class="fa fa-times item-delete"></button>
             </div>
         </div>`
     return card;
+}
+calculate_days_left = (dateToday, expiryDate) => {
+    const date1 = new Date(dateToday);
+    const date2 = new Date(expiryDate);
+    // One day in milliseconds
+    const oneDay = 1000 * 60 * 60 * 24;
+    // Calculating the time difference between two dates
+    const diffInTime = date2.getTime() - date1.getTime();
+    // Calculating the no. of days between two dates
+    let diffInDays = Math.round(diffInTime / oneDay);
+    return diffInDays;
 }
 // nav buttons
 const navProfileBtn = document.querySelector('#nav-profile');
@@ -289,6 +296,31 @@ const freezerBtn = document.querySelector('#freezer-button');
 const pantrySearchBarInput = document.querySelector('#pantry-searchbar-input');
 const fridgeSearchBarInput = document.querySelector('#fridge-searchbar-input');
 const freezerSearchBarInput = document.querySelector('#freezer-searchbar-input');
+const locationInput = document.querySelectorAll('.location-input');
+const clearBtns = document.querySelectorAll('.clear-input');
+
+//toggle clear input button on each location item search
+for (let input of locationInput) {
+
+    input.addEventListener('input', () => {
+        if (!input.value) {
+            for (let btn of clearBtns) {
+                hide([btn]);
+            }
+        } else {
+            for (let btn of clearBtns) {
+                show([btn]);
+            }
+        }
+    })
+}
+
+// for (let btn of clearBtns) {
+//     btn.addEventListener('click', (e) => {
+//         e.target.previousElementSibling.value = "";
+//         hide([btn]);
+//     })
+// }
 
 const pantryContent = document.querySelector('#pantry-content');
 const fridgeContent = document.querySelector('#fridge-content');
@@ -336,7 +368,6 @@ class ItemStore {
         }
         return storeName;
     }
-    //add item to storage location
     static add_item(item, location) {
         const items = ItemStore.get_items(location);
         items.push(item);
@@ -355,7 +386,29 @@ class ItemStore {
         })
         localStorage.setItem(`${location}-items`, JSON.stringify(items));
     }
+    static add_or_subtract_item(itemCard, location, status) {
+        location = capitalize(location);
+        const items = ItemStore.get_items(location);
+        //get index of element in HTML
+        const index = [...itemCard.parentElement.childNodes].indexOf(itemCard);
+        if (status === 'add') {
+            items[index].count++;
+        } else {
+            items[index].count--;
+        }
+        let newCount = String(items[index].count);
+        let itemCardCount = itemCard.children[0].children[1].children[0];
+        itemCardCount.innerText = newCount;
+        let minusBtn = itemCard.children[1].children[1].children[0];
+        if (newCount <= '0') {
+            hide([minusBtn]);
+        } else {
+            show([minusBtn]);
+        }
+        localStorage.setItem(`${location}-items`, JSON.stringify(items));
+    }
 }
+
 //handles UI for location items
 class ItemUI {
     static get_stocks() {
@@ -368,9 +421,7 @@ class ItemUI {
         ItemUI.display_items(pantryItems, pantryList);
         ItemUI.display_items(fridgeItems, fridgeList);
         ItemUI.display_items(freezerItems, freezerList);
-        Item.check_expiry(pantryItems, 'Pantry');
-        Item.check_expiry(fridgeItems, 'Fridge');
-        Item.check_expiry(freezerItems, 'Freezer');
+
     };
     static display_items(items, listLocation) {
         listLocation.innerHTML = '';
@@ -384,10 +435,18 @@ class ItemUI {
         let exactLocation = document.getElementById(`${location.toLowerCase()}-items-list`);
         let card = create_item_card(item);
         exactLocation.appendChild(card);
+        show_expiring_items([item], location);
     }
-
     static delete_item_card(card) {
         card.remove();
+    }
+    static display_expiry() {
+        const pantryItems = ItemStore.get_items('Pantry');
+        const fridgeItems = ItemStore.get_items('Fridge');
+        const freezerItems = ItemStore.get_items('Freezer');
+        Item.check_expiry(pantryItems, 'Pantry');
+        Item.check_expiry(fridgeItems, 'Fridge');
+        Item.check_expiry(freezerItems, 'Freezer');
     }
 
 }
@@ -420,7 +479,7 @@ addItemForm.addEventListener('submit', (e) => {
     const selectedLocation = location.options[location.selectedIndex].innerText;
     //set expiry date to either date or none (if checkbox selected)
     let expiryDate;
-    noExpiryDate.checked ? expiryDate = '–' : expiryDate = itemExpiryDate.value;
+    noExpiryDate.checked ? expiryDate = '-' : expiryDate = itemExpiryDate.value;
     let id = `${capitalize(name)}-${expiryDate}`;
     let finalUnit;
     selectedUnit === 'Select Unit' ? finalUnit = ' ' : finalUnit = selectedUnit;
@@ -454,14 +513,18 @@ locationContent.forEach(content => {
 })
 
 Item.update_item = (targetElement) => {
+    const targetCard = targetElement.parentElement.parentElement.parentElement;
+    //targetLocation returns pantry, fridge, or freezer string
+    const targetLocation = targetCard.parentElement.id.split('-')[0];
     if (targetElement.classList.contains('item-delete')) {
-        const targetCard = targetElement.parentElement.parentElement.parentElement;
-        //targetLocation returns pantry, fridge, or freezer string
-        const targetLocation = targetCard.parentElement.id.split('-')[0];
         ItemStore.delete_item(targetCard, targetLocation);
         ItemUI.delete_item_card(targetCard);
-    } else if (targetElement.classList.contains('item-edit')) {
-        console.log('edit');
+    } else if (targetElement.classList.contains('item-plus')) {
+        ItemStore.add_or_subtract_item(targetCard, targetLocation, 'add');
+    } else if (targetElement.classList.contains('item-minus')) {
+        ItemStore.add_or_subtract_item(targetCard, targetLocation, 'subtract');
+    } else {
+        return;
     }
 }
 //*location  filtered search 
@@ -476,6 +539,7 @@ fridgeSearchBarInput.addEventListener('keyup', (e) => {
     })
     ItemUI.display_items(filteredFridgeItems, fridgeList);
 })
+
 pantrySearchBarInput.addEventListener('keyup', (e) => {
     const pantryItems = ItemStore.get_items('Pantry');
     const pantryList = document.querySelector('#pantry-items-list');
@@ -494,32 +558,58 @@ freezerSearchBarInput.addEventListener('keyup', (e) => {
     })
     ItemUI.display_items(filteredFreezerItems, freezerList);
 })
-//*check expiring items
+//*check expiring items 
 //check expiring items within a week and sort by earliest expiring
 Item.check_expiry = (items, location) => {
     const today = new Date();
-    const nextWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7);
+    const nextWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 8);
     const nextWeekFormatted = nextWeek.toISOString().split('T')[0];
     const expiringItems = items
         .filter(item => {
-            return item.expiryDate <= nextWeekFormatted;
+            return item.expiryDate <= nextWeekFormatted && item.expiryDate != "";
         }).sort((a, b) => (a.expiryDate > b.expiryDate) ? 1 : -1);
-    console.log(expiringItems);
+    // console.log(nextWeekFormatted);
     show_expiring_items(expiringItems, location);
 }
 
+const expiryList = document.querySelector('#expiry-list');
+
 show_expiring_items = (items, location) => {
-    const expiryList = document.querySelector('#expiry-list');
+    const today = new Date();
+    const todayFormatted = today.toISOString().split('T')[0];
     items.forEach(item => {
+        let daysLeftMessage;
+        let daysLeft = calculate_days_left(todayFormatted, item.expiryDate);
+        if (Math.sign(daysLeft) === -1) {
+            daysLeftMessage = 'Expired';
+        } else if (daysLeft === 0) {
+            daysLeftMessage = 'Expires today';
+        } else if (daysLeft === 1) {
+            daysLeftMessage = `Expiring in 1 day`;
+        } else {
+            daysLeftMessage = `Expiring in ${daysLeft} days`;
+        }
+        //display only month and day
+        item.expiryDate = item.expiryDate.split('-')[1] + '-' + item.expiryDate.split('-')[2];
         const card = document.createElement('div');
         card.className = 'alert-item-card';
         card.innerHTML =
-            `<div class="alert-item">
+            `<i class="fa fa-times alert-delete"></i>
+            <div class="alert-item">
                 <strong class="alert-item-name">${item.name}</strong>
-                <span class="alert-item-date">${item.expiryDate.split('-')[1] + '-' + item.expiryDate.split('-')[2]}</span>
+                <span class="alert-daysleft">${daysLeftMessage}</span>
             </div>
-            <p class="alert-location">${location}</p>`
+            <div class="alert-info">
+                <p class="alert-location">${location}</p>
+                <span class="alert-item-date">${item.expiryDate}</span>
+            </div>`
         expiryList.appendChild(card);
     })
 }
 
+expiryList.addEventListener('click', (e) => {
+    if (e.target.classList.contains('alert-delete')) {
+        e.target.closest('div').remove();
+    }
+
+})

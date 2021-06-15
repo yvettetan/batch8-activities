@@ -77,7 +77,7 @@
             <div id="tips">
                 <div id="tips-header">
                     <h3>Food Hero Tips</h3>
-                    <button id="all-tips-btn">View All Tips</button>
+                    <button id="all-tips-btn">View All<img src="./assets/images/right.svg" alt=""></button>
                 </div>
                 <div id="tips-list">
                     <div id="summary-tips">
@@ -90,6 +90,7 @@
                         <div class="tip-card tip3">
                             <p>Store Food Wisely</p>
                         </div>
+
                     </div>
                     <div class="all-tips hide">
                         <div>
@@ -102,8 +103,7 @@
             </div>
             <!-- expiry -->
             <div id="expiry">
-                <img id="alert" src="./assets/images/alert.svg" alt="alert">
-                <span>Expiring Items</span>
+                <h3><img id="alert" src="./assets/images/alert.svg" alt="alert">Expiring Items</h3>
                 <div id="expiry-list">
                 </div>
             </div>
@@ -143,15 +143,24 @@
             <button id="freezer-button" class="location-button">Freezer</button>
         </div>
         <div id="pantry-content" class="location-content hide">
-            <input type="text" id="pantry-searchbar-input" class="location-input" placeholder="Search Pantry">
+            <div class="location-searchbar-group">
+                <input type="text" id="pantry-searchbar-input" class="location-input" placeholder="Search Pantry">
+                <img class="clear-input hide" src="./assets/images/close.svg" alt="clear">
+            </div>
             <div id="pantry-items-list" class="item-list"></div>
         </div>
         <div id="fridge-content" class="location-content">
-            <input type="text" id="fridge-searchbar-input" class="location-input" placeholder="Search Fridge">
+            <div class="location-searchbar-group">
+                <input type="text" id="fridge-searchbar-input" class="location-input" placeholder="Search Fridge">
+                <img class="clear-input hide" src="./assets/images/close.svg" alt="clear">
+            </div>
             <div id="fridge-items-list" class="item-list"></div>
         </div>
         <div id="freezer-content" class="location-content hide">
-            <input type="text" id="freezer-searchbar-input" class="location-input" placeholder="Search Freezer">
+            <div class="location-searchbar-group">
+                <input type="text" id="freezer-searchbar-input" class="location-input" placeholder="Search Freezer">
+                <img class="clear-input hide" src="./assets/images/close.svg" alt="clear">
+            </div>
             <div id="freezer-items-list" class="item-list"></div>
         </div>
     </section>
@@ -176,7 +185,7 @@
             <label for="">Details</label>
             <input id="item-count" type="number" min="0.5" step="0.01" placeholder="Enter Count" required>
             <select name="item-unit" id="item-unit" required>
-                <option selected>Select Unit</option>
+                <option disabled="disabled" selected>Select Unit</option>
                 <option value="bags">bag/s</option>
                 <option value="bottle">bottle/s</option>
                 <option value="can">can/s</option>
@@ -186,7 +195,7 @@
                 <option value="pieces">piece/s</option>
             </select>
             <select name="item-category" id="item-category" required>
-                <option selected>Select Category</option>
+                <option disabled="disabled" selected>Select Category</option>
                 <option value="baking">Baking</option>
                 <option value="canned">Beverage</option>
                 <option value="canned">Canned</option>
@@ -200,7 +209,7 @@
                 <option value="others">Others</option>
             </select>
             <select name="item-location" id="item-location" required>
-                <option selected>Select Location</option>
+                <option disabled="disabled" selected>Select Location</option>
                 <option value="freezer">Freezer</option>Freezer</option>
                 <option value="fridge">Fridge</option>
                 <option value="pantry">Pantry</option>
