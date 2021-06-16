@@ -1,3 +1,7 @@
+//todo current date is not updated to today's real date?
+//todo weekly goal feature
+//todo grocery list feature
+//todo button to top of page - or make search input fixed
 //helper functions
 capitalize = (words) => {
     wordsArr = words.split(' ');
@@ -7,42 +11,8 @@ capitalize = (words) => {
     capitalized = wordsArr.join(' ');
     return capitalized;
 }
-//creates card container for new items added to pantry, fridge or freezer
-create_item_card = (item) => {
-    const card = document.createElement('div');
-    card.className = 'item-card';
-    card.innerHTML =
-        `<div class="item">
-            <p class="item-name">${item.name}</p>
-            <div class="amount">
-                <strong class="item-count">${item.count}</strong>
-                <span class="item-unit">${item.unit}</span>
-            </div>
-        </div>
-        <div class="item-actions">
-            <p class="item-expiry">
-                <i class="fa fa-bell"></i>
-                <span>${item.expiryDate}</span>
-            </p>
-            <div class="item-action-btn">
-                <button class="fa fa-minus-circle item-minus"></button>
-                <button class="fa fa-plus-circle item-plus"></button>
-                <button class="fa fa-times item-delete"></button>
-            </div>
-        </div>`
-    return card;
-}
-calculate_days_left = (dateToday, expiryDate) => {
-    const date1 = new Date(dateToday);
-    const date2 = new Date(expiryDate);
-    // One day in milliseconds
-    const oneDay = 1000 * 60 * 60 * 24;
-    // Calculating the time difference between two dates
-    const diffInTime = date2.getTime() - date1.getTime();
-    // Calculating the no. of days between two dates
-    let diffInDays = Math.round(diffInTime / oneDay);
-    return diffInDays;
-}
+
+
 // nav buttons
 const navProfileBtn = document.querySelector('#nav-profile');
 const navRecipesBtn = document.querySelector('#nav-recipes');
@@ -53,7 +23,7 @@ const navAddBtn = document.querySelector('#nav-add');
 const profileContainer = document.querySelector('#profile');
 const recipesContainer = document.querySelector('#recipes');
 const fridgeContainer = document.querySelector('#fridge');
-const shoppingContainer = document.querySelector('#shopping-list');
+const groceryContainer = document.querySelector('#grocery-list');
 const addItemContainer = document.querySelector('#add-item');
 //general elements
 const inputTexts = document.querySelectorAll('input[type=text]');
@@ -66,31 +36,31 @@ navProfileBtn.addEventListener('click', () => {
     nav_active(navProfileBtn);
     nav_inactive([navRecipesBtn, navFridgeBtn, navCartBtn, navAddBtn]);
     show([profileContainer]);
-    hide([recipesContainer, fridgeContainer, shoppingContainer, addItemContainer]);
+    hide([recipesContainer, fridgeContainer, groceryContainer, addItemContainer]);
 })
 navRecipesBtn.addEventListener('click', () => {
     nav_active(navRecipesBtn);
     nav_inactive([navProfileBtn, navFridgeBtn, navCartBtn, navAddBtn]);
     show([recipesContainer]);
-    hide([profileContainer, fridgeContainer, shoppingContainer, addItemContainer]);
+    hide([profileContainer, fridgeContainer, groceryContainer, addItemContainer]);
 })
 navFridgeBtn.addEventListener('click', () => {
     nav_active(navFridgeBtn);
     nav_inactive([navProfileBtn, navRecipesBtn, navCartBtn, navAddBtn]);
     show([fridgeContainer]);
-    hide([profileContainer, recipesContainer, shoppingContainer, addItemContainer]);
+    hide([profileContainer, recipesContainer, groceryContainer, addItemContainer]);
 })
 navCartBtn.addEventListener('click', () => {
     nav_active(navCartBtn);
     nav_inactive([navProfileBtn, navRecipesBtn, navFridgeBtn, navAddBtn]);
-    show([shoppingContainer]);
+    show([groceryContainer]);
     hide([profileContainer, recipesContainer, fridgeContainer, addItemContainer]);
 })
 navAddBtn.addEventListener('click', () => {
     nav_active(navAddBtn);
     nav_inactive([navProfileBtn, navRecipesBtn, navFridgeBtn, navCartBtn]);
     show([addItemContainer]);
-    hide([profileContainer, recipesContainer, fridgeContainer, shoppingContainer]);
+    hide([profileContainer, recipesContainer, fridgeContainer, groceryContainer]);
 })
 nav_active = (element) => {
     element.classList.add('nav-active');
@@ -131,11 +101,10 @@ const allTips = document.querySelector('.all-tips');
 const allTipsList = document.querySelector('#all-tips-list');
 const backBtn = document.querySelector('#back-btn');
 
-
 const foodWasteTips = [
     {
         title: 'Buy only what you need',
-        description: 'Plan your meals. Make a shopping list and stick to it, and avoid impulse buys. Not only will you waste less food, you’ll also save money!'
+        description: 'Plan your meals. Make a grocery list and stick to it, and avoid impulse buys. Not only will you waste less food, you’ll also save money!'
     },
     {
         title: 'Store food wisely',
@@ -221,7 +190,7 @@ class RecipeStore {
         localStorage.setItem('recipes', JSON.stringify(recipes));
     }
 }
-
+//*fetch API 
 add_recipe = async (e) => {
     e.preventDefault();
     await fetch(`https://api.edamam.com/search?q=${searchItem.value}&app_id=b007a9df&app_key=ccd005a10207133fc919236fa78ac276&to=25`)
@@ -238,6 +207,7 @@ recipesForm.addEventListener('submit', add_recipe)
 display_recipes = (data) => {
     RecipeStore.clear_recipes();
     searchItem.value = '';
+    //remove start cooking image
     hide([startCookingContainer]);
     let recipesArr = [];
     //store each recipe object inside arr and append to list
@@ -271,9 +241,11 @@ display_recipes = (data) => {
     }
 }
 show_ingredients = (name, ingredients) => {
+    //clear previous list
     ingredientsList.innerHTML = '';
     show([ingredientsModalBg]);
-    document.body.style.position = 'fixed';
+    //prevent scrolling when modal is open 
+    document.body.style.overflow = 'hidden';
     nameModal.innerText = name;
     ingredients.forEach(ingredient => {
         const li = document.createElement('li');
@@ -283,7 +255,8 @@ show_ingredients = (name, ingredients) => {
 }
 closeIngredientsBtn.addEventListener('click', () => {
     hide([ingredientsModalBg]);
-    document.body.style.position = 'relative';
+    //allow scrolling when modal is closed
+    document.body.style.overflow = 'auto';
 })
 if (!recipesList.innerHTML) {
     RecipeStore.clear_recipes();
@@ -298,6 +271,7 @@ const fridgeSearchBarInput = document.querySelector('#fridge-searchbar-input');
 const freezerSearchBarInput = document.querySelector('#freezer-searchbar-input');
 const locationInput = document.querySelectorAll('.location-input');
 const clearBtns = document.querySelectorAll('.clear-input');
+const itemLists = document.querySelectorAll('.item-list');
 
 //toggle clear input button on each location item search
 for (let input of locationInput) {
@@ -315,12 +289,6 @@ for (let input of locationInput) {
     })
 }
 
-// for (let btn of clearBtns) {
-//     btn.addEventListener('click', (e) => {
-//         e.target.previousElementSibling.value = "";
-//         hide([btn]);
-//     })
-// }
 
 const pantryContent = document.querySelector('#pantry-content');
 const fridgeContent = document.querySelector('#fridge-content');
@@ -347,7 +315,7 @@ freezerBtn.addEventListener('click', () => {
 
 //*ADD ITEM SECTION 
 class Item {
-    constructor(id, name, count, unit, category, expiryDate) {
+    constructor(id, name, count, unit, category, expiryDate = '-') {
         this.id = id;
         this.name = capitalize(name);
         this.count = parseFloat(count);
@@ -389,13 +357,16 @@ class ItemStore {
     static add_or_subtract_item(itemCard, location, status) {
         location = capitalize(location);
         const items = ItemStore.get_items(location);
-        //get index of element in HTML
+        //get index of element via html container
+        //use spread to turn childNodes HTMLCollection into a true array in order to use indexOf
         const index = [...itemCard.parentElement.childNodes].indexOf(itemCard);
+        //update item count in storage
         if (status === 'add') {
-            items[index].count++;
+            items[index].count += 0.5;
         } else {
-            items[index].count--;
+            items[index].count -= 0.5;
         }
+        //display new count in item card UI
         let newCount = String(items[index].count);
         let itemCardCount = itemCard.children[0].children[1].children[0];
         itemCardCount.innerText = newCount;
@@ -421,7 +392,7 @@ class ItemUI {
         ItemUI.display_items(pantryItems, pantryList);
         ItemUI.display_items(fridgeItems, fridgeList);
         ItemUI.display_items(freezerItems, freezerList);
-
+        ItemUI.is_empty();
     };
     static display_items(items, listLocation) {
         listLocation.innerHTML = '';
@@ -430,15 +401,21 @@ class ItemUI {
             card = create_item_card(item);
             listLocation.appendChild(card);
         })
+        ItemUI.is_empty();
     }
     static add_item(item, location) {
         let exactLocation = document.getElementById(`${location.toLowerCase()}-items-list`);
         let card = create_item_card(item);
         exactLocation.appendChild(card);
-        show_expiring_items([item], location);
+        //check expiry only if item has a date
+        if (item.expiryDate) {
+            Item.check_expiry([item], location);
+        }
+        ItemUI.is_empty();
     }
     static delete_item_card(card) {
         card.remove();
+        ItemUI.is_empty();
     }
     static display_expiry() {
         const pantryItems = ItemStore.get_items('Pantry');
@@ -448,9 +425,54 @@ class ItemUI {
         Item.check_expiry(fridgeItems, 'Fridge');
         Item.check_expiry(freezerItems, 'Freezer');
     }
-
+    //checks if each location is empty
+    static is_empty = () => {
+        let listsArr = [...itemLists];
+        listsArr.forEach(list => {
+            //get location based on list id
+            const location = list.id.split('-')[0];
+            const locationItemsCount = list.childElementCount;
+            if (locationItemsCount === 0) {
+                list.innerHTML =
+                    `<p class="empty-message">Seems like you currently have no items in your ${location}.
+                    <br><br>Click + to add a new item</p>`;
+            } else if (locationItemsCount === 2) {
+                //remove message
+                if (list.children[0].classList.contains('empty-message')) {
+                    list.children[0].remove();
+                }
+            };
+        })
+    }
 }
 
+//creates card container for new items added to pantry, fridge or freezer
+create_item_card = (item) => {
+    const card = document.createElement('div');
+    card.className = 'item-card';
+    card.innerHTML =
+        `<div class="item">
+            <p class="item-name">${item.name}</p>
+            <div class="amount">
+                <strong class="item-count">${item.count}</strong>
+                <span class="item-unit">${item.unit}</span>
+            </div>
+        </div>
+        <div class="item-actions">
+            <p class="item-expiry">
+                <i class="fa fa-bell"></i>
+                <span>${item.expiryDate}</span>
+            </p>
+            <div class="item-action-btn">
+                <button class="fa fa-minus-circle item-minus"></button>
+                <button class="fa fa-plus-circle item-plus"></button>
+                <button class="fa fa-times item-delete"></button>
+            </div>
+        </div>`
+    return card;
+}
+
+//once DOM loads, display stocks and expiring items
 document.addEventListener('DOMContentLoaded', ItemUI.get_stocks);
 document.addEventListener('DOMContentLoaded', ItemUI.display_expiry);
 
@@ -458,6 +480,7 @@ const addItemForm = document.querySelector('#add-item-form');
 //default date value format: yyyy-mm-dd
 const itemExpiryDate = document.querySelector('#item-expiry-date');
 const noExpiryDate = document.querySelector('#no-expiry-date');
+//clear input date when the 'no date' checkbox is checked to not duplicate dates
 noExpiryDate.addEventListener('change', () => {
     if (noExpiryDate.checked) {
         document.querySelector('#item-expiry-date').value = '';
@@ -466,6 +489,7 @@ noExpiryDate.addEventListener('change', () => {
 //restrict past dates
 const today = new Date().toISOString().slice(0, 10);
 itemExpiryDate.setAttribute('min', today);
+
 //get form values
 addItemForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -479,14 +503,18 @@ addItemForm.addEventListener('submit', (e) => {
     const selectedLocation = location.options[location.selectedIndex].innerText;
     //set expiry date to either date or none (if checkbox selected)
     let expiryDate;
-    noExpiryDate.checked ? expiryDate = '-' : expiryDate = itemExpiryDate.value;
+    noExpiryDate.checked ? expiryDate = '' : expiryDate = itemExpiryDate.value;
     let id = `${capitalize(name)}-${expiryDate}`;
     let finalUnit;
-    selectedUnit === 'Select Unit' ? finalUnit = ' ' : finalUnit = selectedUnit;
-    Item.create_item(id, name, count, finalUnit, selectedCategory, expiryDate, selectedLocation);
+    let finalCategory;
+    // let finalLocation;
+    selectedUnit === 'Select Unit' ? finalUnit = '' : finalUnit = selectedUnit;
+    selectedCategory === 'Select Category' ? finalCategory = '' : finalCategory = selectedCategory;
+    // selectedLocation === 'Select Location' ? finalLocation = '' : finalLocation = finalLocation;
+    Item.create_item(id, name, count, finalUnit, finalCategory, expiryDate, selectedLocation);
 })
 
-//instantiate new item, add to storage and display in table location
+//instantiate new item, add to storage and display under tab location
 Item.create_item = (id, name, count, unit, category, date, location) => {
     let newItem = new Item(id, name, count, unit, category, date, location);
     ItemStore.add_item(newItem, location);
@@ -503,7 +531,7 @@ Item.create_item = (id, name, count, unit, category, date, location) => {
     noExpiryDate.checked = false;
 }
 
-//traverse DOM to target each item card to update location content
+//traverse DOM to target each item card, either to delete item or update count
 const locationContent = [pantryContent, fridgeContent, freezerContent];
 locationContent.forEach(content => {
     content.addEventListener('click', (e) => {
@@ -511,20 +539,28 @@ locationContent.forEach(content => {
         Item.update_item(targetElement);
     })
 })
-
+//catch error: id of null
 Item.update_item = (targetElement) => {
-    const targetCard = targetElement.parentElement.parentElement.parentElement;
-    //targetLocation returns pantry, fridge, or freezer string
-    const targetLocation = targetCard.parentElement.id.split('-')[0];
-    if (targetElement.classList.contains('item-delete')) {
-        ItemStore.delete_item(targetCard, targetLocation);
-        ItemUI.delete_item_card(targetCard);
-    } else if (targetElement.classList.contains('item-plus')) {
-        ItemStore.add_or_subtract_item(targetCard, targetLocation, 'add');
-    } else if (targetElement.classList.contains('item-minus')) {
-        ItemStore.add_or_subtract_item(targetCard, targetLocation, 'subtract');
-    } else {
-        return;
+    try {
+        const targetCard = targetElement.parentElement.parentElement.parentElement;
+        //targetLocation returns pantry, fridge, or freezer string
+        const targetLocation = targetCard.parentElement.id.split('-')[0];
+        //delete item
+        if (targetElement.classList.contains('item-delete')) {
+            ItemStore.delete_item(targetCard, targetLocation);
+            ItemUI.delete_item_card(targetCard);
+            //add item count
+        } else if (targetElement.classList.contains('item-plus')) {
+            ItemStore.add_or_subtract_item(targetCard, targetLocation, 'add');
+            //subtract item count
+        } else if (targetElement.classList.contains('item-minus')) {
+            ItemStore.add_or_subtract_item(targetCard, targetLocation, 'subtract');
+        } else {
+            return;
+        }
+        //catch typeError: Cannot read property 'id' of null
+    } catch (error) {
+        console.log(error);
     }
 }
 //*location  filtered search 
@@ -532,14 +568,15 @@ Item.update_item = (targetElement) => {
 fridgeSearchBarInput.addEventListener('keyup', (e) => {
     const fridgeItems = ItemStore.get_items('Fridge');
     const fridgeList = document.querySelector('#fridge-items-list');
+    //turn searchstring and item name to lowercase for accurate comparison
     const searchString = e.target.value.toLowerCase();
     //returns new array of filtered search items based on item name
     const filteredFridgeItems = fridgeItems.filter(item => {
         return item.name.toLowerCase().includes(searchString);
     })
+    //display only filetered items
     ItemUI.display_items(filteredFridgeItems, fridgeList);
 })
-
 pantrySearchBarInput.addEventListener('keyup', (e) => {
     const pantryItems = ItemStore.get_items('Pantry');
     const pantryList = document.querySelector('#pantry-items-list');
@@ -559,16 +596,30 @@ freezerSearchBarInput.addEventListener('keyup', (e) => {
     ItemUI.display_items(filteredFreezerItems, freezerList);
 })
 //*check expiring items 
-//check expiring items within a week and sort by earliest expiring
+//returns number of days left between item expiry date and today's date
+calculate_days_left = (dateToday, expiryDate) => {
+    const date1 = new Date(dateToday);
+    const date2 = new Date(expiryDate);
+    // One day in milliseconds
+    const oneDay = 1000 * 60 * 60 * 24;
+    //get time difference between two dates
+    const diffInTime = date2.getTime() - date1.getTime();
+    //get the no. of days between two dates
+    let diffInDays = Math.round(diffInTime / oneDay);
+    return diffInDays;
+}
+
+//check expiring items within a week and sort by earliest expiring per location
 Item.check_expiry = (items, location) => {
     const today = new Date();
     const nextWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 8);
+    //get the date 1 week from today with the same format as item date (yyyy-mm-dd)
     const nextWeekFormatted = nextWeek.toISOString().split('T')[0];
+    //returns new array of sorted expiring items
     const expiringItems = items
         .filter(item => {
             return item.expiryDate <= nextWeekFormatted && item.expiryDate != "";
         }).sort((a, b) => (a.expiryDate > b.expiryDate) ? 1 : -1);
-    // console.log(nextWeekFormatted);
     show_expiring_items(expiringItems, location);
 }
 
@@ -581,6 +632,7 @@ show_expiring_items = (items, location) => {
         let daysLeftMessage;
         let daysLeft = calculate_days_left(todayFormatted, item.expiryDate);
         if (Math.sign(daysLeft) === -1) {
+            //if days left is a negative number
             daysLeftMessage = 'Expired';
         } else if (daysLeft === 0) {
             daysLeftMessage = 'Expires today';
@@ -589,7 +641,7 @@ show_expiring_items = (items, location) => {
         } else {
             daysLeftMessage = `Expiring in ${daysLeft} days`;
         }
-        //display only month and day
+        //change date format from full date (yyyy-mm-dd) to (mm-dd)
         item.expiryDate = item.expiryDate.split('-')[1] + '-' + item.expiryDate.split('-')[2];
         const card = document.createElement('div');
         card.className = 'alert-item-card';
@@ -606,10 +658,89 @@ show_expiring_items = (items, location) => {
         expiryList.appendChild(card);
     })
 }
-
+//traverse DOM to remove alert item card (expiring item)
 expiryList.addEventListener('click', (e) => {
     if (e.target.classList.contains('alert-delete')) {
         e.target.closest('div').remove();
     }
-
 })
+
+//* grocery list 
+const groceryForm = document.querySelector('#grocery-form');
+const groceryItemCountInput = document.querySelector('#grocery-item-count-input');
+const groceryItemInput = document.querySelector('#grocery-item-input');
+
+class GroceryItem {
+    constructor(name, count = '') {
+        this.name = name;
+        this.count = count;
+    }
+}
+
+class GroceryStore {
+    static get_grocery_items() {
+        let items = 'grocery-list';
+        if (localStorage.getItem('grocery-list') === null) {
+            items = [];
+        } else {
+            items = JSON.parse(localStorage.getItem('grocery-list'));
+        }
+        return items;
+    }
+    static add_grocery_item(item) {
+        console.log(item);
+        const items = GroceryStore.get_grocery_items();
+        items.push(item);
+        localStorage.setItem('grocery-list', JSON.stringify(items));
+    }
+}
+
+class GroceryUI {
+    static get_grocery_items() {
+        const items = GroceryStore.get_grocery_items();
+        GroceryUI.display_grocery_items(items);
+    }
+    static display_grocery_items(items) {
+        items.forEach(item => {
+            GroceryUI.add_grocery_item(item);
+        })
+    }
+    static add_grocery_item(item) {
+        const listContainer = document.querySelector('#grocery-item-container');
+        let newItem = create_grocery_item_container(item);
+        listContainer.appendChild(newItem);
+    }
+}
+
+create_grocery_item_container = (item) => {
+    const div = document.createElement('div');
+    div.className = 'grocery-item';
+    div.innerHTML =
+        `<div>
+            <span class="grocery-item-count">${item.count}</span>
+            <span class="grocery-item-name">${item.name}</span>
+            <button class="fa fa-edit grocery-edit"></button>
+        </div>
+        <div>
+            <button class="fa fa-trash grocery-delete"></button>
+        </div>`;
+    return div;
+}
+
+document.addEventListener('DOMContentLoaded', GroceryUI.get_grocery_items);
+//get form values
+groceryForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const count = groceryItemCountInput.value;
+    const name = groceryItemInput.value;
+    GroceryItem.create_grocery_item(name, count);
+})
+
+GroceryItem.create_grocery_item = (itemName, itemCount) => {
+    let groceryItem = new GroceryItem(itemName, itemCount);
+    GroceryStore.add_grocery_item(groceryItem);
+    GroceryUI.add_grocery_item(groceryItem);
+    //clear input values
+    groceryItemCountInput.value = '';
+    groceryItemInput.value = '';
+}
