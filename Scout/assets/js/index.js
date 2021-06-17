@@ -1,6 +1,3 @@
-//? current date is not updated to today's real date?
-//todo weekly goal feature
-//todo button to top of page - or make search input fixed
 //helper functions
 capitalize = (words) => {
     wordsArr = words.split(' ');
@@ -93,7 +90,10 @@ const dashboard = document.querySelector('#dashboard');
 const tracker = document.querySelector('#tracker');
 const expiry = document.querySelector('#expiry');
 const tipsHeader = document.querySelector('#tips-header');
-// const summaryTips = document.querySelector('#summary-tips');
+
+const weeklyTracker = document.querySelector('#weekly-tracker');
+const dailyGoals = document.querySelectorAll('.daily-goal');
+
 const allTipsBtn = document.querySelector('#all-tips-btn');
 const allTips = document.querySelector('.all-tips');
 const allTipsList = document.querySelector('#all-tips-list');
@@ -109,12 +109,16 @@ const foodWasteTips = [
         description: 'Move older products to the front of your cupboard or fridge and new ones to the back. Use airtight containers to keep open food fresh in the fridge and ensure packets are closed to stop insects from getting in.'
     },
     {
-        title: 'Don’t judge food by its appearance!',
+        title: 'See beyond appearance',
         description: 'Oddly-shaped or bruised fruits and vegetables are often thrown away because they don’t meet arbitrary cosmetic standards. Don’t worry - they taste the same! Use mature fruit for smoothies, juices and desserts.'
     },
     {
         title: 'Love your leftovers',
         description: 'If you don’t eat everything you make, freeze it for later or use the leftovers as an ingredient in another meal.'
+    },
+    {
+        title: 'Consider home composting',
+        description: 'One way to reduce the amount of food waste going into landfill is to compost it at home. Two increasingly popular options are the bokashi system and worm composting. They sound scary but they’re really not.'
     }
 ]
 
@@ -141,6 +145,27 @@ display_tips = tipsArr => {
         allTipsList.appendChild(div);
     })
 }
+
+//handles daily goal completion
+for (let goal of dailyGoals) {
+    goal.addEventListener('click', () => {
+        //use index of element as basis for week day number (start at 1, instead of 0)
+        const day = [...weeklyTracker.children].indexOf(goal) + 1;
+        //add banner icon
+        goal.classList.toggle('achieved');
+        //add check icon if achieved
+        if (goal.classList.contains('achieved')) {
+            goal.innerHTML = '<i class="fa fa-check"></i>';
+            goal.style.borderColor = 'var(--primaryColor)'
+        } else {
+            //set 
+            goal.innerHTML = day;
+            goal.style.borderColor = 'var(--primaryLight)';
+        }
+    });
+}
+
+
 
 //* RECIPES SECTION 
 const recipesForm = document.querySelector('#recipes-form');
@@ -372,7 +397,6 @@ class ItemUI {
         ItemUI.display_items(pantryItems, pantryList);
         ItemUI.display_items(fridgeItems, fridgeList);
         ItemUI.display_items(freezerItems, freezerList);
-        ItemUI.is_empty();
     };
     static display_items(items, listLocation) {
         listLocation.innerHTML = '';
@@ -405,23 +429,24 @@ class ItemUI {
         Item.check_expiry(fridgeItems, 'Fridge');
         Item.check_expiry(freezerItems, 'Freezer');
     }
-    //checks if each location is empty
+    //checks if each location is empty then displays empty message if empty or removes message if not
     static is_empty = () => {
         let listsArr = [...itemLists];
         listsArr.forEach(list => {
             //get location based on list id
             const location = list.id.split('-')[0];
+            const items = ItemStore.get_items(`${capitalize(location)}`);
             const locationItemsCount = list.childElementCount;
-            if (locationItemsCount === 0) {
+            if (locationItemsCount === 0 && items.length === 0) {
+                list.style.display = 'inline';
                 list.innerHTML =
                     `<p class="empty-message">Seems like you currently have no items in your ${location}.
                     <br><br>Click + to add a new item</p>`;
-                list.style.display = 'inline';
             } else if (locationItemsCount === 2) {
+                list.style.display = 'grid';
                 //remove message
                 if (list.children[0].classList.contains('empty-message')) {
                     list.children[0].remove();
-                    list.style.display = '';
                 }
             };
         })
@@ -779,7 +804,7 @@ groceryListContainer.addEventListener('click', (e) => {
     } else if (targetElement.classList.contains('grocery-edit')) {
         GroceryUI.edit_or_delete_item(itemContainer, 'edit');
         GroceryStore.edit_or_delete_item(index, 'delete');
-    } else if (targetElement.classList.contains('grocery-item') || targetElement.classList.contains('grocery-item-name')) {
+    } else if (targetElement.classList.contains('grocery-item')) {
         GroceryUI.complete_item(targetElement);
     }
 })
