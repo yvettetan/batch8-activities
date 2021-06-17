@@ -118,7 +118,11 @@ const foodWasteTips = [
     },
     {
         title: 'Consider home composting',
-        description: 'One way to reduce the amount of food waste going into landfill is to compost it at home. Two increasingly popular options are the bokashi system and worm composting. They sound scary but they’re really not.'
+        description: 'Two increasingly popular options are the bokashi system and worm composting. They sound scary but they’re really not. This way you are giving nutrients back to the soil and reducing your carbon footprint. '
+    },
+    {
+        title: 'Sharing is caring',
+        description: 'Donate or sell excess food that would otherwise be wasted. Connect with neighbours or local charities so surplus food can be shared, not thrown away.'
     }
 ]
 
