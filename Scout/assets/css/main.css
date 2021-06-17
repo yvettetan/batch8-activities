@@ -268,10 +268,14 @@ a {
     #dashboard {
         margin: 0 5em;
     }
+    #all-tips-list,
     #expiry-list {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         grid-auto-rows: auto;
+    }
+    .tip-card {
+        height: 6rem;
     }
 }
 /** recipes */
