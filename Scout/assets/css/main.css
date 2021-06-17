@@ -62,6 +62,10 @@ h3 {
 h3 {
     color: var(--primaryColor);
 }
+input::placeholder {
+    font-size: 90%;
+    color: rgb(148, 148, 148);
+}
 /** navbar */
 #nav-bar {
     width: 100vw;
@@ -115,22 +119,8 @@ a {
     display: none !important;
 }
 /** profile */
-/* #profile-img {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-    background-image: url(../images/profile.svg);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-} */
 #dashboard {
     margin-bottom: 4em;
-}
-#summary-tips {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-column-gap: 0.3em;
 }
 .tip-card {
     height: 4rem;
@@ -189,6 +179,7 @@ a {
 #all-tips-btn {
     font-size: 0.8rem;
     font-weight: 500;
+    display: flex;
 }
 #alert,
 #bulb {
@@ -238,7 +229,7 @@ a {
         column-gap: 1em;
     }
     .tip-container {
-        height: 15rem;
+        height: 10rem;
     }
     .tip-description {
         height: 80%;
@@ -253,7 +244,6 @@ a {
     #dashboard {
         margin: 0 5em;
     }
-    #all-tips-list,
     #expiry-list {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -276,9 +266,6 @@ a {
     outline: none;
     color: var(--black);
     font-family: var(--ff-heading);
-}
-#recipe-search-box::placeholder {
-    font-size: 90%;
 }
 #recipes-search-bar input[type="image"] {
     background-color: var(--primaryColor);
@@ -413,6 +400,7 @@ li::before {
 @media (min-width: 768px) {
     #recipes-search-bar {
         width: 80vmin;
+        margin-top: 2em;
     }
     #start-cooking {
         margin-left: -2em;
@@ -562,7 +550,6 @@ button {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
 }
 .grocery-input-group {
     display: flex;
@@ -571,9 +558,13 @@ button {
 #grocery-item-count-input {
     width: 15%;
 }
-#grocery-item-input {
+.grocery-item-input-group {
     width: 85%;
     margin-left: 0.2em;
+    position: relative;
+}
+#grocery-item-input {
+    width: 100%;
 }
 #add-grocery-btn {
     position: absolute;
@@ -600,7 +591,6 @@ button {
     border-radius: 0.3rem;
     font-family: var(--ff-heading);
     padding: 2em 1em 1em 1em;
-    position: relative;
 }
 .grocery-item {
     width: 100%;
@@ -608,21 +598,71 @@ button {
     justify-content: space-between;
     border-bottom: 1px solid var(--gray);
     padding: 0.2em;
-    font-size: 1.1rem;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 }
 .grocery-edit,
 .grocery-delete {
     color: var(--black);
     font-size: 0.9rem;
 }
+.grocery-edit {
+    margin-left: 0.3em;
+}
 .grocery-close {
     position: absolute;
-    top: 0.5em;
+    top: 1em;
     right: 0.5em;
 }
+.empty-cart-container {
+    width: 100%;
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    color: var(--primaryColor);
+}
+.strikethrough {
+    text-decoration: 2px line-through var(--primaryColor);
+}
+@media (min-width: 768px) {
+    #grocery-form {
+        margin-top: 2em;
+    }
+}
 /** add item */
-#add-item {
-    height: 99vh;
+#add-item-form {
+    margin: 0 auto;
+    width: 80vmin;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 0.3em;
+    padding: 0 1em;
+}
+#add-item-form input,
+#add-item-form select,
+#add-item-form label,
+#add-item-form span {
+    width: 100%;
+}
+#add-item-form label {
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+}
+#add-item-form input[type="checkbox"] {
+    width: fit-content;
+    margin-right: 1em;
+}
+#add-item-form input[type="submit"] {
+    background-color: var(--primaryColor);
+    color: #ffffff;
 }
 form {
     text-transform: capitalize;
@@ -647,9 +687,5 @@ select:focus {
         display: flex;
         justify-content: center;
         align-items: center;
-    }
-    #add-item-form {
-        margin: 0 auto;
-        width: 80vmin;
     }
 }
