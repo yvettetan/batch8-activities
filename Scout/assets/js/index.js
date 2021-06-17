@@ -1,6 +1,5 @@
-//todo current date is not updated to today's real date?
+//? current date is not updated to today's real date?
 //todo weekly goal feature
-//todo grocery list feature
 //todo button to top of page - or make search input fixed
 //helper functions
 capitalize = (words) => {
@@ -11,7 +10,6 @@ capitalize = (words) => {
     capitalized = wordsArr.join(' ');
     return capitalized;
 }
-
 
 // nav buttons
 const navProfileBtn = document.querySelector('#nav-profile');
@@ -95,7 +93,7 @@ const dashboard = document.querySelector('#dashboard');
 const tracker = document.querySelector('#tracker');
 const expiry = document.querySelector('#expiry');
 const tipsHeader = document.querySelector('#tips-header');
-const summaryTips = document.querySelector('#summary-tips');
+// const summaryTips = document.querySelector('#summary-tips');
 const allTipsBtn = document.querySelector('#all-tips-btn');
 const allTips = document.querySelector('.all-tips');
 const allTipsList = document.querySelector('#all-tips-list');
@@ -121,14 +119,14 @@ const foodWasteTips = [
 ]
 
 allTipsBtn.addEventListener('click', () => {
-    hide([about, tracker, expiry, tipsHeader, summaryTips]);
+    hide([about, tracker, expiry, tipsHeader]);
     show([allTips]);
     display_tips(foodWasteTips);
 })
 
 backBtn.addEventListener('click', () => {
     hide([allTips]);
-    show([about, tracker, expiry, tipsHeader, summaryTips])
+    show([about, tracker, expiry, tipsHeader])
 })
 
 display_tips = tipsArr => {
@@ -270,25 +268,7 @@ const pantrySearchBarInput = document.querySelector('#pantry-searchbar-input');
 const fridgeSearchBarInput = document.querySelector('#fridge-searchbar-input');
 const freezerSearchBarInput = document.querySelector('#freezer-searchbar-input');
 const locationInput = document.querySelectorAll('.location-input');
-const clearBtns = document.querySelectorAll('.clear-input');
 const itemLists = document.querySelectorAll('.item-list');
-
-//toggle clear input button on each location item search
-for (let input of locationInput) {
-
-    input.addEventListener('input', () => {
-        if (!input.value) {
-            for (let btn of clearBtns) {
-                hide([btn]);
-            }
-        } else {
-            for (let btn of clearBtns) {
-                show([btn]);
-            }
-        }
-    })
-}
-
 
 const pantryContent = document.querySelector('#pantry-content');
 const fridgeContent = document.querySelector('#fridge-content');
@@ -436,10 +416,12 @@ class ItemUI {
                 list.innerHTML =
                     `<p class="empty-message">Seems like you currently have no items in your ${location}.
                     <br><br>Click + to add a new item</p>`;
+                list.style.display = 'inline';
             } else if (locationItemsCount === 2) {
                 //remove message
                 if (list.children[0].classList.contains('empty-message')) {
                     list.children[0].remove();
+                    list.style.display = '';
                 }
             };
         })
@@ -667,8 +649,11 @@ expiryList.addEventListener('click', (e) => {
 
 //* grocery list 
 const groceryForm = document.querySelector('#grocery-form');
+const groceryItemsList = document.querySelector('#grocery-items-list');
+const groceryListContainer = document.querySelector('#grocery-item-container');
 const groceryItemCountInput = document.querySelector('#grocery-item-count-input');
 const groceryItemInput = document.querySelector('#grocery-item-input');
+const removeGroceryList = document.querySelector('.grocery-close');
 
 class GroceryItem {
     constructor(name, count = '') {
@@ -688,9 +673,15 @@ class GroceryStore {
         return items;
     }
     static add_grocery_item(item) {
-        console.log(item);
         const items = GroceryStore.get_grocery_items();
         items.push(item);
+        localStorage.setItem('grocery-list', JSON.stringify(items));
+    }
+    static edit_or_delete_item(itemIndex, type) {
+        const items = GroceryStore.get_grocery_items();
+        if (type === 'delete') {
+            items.splice(itemIndex, 1);
+        }
         localStorage.setItem('grocery-list', JSON.stringify(items));
     }
 }
@@ -701,14 +692,47 @@ class GroceryUI {
         GroceryUI.display_grocery_items(items);
     }
     static display_grocery_items(items) {
-        items.forEach(item => {
-            GroceryUI.add_grocery_item(item);
-        })
+        if (items != []) {
+            show([groceryListContainer]);
+            items.forEach(item => {
+                GroceryUI.add_grocery_item(item);
+            })
+        }
+        GroceryUI.is_grocerylist_empty();
     }
     static add_grocery_item(item) {
-        const listContainer = document.querySelector('#grocery-item-container');
         let newItem = create_grocery_item_container(item);
-        listContainer.appendChild(newItem);
+        groceryListContainer.appendChild(newItem);
+        GroceryUI.is_grocerylist_empty();
+    }
+    static edit_or_delete_item(itemContainer, type) {
+        if (type === 'delete') {
+            itemContainer.remove();
+            GroceryUI.is_grocerylist_empty();
+        } else {
+            const itemCount = itemContainer.children[0].children[0].innerText;
+            const itemName = itemContainer.children[0].children[1].innerText;
+            document.querySelector('#grocery-item-count-input').value = itemCount;
+            document.querySelector('#grocery-item-input').value = itemName;
+            itemContainer.remove();
+        }
+    }
+    static complete_item(itemContainer) {
+        itemContainer.classList.toggle('strikethrough');
+    }
+    static is_grocerylist_empty = () => {
+        const groceryItemsCount = groceryListContainer.childElementCount;
+        if (groceryItemsCount === 1) {
+            groceryListContainer.innerHTML =
+                `<div class="empty-cart-container">
+                    <strong>Your grocery list is empty</strong>
+                    <img src = "./assets/images/empty-cart.svg" alt="empty cart">
+                   </img>
+                </div>`;
+        } else if (groceryItemsCount === 2) {
+            //hide empty cart container
+            hide([groceryListContainer.children[0]]);
+        }
     }
 }
 
@@ -736,11 +760,28 @@ groceryForm.addEventListener('submit', (e) => {
     GroceryItem.create_grocery_item(name, count);
 })
 
+//instantiate new grocery item, add to storage and display to list
 GroceryItem.create_grocery_item = (itemName, itemCount) => {
     let groceryItem = new GroceryItem(itemName, itemCount);
     GroceryStore.add_grocery_item(groceryItem);
     GroceryUI.add_grocery_item(groceryItem);
-    //clear input values
     groceryItemCountInput.value = '';
     groceryItemInput.value = '';
 }
+
+groceryListContainer.addEventListener('click', (e) => {
+    const targetElement = e.target;
+    const itemContainer = e.target.parentElement.parentElement;
+    const index = [...itemContainer.parentElement.children].indexOf(itemContainer);
+    if (targetElement.classList.contains('grocery-delete')) {
+        GroceryUI.edit_or_delete_item(itemContainer, 'delete');
+        GroceryStore.edit_or_delete_item(index, 'delete');
+    } else if (targetElement.classList.contains('grocery-edit')) {
+        GroceryUI.edit_or_delete_item(itemContainer, 'edit');
+        GroceryStore.edit_or_delete_item(index, 'delete');
+    } else if (targetElement.classList.contains('grocery-item') || targetElement.classList.contains('grocery-item-name')) {
+        GroceryUI.complete_item(targetElement);
+    }
+})
+
+

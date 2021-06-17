@@ -80,18 +80,6 @@
                     <button id="all-tips-btn">View All<img src="./assets/images/right.svg" alt=""></button>
                 </div>
                 <div id="tips-list">
-                    <div id="summary-tips">
-                        <div class="tip-card tip1">
-                            <p>Make a Meal Plan</p>
-                        </div>
-                        <div class="tip-card tip2">
-                            <p>Turn Leftovers into New Meals</p>
-                        </div>
-                        <div class="tip-card tip3">
-                            <p>Store Food Wisely</p>
-                        </div>
-
-                    </div>
                     <div class="all-tips hide">
                         <div>
                             <button id="back-btn"><img src="./assets/images/back.svg" alt="back"></button>
@@ -146,39 +134,37 @@
         <div id="pantry-content" class="location-content hide">
             <div class="location-searchbar-group">
                 <input type="text" id="pantry-searchbar-input" class="location-input" placeholder="Search Pantry">
-                <img class="clear-input hide" src="./assets/images/close.svg" alt="clear">
             </div>
             <div id="pantry-items-list" class="item-list"></div>
         </div>
         <div id="fridge-content" class="location-content">
             <div class="location-searchbar-group">
                 <input type="text" id="fridge-searchbar-input" class="location-input" placeholder="Search Fridge">
-                <img class="clear-input hide" src="./assets/images/close.svg" alt="clear">
             </div>
             <div id="fridge-items-list" class="item-list"></div>
         </div>
         <div id="freezer-content" class="location-content hide">
             <div class="location-searchbar-group">
                 <input type="text" id="freezer-searchbar-input" class="location-input" placeholder="Search Freezer">
-                <img class="clear-input hide" src="./assets/images/close.svg" alt="clear">
             </div>
             <div id="freezer-items-list" class="item-list"></div>
         </div>
     </section>
     <!--* grocery list section -->
     <section id="grocery-list" class="hide">
-        <h2>My Grocery List</h2>
+        <!-- <h2>My Grocery List</h2> -->
         <form id="grocery-form">
             <div class="grocery-input-group">
-                <input id="grocery-item-count-input" min="1" type="number" placeholder="1" required>
-                <input id="grocery-item-input" type="text" placeholder='Enter item name' required>
+                <input id="grocery-item-count-input" min="1" type="number" placeholder="1">
+                <div class="grocery-item-input-group">
+                    <input id="grocery-item-input" type="text" placeholder='Enter item' required>
+                    <input id="add-grocery-btn" type="image" src="./assets/images/add-white.svg">
+                </div>
             </div>
-            <input id="add-grocery-btn" type="image" src="./assets/images/add-white.svg">
         </form>
         <div id="grocery-items-list">
-            <div id="grocery-item-container">
-                <button class="fa fa-close grocery-close"></button>
-            </div>
+            <button id="clear-grocery-btn">clear</button>
+            <div id="grocery-item-container" class=""></div>
         </div>
     </section>
     <!--* add item section -->
@@ -217,7 +203,7 @@
                 <option value="fridge">Fridge</option>
                 <option value="pantry">Pantry</option>
             </select>
-            <label for="item-expiry-date">Expiration Date:</label>
+            <span>Expiration Date:</span>
             <input id="item-expiry-date" type="date">
             <label for="no-expiry-date"><input id="no-expiry-date" type="checkbox">No Date</label>
             <input type="submit" value="Add Item">
