@@ -801,7 +801,7 @@ class GroceryUI {
     static complete_item(itemContainer) {
         itemContainer.classList.toggle('strikethrough');
     }
-    static is_grocerylist_empty = () => {
+    static is_grocerylist_empty() {
         const groceryItemsCount = groceryListContainer.childElementCount;
         if (groceryItemsCount === 1) {
             groceryListContainer.innerHTML =
