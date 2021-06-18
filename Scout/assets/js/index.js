@@ -85,8 +85,7 @@ location_inactive = elementsArr => {
     });
 }
 //* PROFILE SECTON 
-const about = document.querySelector('#about');
-const dashboard = document.querySelector('#dashboard');
+const aboutApp = document.querySelector('#about');
 const tracker = document.querySelector('#tracker');
 const expiry = document.querySelector('#expiry');
 const tipsHeader = document.querySelector('#tips-header');
@@ -127,14 +126,14 @@ const foodWasteTips = [
 ]
 
 allTipsBtn.addEventListener('click', () => {
-    hide([about, tracker, expiry, tipsHeader]);
+    hide([aboutApp, tracker, expiry, tipsHeader]);
     show([allTips]);
     display_tips(foodWasteTips);
 })
 
 backBtn.addEventListener('click', () => {
     hide([allTips]);
-    show([about, tracker, expiry, tipsHeader])
+    show([aboutApp, tracker, expiry, tipsHeader])
 })
 
 
