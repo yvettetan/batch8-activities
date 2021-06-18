@@ -280,7 +280,7 @@ add_recipe = async (e) => {
             alert(err);
         })
 }
-recipesForm.addEventListener('submit', add_recipe)
+recipesForm.addEventListener('submit', add_recipe);
 
 display_recipes = (data) => {
     RecipeStore.clear_recipes();
@@ -298,6 +298,7 @@ display_recipes = (data) => {
         recipesArr.push(recipe);
         RecipeStore.add_recipe(recipe);
     })
+    //clear list before populating with new data
     recipesList.innerHTML = '';
     recipesArr.forEach(recipe => {
         recipesList.innerHTML +=
