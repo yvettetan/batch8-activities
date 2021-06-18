@@ -22,6 +22,13 @@ h1,
 h2,
 h3 {
     font-family: var(--ff-heading);
+    color: var(--primaryColor);
+}
+h1 {
+    font-size: 1.4rem;
+}
+h2 {
+    font-size: 1.17rem;
 }
 ul[class],
 ol[class] {
@@ -59,10 +66,6 @@ body {
 }
 section {
     padding: 1em;
-}
-h2 {
-    color: var(--primaryColor);
-    font-size: 1.17rem;
 }
 input::placeholder {
     font-size: 90%;
@@ -124,9 +127,21 @@ a {
 #dashboard {
     margin-bottom: 4em;
 }
+#about p {
+    font-size: 0.9rem;
+}
+#logo {
+    width: 3rem;
+    float: right;
+    transform: rotate(15deg);
+}
+#tracker {
+    margin: 1em 0;
+}
 #weekly-tracker {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
+    margin-top: 0.5em;
 }
 .daily-goal {
     width: 100%;
@@ -195,9 +210,6 @@ a {
     border-radius: 0.2rem;
     padding: 0.5em;
 }
-#tracker {
-    margin: 1em 0;
-}
 #alert,
 .bulb,
 .right {
@@ -238,6 +250,12 @@ a {
     cursor: pointer;
 }
 @media (min-width: 576px) {
+    #logo {
+        width: 12vmin;
+    }
+    #about p {
+        font-size: 1rem;
+    }
     #all-tips-list,
     #expiry-list {
         display: grid;
