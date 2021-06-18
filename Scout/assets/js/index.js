@@ -486,7 +486,7 @@ class ItemUI {
         Item.check_expiry(freezerItems, 'Freezer');
     }
     //checks if each location is empty then displays empty message if empty or removes message if not
-    static is_empty = () => {
+    static is_empty() {
         let listsArr = [...itemLists];
         listsArr.forEach(list => {
             //get location based on list id
