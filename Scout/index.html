@@ -66,14 +66,14 @@
     <section id="profile">
         <div id="dashboard">
             <div id="about">
-                <h2>Scout</h2>
+                <h1>Scout</h1>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum odio iusto eveniet cumque sequi.
                     Veniam eius vel voluptatibus. Temporibus, a corrupti ut necessitatibus consequuntur odio esse saepe
                     eos animi veritatis!</p>
             </div>
             <!-- tracker -->
             <div id="tracker">
-                <h3><i class="fa fa-calendar"></i> Weekly No Waste</h3>
+                <h2><i class="fa fa-calendar"></i> Weekly Goal Tracker</h2>
                 <div id="weekly-tracker">
                     <div class="daily-goal">1</div>
                     <div class="daily-goal">2</div>
@@ -88,16 +88,20 @@
             <div id="tips">
 
                 <div id="tips-header">
-                    <h3 class="tip-card"><img id="bulb" src="./assets/images/bulb.svg" alt="lightbulb">&nbspFood Hero
-                        Tips </h3>
-                    <button id="all-tips-btn">View All<img src="./assets/images/right.svg" alt=""></button>
+                    <button id="all-tips-btn">
+                        <h2 class="all-tips-btn-text">
+                            <div>
+                                <img class="bulb" src="./assets/images/bulb.svg" alt="lightbulb">&nbspFood
+                                Hero Tips
+                            </div>
+                            <img class="right" src="./assets/images/right.svg" alt="">
+                        </h2>
+                    </button>
                 </div>
                 <div id="tips-list">
                     <div class="all-tips hide">
-                        <div>
-                            <button id="back-btn"><img src="./assets/images/back.svg" alt="back"></button>
-                            <div id="all-tips-list">
-                            </div>
+                        <button id="back-btn"><img src="./assets/images/back.svg" alt="back"></button>
+                        <div id="all-tips-list">
                         </div>
                     </div>
                 </div>
@@ -105,7 +109,7 @@
             <!-- expiry -->
             <div id="expiry">
                 <br>
-                <h3><img id="alert" src="./assets/images/alert.svg" alt="alert">&nbspMake Haste, Don't Waste</h3>
+                <h2><img id="alert" src="./assets/images/alert.svg" alt="alert">&nbspMake Haste, Don't Waste</h2>
                 <div id="expiry-list">
                 </div>
             </div>
@@ -128,7 +132,7 @@
         </div>
         <div class="ingredients-modal-bg hide">
             <div class="ingredients-modal">
-                <h3 class="modal-name"></h3>
+                <h2 class="modal-name"></h2>
                 <ul class="ingredients-list">
                 </ul>
                 <button class="close-ingredients">
@@ -176,8 +180,7 @@
             </div>
         </form>
         <div id="grocery-items-list">
-            <button id="clear-grocery-btn">clear</button>
-            <div id="grocery-item-container" class=""></div>
+            <div id="grocery-item-container"></div>
         </div>
     </section>
     <!--* add item section -->
@@ -187,6 +190,7 @@
             <input id="item-count" type="number" min="1" placeholder="Enter Count" required>
             <select name="item-unit" id="item-unit" required>
                 <option disabled="disabled" selected>Select Unit</option>
+                <option value=""></option>
                 <option value="bags">bag/s</option>
                 <option value="bottle">bottle/s</option>
                 <option value="bottle">box/es</option>

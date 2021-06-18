@@ -137,6 +137,8 @@ backBtn.addEventListener('click', () => {
     show([about, tracker, expiry, tipsHeader])
 })
 
+
+//display each food waste tip inside its own container
 display_tips = tipsArr => {
     allTipsList.innerHTML = '';
     tipsArr.forEach(tip => {
@@ -144,15 +146,51 @@ display_tips = tipsArr => {
         div.className = 'tip-container';
         div.innerHTML =
             `<strong class="tip-title">${tip.title}</strong>
-        <p class="tip-description">${tip.description}</p>
-        `
+            <p class="tip-description">${tip.description}</p>`
         allTipsList.appendChild(div);
     })
 }
 
-//handles daily goal completion
+class GoalAchieved {
+    constructor(index, status) {
+        this.index = index;
+        this.status = status;
+    }
+}
+class Tracker {
+    static get_goals() {
+        let tracker;
+        return (localStorage.getItem('tracker') === null) ? tracker = [] : tracker = JSON.parse(localStorage.getItem('tracker'));
+    }
+    static display_achievements() {
+        const dailyAchieved = Tracker.get_goals();
+        dailyAchieved.forEach(day => {
+            let index = day.index;
+            dailyGoals[index].classList.add('achieved');
+            dailyGoals[index].innerHTML = '<i class="fa fa-check"></i>';
+            dailyGoals[index].borderColor = 'var(--primaryColor)';
+        })
+    }
+    static add_achievement(goalAchieved) {
+        const dailyAchieved = Tracker.get_goals();
+        dailyAchieved.push(goalAchieved);
+        localStorage.setItem('tracker', JSON.stringify(dailyAchieved));
+    }
+    static remove_achievement(goalIndex) {
+        const dailyAchieved = Tracker.get_goals();
+        dailyAchieved.forEach((day, index) => {
+            if (day.index === goalIndex) {
+                dailyAchieved.splice(index, 1);
+            }
+        })
+        localStorage.setItem('tracker', JSON.stringify(dailyAchieved));
+    }
+}
+
+//handles daily goal completion, adds to local storage / removes from local storage
 for (let goal of dailyGoals) {
     goal.addEventListener('click', () => {
+        //weeklyTracker.children returns HTML collection -> spread to use indexOf
         //use index of element as basis for week day number (start at 1, instead of 0)
         const day = [...weeklyTracker.children].indexOf(goal) + 1;
         //add banner icon
@@ -161,15 +199,29 @@ for (let goal of dailyGoals) {
         if (goal.classList.contains('achieved')) {
             goal.innerHTML = '<i class="fa fa-check"></i>';
             goal.style.borderColor = 'var(--primaryColor)'
+            const dayGoal = new GoalAchieved(day - 1, 'achieved');
+            Tracker.add_achievement(dayGoal);
         } else {
-            //set 
+            //set check back to day
             goal.innerHTML = day;
             goal.style.borderColor = 'var(--primaryLight)';
+            Tracker.remove_achievement(day - 1);
         }
     });
 }
 
+//resets the tracker every monday
+const dateToday = new Date();
+let dayNum = dateToday.getDay();
+let hour = dateToday.getHours();
+if (dayNum == 1 && hour === 0) {
+    for (let goal of dailyGoals) {
+        goal.classList.remove('achieved');
+    }
+    localStorage.setItem('tracker', JSON.stringify([]));
+}
 
+document.addEventListener('DOMContentLoaded', Tracker.display_achievements);
 
 //* RECIPES SECTION 
 const recipesForm = document.querySelector('#recipes-form');
