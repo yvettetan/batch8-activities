@@ -86,8 +86,8 @@ location_inactive = elementsArr => {
 }
 //* PROFILE SECTON 
 const aboutApp = document.querySelector('#about');
-const tracker = document.querySelector('#tracker');
-const expiry = document.querySelector('#expiry');
+const trackerContainer = document.querySelector('#tracker');
+const expiryContainer = document.querySelector('#expiry');
 const tipsHeader = document.querySelector('#tips-header');
 
 const weeklyTracker = document.querySelector('#weekly-tracker');
@@ -126,14 +126,14 @@ const foodWasteTips = [
 ]
 
 allTipsBtn.addEventListener('click', () => {
-    hide([aboutApp, tracker, expiry, tipsHeader]);
+    hide([aboutApp, trackerContainer, expiryContainer, tipsHeader]);
     show([allTips]);
     display_tips(foodWasteTips);
 })
 
 backBtn.addEventListener('click', () => {
     hide([allTips]);
-    show([aboutApp, tracker, expiry, tipsHeader])
+    show([aboutApp, trackerContainer, expiryContainer, tipsHeader])
 })
 
 
