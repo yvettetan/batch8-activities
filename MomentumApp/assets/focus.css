@@ -1,3 +1,8 @@
+button {
+    background-color: transparent;
+    outline: none;
+    border: none;
+}
 #center-time {
     font-size: 3rem;
 }
@@ -7,6 +12,9 @@ h1 {
 h2 {
     font-size: 0.8rem;
     margin-top: 2em;
+}
+#focus-section {
+    display: none;
 }
 #todoButton {
     background-color: transparent;
@@ -66,6 +74,9 @@ h2 {
 }
 .todoCheck {
     margin: 0 0.5em;
+}
+.todoCheck:checked ~ label {
+    text-decoration: line-through;
 }
 .todo-text {
     display: flex;
@@ -211,16 +222,16 @@ h2 {
 }
 #quote-list-container {
     background-color: rgb(255, 255, 255);
-    height: auto;
-    width: auto;
+    height: 5rem;
+    width: 10rem;
     position: absolute;
-    bottom: 0;
-    right: 0;
-    margin: 2.5em 1em;
+    bottom: 2.5em;
+    right: 1em;
     padding: 0.5em;
     display: none;
-    text-align: right;
     border-radius: 5px;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
 #add-quote-container {
     display: none;
@@ -238,24 +249,20 @@ h2 {
 #add-quote-option,
 #show-quote-option {
     background-color: white;
-    border: none;
-    border-bottom: 1px solid black;
     color: black;
     outline: none;
-    padding: 0.2em 0.3em;
     width: 100%;
     font-family: var(--montserrat);
     font-size: 0.6rem;
+    padding: 0.2em 0.3em;
+    border: 1px solid black;
 }
 #show-quote-option {
     margin-top: 0.2em;
 }
 #add-quote-option:hover,
 #show-quote-option:hover {
-    border: 1px solid black;
-    color: black;
-    outline: none;
-    padding: 0.2em 0.3em;
+    background-color: rgb(231, 231, 231);
     width: 100%;
 }
 #new-quote-input,
