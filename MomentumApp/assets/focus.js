@@ -1,22 +1,19 @@
 /*/toggle display function/*/
 
-function isDisplayed(container) {
+function isDisplayedFlex(container) {
     if (container.style.display === "none") {
-        container.style.display = "block";
+        container.style.display = "flex";
     } else {
-        container.style.display = "none";
-        container.style.display = "none";
         container.style.display = "none";
     }
 }
 
 /*/greet user section/*/
 
-function greeting() {
-    //automatically updates time
-    setInterval(timeNowCenter, 1000);
+(function greeting() {
     const centerTime = document.getElementById('center-time');
-
+    setInterval(timeNowCenter, 1000);
+    //automatically updates time
     function timeNowCenter() {
         //gets current time in 12 hour format
         let now = new Date();
@@ -26,44 +23,49 @@ function greeting() {
                 hour: 'numeric',
                 minute: 'numeric'
             }).format(now);
-        //places current time in div to display on web
         centerTime.textContent = currentTime;
         //greets user depending on time of day
+        // setTimeout(() => {
         let dayOrNightValue = document.getElementById('timeOfDay');
         let dayOrNight = centerTime.innerHTML[centerTime.innerHTML.length - 2];
         if (dayOrNight === 'A') {
-            dayOrNightValue.innerText = 'morning';
+            dayOrNightValue.innerText = 'Good morning,';
         } else if (centerTime.innerHTML[0] === '1') {
             if (centerTime.innerHTML[1] < 2) {
-                dayOrNightValue.innerText = 'evening';
+                dayOrNightValue.innerText = 'Good evening,';
             } else {
-                dayOrNightValue.innerText = 'afternoon';
+                dayOrNightValue.innerText = 'Good afternoon,';
             }
         } else if (centerTime.innerHTML[0] < 6) {
-            dayOrNightValue.innerText = 'afternoon'
+            dayOrNightValue.innerText = 'Good afternoon,'
         } else {
-            dayOrNightValue.innerText = 'evening';
+            dayOrNightValue.innerText = 'Good evening,';
         }
+        // }, 500);
     }
-};
-
-greeting();
+}());
 
 //gets user's name from form
-
-window.addEventListener('load', () => {
+setTimeout(getUserName, 1000);
+function getUserName() {
     let params = (new URL(document.location)).searchParams;
     const name = params.get('name');
     //display user's name
-    document.getElementById('name-input').textContent = name;
-})
+    const nameInput = document.getElementById('name-input');
+    nameInput.textContent = name;
+    let editbtn = document.createElement('button');
+    editbtn.id = 'edit-name';
+    editbtn.innerHTML = '<i id="edit-name-icon" class="fa fa-edit"></i>';
+    insertAfter(editbtn, nameInput);
+}
 
+function insertAfter(newNode, existingNode) {
+    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+}
 //creates option to edit user's name
 const username = document.getElementById('name-input');
-const editNameBtn = document.getElementById('edit-name');
-const editIcon = document.getElementById('edit-name-icon');
+
 //makes name editable on edit button click or enter key is pressed
-editNameBtn.addEventListener('click', editName);
 username.addEventListener('keyup', function (e) {
     if (e.key === 'Enter') {
         e.preventDefault();
@@ -71,20 +73,27 @@ username.addEventListener('keyup', function (e) {
     }
 })
 
+setTimeout(editName, 1000);
 function editName() {
-    //if name is editable, disables it and changes button icon
-    if (username.isContentEditable) {
-        username.contentEditable = 'false';
-        editIcon.classList.toggle('fa-check-square');
-        editIcon.classList.toggle('fa-edit');
-        //if name is not editable, enables it and changes button icon
-    } else {
-        username.contentEditable = 'true';
-        editIcon.classList.toggle('fa-edit');
-        editIcon.classList.toggle('fa-check-square');
-    };
-
+    const editIcon = document.getElementById('edit-name-icon');
+    const editNameBtn = document.getElementById('edit-name');
+    editNameBtn.addEventListener('click', () => {
+        //if name is editable, disables it and changes button icon
+        if (username.isContentEditable) {
+            username.contentEditable = 'false';
+            editIcon.classList.toggle('fa-check-square');
+            editIcon.classList.toggle('fa-edit');
+            //if name is not editable, enables it and changes button icon
+        } else {
+            username.contentEditable = 'true';
+            editIcon.classList.toggle('fa-edit');
+            editIcon.classList.toggle('fa-check-square');
+        };
+    })
 }
+setTimeout(() => {
+    document.getElementById('focus-section').style.display = 'block';
+}, 1000);
 
 /*/user's focus section/*/
 
@@ -101,48 +110,36 @@ focusInput.addEventListener('keyup', function (e) {
 })
 
 function createFocusList() {
+    //gets user's focus input value and store in variable
+    const focusInputValue = focusInput.value;
     //creates div to contain checkbox and label
     const focusItem = document.createElement('div');
     focusItem.id = 'focus-item';
-    //gets user's focus input value and store in variable
-    const focusInputValue = focusInput.value;
-    const focusCheckbox = document.createElement('input');
-    //creates a checkbox
-    focusCheckbox.type = 'checkbox';
-    focusCheckbox.id = 'main-focus';
-    //creates a label that links to checkbox
-    const toFocus = document.createElement('label');
-    toFocus.setAttribute('for', 'main-focus');
-    toFocus.id = 'main-focus-text';
-    //clears text input field when input is submitted
+    focusItem.innerHTML =
+        `<input type="checkbox" id="main-focus">
+    <label for="main-focus" id="main-focus-text">${focusInputValue}
+        <button id="remove-focus">
+            <i class="fa fa-trash"></i>
+        </button>
+    </label>`;
     focusInput.value = "";
-    //sets checkbox label to user's focus input (display user's focus)
-    toFocus.textContent = focusInputValue;
-    //places checkbox and label in the div
-    focusItem.appendChild(focusCheckbox);
-    focusItem.appendChild(toFocus);
-    //places the div in its container
-    focusList.appendChild(focusItem);
-    //removes text input field and change it to 'today's focus'
     focusInput.style.display = "none";
     addFocus.style.display = "none";
-    document.querySelector('h2').innerText = "TODAY'S FOCUS:"
-    //creates a remove focus button
-    const removeFocusBtn = document.createElement('button');
-    removeFocusBtn.id = 'remove-focus';
-    removeFocusBtn.innerHTML = '<i class="fa fa-trash"></i>';
-    //places remove button in label
-    toFocus.appendChild(removeFocusBtn);
-    //when remove button is clicked, removes user's focus then displays text input and asks focus question
-    removeFocusBtn.addEventListener('click', () => {
-        focusItem.remove();
-        focusInput.style.display = "block";
-        addFocus.style.display = "block";
-        document.querySelector('h2').innerText = "What is your main focus for today?"
-    });
+    document.querySelector('h2').innerText = "TODAY'S FOCUS:";
+    focusList.appendChild(focusItem);
+    //remove focus item on trash icon click
+    (removeItem => {
+        document.getElementById('remove-focus').addEventListener('click', () => {
+            focusItem.remove();
+            focusInput.style.display = "block";
+            addFocus.style.display = "block";
+            document.querySelector('h2').innerText = "What is your main focus for today?"
+        });
+    })();
 }
 
-/*/user's todo list section/*/
+
+//* todo list section 
 
 //displays todo container when todo button is clicked
 const toDoBtn = document.getElementById('todoButton');
@@ -150,18 +147,21 @@ const toDoContainer = document.getElementById('todoContainer');
 toDoBtn.addEventListener('click', showToDoContainer);
 
 function showToDoContainer() {
-    isDisplayed(toDoContainer);
+    if (toDoContainer.style.display === "none") {
+        toDoContainer.style.display = "block";
+    } else {
+        toDoContainer.style.display = "none";
+    }
 };
 
-//generates todo list
-
 //stores user's todos in an array
-let TodoList = [];
 //dislays todo when add(+) button is clicked or enter key is pressed
+let TodoList = [];
 const addTodoBtn = document.querySelector('#add-todoButton');
 const newTodoInput = document.getElementById('todoInput');
-addTodoBtn.addEventListener('click', todo);
 const todoList = document.getElementById('todo-list');
+
+addTodoBtn.addEventListener('click', addTodo);
 newTodoInput.addEventListener('keyup', function (e) {
     if (e.key === 'Enter') {
         e.preventDefault();
@@ -169,53 +169,31 @@ newTodoInput.addEventListener('keyup', function (e) {
     }
 })
 
-function todo(newTodo, index) {
-    //gets user's input
-    newTodo = document.getElementById('todoInput').value;
-    let todoItem = document.createElement('div');
-    //creates a div to contain checkbox and label
-    todoItem.classList.add('todoItem');
-    const todoCheckbox = document.createElement('input');
-    //creates checkbox
-    todoCheckbox.type = 'checkbox';
-    todoCheckbox.classList.add('todoCheck');
-    //creates label
-    let todo = document.createElement('label');
-    todo.classList.add('todo-text');
-    //clears input field when new todo is created
-    todoInput.value = "";
-    //sets checkbox label to user's todo input (display new todo)
-    todo.textContent = newTodo;
-    //adds new todo to array
-    TodoList.push(newTodo);
-    //links label to checkbox
-    index = TodoList.indexOf(newTodo);
-    todoCheckbox.setAttribute('id', `check${index}`);
-    todo.setAttribute('for', `check${index}`);
-    //creates remove button
-    const removeBtn = document.createElement('button');
-    removeBtn.classList.add('remove-todo');
-    removeBtn.innerHTML = '<i class="fa fa-trash"></i>';
-    //places remove button in label
-    todo.appendChild(removeBtn);
-    //places checkbox and label in div
-    todoItem.appendChild(todoCheckbox);
-    todoItem.appendChild(todo);
-    //places div in its container
+//sets todo checkbox 'id' and label 'for' attributes to the todoItem's index in the todo list
+function addTodo() {
+    const todoItem = document.createElement('div');
+    todoItem.className = 'todoItem';
+    let newTodo = document.getElementById('todoInput');
+    todoItem.innerHTML =
+        `<input type="checkbox" class="todoCheck">
+        <label class="todo-text">${newTodo.value}
+            <button>
+                <i class="fa fa-trash remove"></i>
+            </button>
+        </label>`;
+    newTodo.value = "";
     todoList.appendChild(todoItem);
-    //deletes todo and remove from array
-    removeBtn.addEventListener('click', () => {
-        todoItem.remove();
-        TodoList.splice(TodoList.indexOf(newTodo), 1);
-    });
+    const todoCheckbox = todoItem.firstElementChild;
+    const todoLabel = todoCheckbox.nextElementSibling;
+    todoCheckbox.id = [...todoList.children].indexOf(todoItem);
+    todoLabel.setAttribute('for', todoCheckbox.id);
 }
 
-/*/user's quotes section/*/
+//*quotes section 
 
-//stores quotes in array
-let quotes = [
+let quotesArr = [
     {
-        author: "Bren&eacute; Brown",
+        author: "Brene Brown",
         quote: "One day you will tell your story of how you overcame what you went through and it will be someone else's surival guide"
     },
     {
@@ -240,7 +218,7 @@ let quotes = [
     }
 ]
 
-//displays a random quote when button is clicked
+//displays a random quote when shuffle button is clicked
 const shuffleBtn = document.getElementById('shuffleButton');
 shuffleBtn.addEventListener('click', getRandQuote);
 
@@ -248,12 +226,10 @@ function getRandQuote() {
     const quote = document.querySelector('#random-quote');
     const author = document.querySelector('#author');
     //generates a random number (from length of array)
-    let index = Math.floor(Math.random() * quotes.length);
-    //gets a random quote from array
-    let randQuote = quotes[index].quote;
-    //gets the author of the quote
-    let randAuthor = quotes[index].author;
-    //displays quote and author
+    let index = Math.floor(Math.random() * quotesArr.length);
+    //gets random quote and author from array and displays it on page
+    let randQuote = quotesArr[index].quote;
+    let randAuthor = quotesArr[index].author;
     quote.innerHTML = randQuote;
     author.innerHTML = `- ${randAuthor}`;
 };
@@ -261,11 +237,11 @@ function getRandQuote() {
 //displays quote options: add quote or show quotes
 const quoteContainer = document.getElementById("quote-list-container");
 const quoteBtn = document.querySelector('.quote');
-quoteBtn.addEventListener('click', showQuotesOptions);
-
-function showQuotesOptions() {
-    isDisplayed(quoteContainer);
-}
+quoteBtn.addEventListener('click', () => {
+    isDisplayedFlex(quoteContainer);
+    addQuoteContainer.style.display = 'none';
+    showQuoteContainer.style.display = 'none';
+});
 
 //displays add new quote container when 'add new quote' button is clicked
 const addQuoteContainer = document.getElementById('add-quote-container')
@@ -273,13 +249,8 @@ const addOption = document.querySelector('#add-quote-option');
 addOption.addEventListener('click', showAddQuoteContainer);
 
 function showAddQuoteContainer() {
-    if (addQuoteContainer.style.display === "none") {
-        addQuoteContainer.style.display = "flex";
-        //hides show quotes container if shown
-        showQuoteContainer.style.display = "none";
-    } else {
-        addQuoteContainer.style.display = "none";
-    }
+    isDisplayedFlex(addQuoteContainer);
+    showQuoteContainer.style.display = 'none';
 }
 
 //displays show quotes container when 'show all quotes' button is clicked
@@ -289,13 +260,8 @@ const showOption = document.querySelector('#show-quote-option');
 showOption.addEventListener('click', showQuotesContainer);
 
 function showQuotesContainer() {
-    if (showQuoteContainer.style.display === "none") {
-        showQuoteContainer.style.display = "flex";
-        //hides add new quote container if shown
-        addQuoteContainer.style.display = "none";
-    } else {
-        showQuoteContainer.style.display = "none";
-    }
+    isDisplayedFlex(showQuoteContainer);
+    addQuoteContainer.style.display = 'none';
 }
 
 //adds new quote to array when add(+) button is clicked or enter key is pressed
@@ -304,73 +270,56 @@ newQuoteBtn.addEventListener('click', addToQuotes);
 let newQuote = document.getElementById('new-quote-input');
 let newAuthor = document.getElementById('new-author-input');
 
-function addToQuotes(event) {
-    event.preventDefault();
+//adds new quote and author to quote array, display new quote in quotes list
+function addToQuotes(e) {
+    e.preventDefault();
     const quoteObject = {};
-    //stores author and quote input values in object
     quoteObject.author = newAuthor.value;
     quoteObject.quote = newQuote.value;
-    //adds new quote and author to end of quote array
-    quotes.push(quoteObject);
-    //creates a div
-    const newQuoteContainer = document.createElement('div');
-    newQuoteContainer.classList.add('quote-item-container');
-    //creates a paragraph
-    const newQuoteItem = document.createElement('p');
-    newQuoteItem.classList.add('quote-item');
-    //creates a button to add new quotes
-    const newQuoteItemBtn = document.createElement('button');
-    newQuoteItemBtn.classList.add('remove-quote');
-    newQuoteItemBtn.innerHTML = '<i class="fa fa-trash"></i>';
-    //places div in quote container
-    quoteList.appendChild(newQuoteContainer)
-    //places quote and author in paragraph
-    newQuoteContainer.appendChild(newQuoteItem);
-    newQuoteContainer.appendChild(newQuoteItemBtn);
-    //sets how quote and author is displayed
-    newQuoteItem.textContent = (`"${quoteObject.quote}" - ${quoteObject.author}`);
-    //clears input fields when new quote is added
+    quotesArr.push(quoteObject);
+    const newQuoteContainer = createQuoteItem(newQuote.value, newAuthor.value);
+    quoteList.appendChild(newQuoteContainer);
     newQuote.value = "";
     newAuthor.value = "";
-    //removes new quote when remove button is clicked
-    newQuoteItemBtn.addEventListener('click', () => {
-        newQuoteContainer.remove();
-        quotes.splice(quotes.indexOf(newQuoteItem), 1);
-    });
-    //shows new quote is added to current quotes list
     showQuotesContainer();
 }
 
-//displays current quotes list in container 
-function displayQuotes() {
+// displays current quotes list in container 
+(function displayQuotes() {
     //loops over each quote and author and displays it
-    for (let i = 0; i < quotes.length; i++) {
-        //creates a div
-        const quoteItemContainer = document.createElement('div');
-        quoteItemContainer.classList.add('quote-item-container');
-        //creates a paragraph
-        const quoteItem = document.createElement('p');
-        quoteItem.classList.add('quote-item');
-        //creates remove quote button
-        const quoteItemBtn = document.createElement('button');
-        quoteItemBtn.classList.add('remove-quote');
-        quoteItemBtn.innerHTML = '<i class="fa fa-trash"></i>';
-        //sets how each quote and author is displaued
-        let quoteText = quotes[i].quote;
-        let authorText = quotes[i].author;
-        quoteItem.textContent = (`"${quoteText}" - ${authorText}`);
+    for (let i = 0; i < quotesArr.length; i++) {
+        const quoteItemContainer = createQuoteItem(quotesArr[i].quote, quotesArr[i].author);
         quoteList.appendChild(quoteItemContainer);
-        quoteItemContainer.appendChild(quoteItem);
-        quoteItemContainer.appendChild(quoteItemBtn);
-        //removes quote and author
-        quoteItemBtn.addEventListener('click', () => {
-            //removes from display
-            quoteItemContainer.remove();
-            //removes in array
-            quotes.splice(quotes.indexOf(quoteItem), 1);
-        })
     };
+}())
+
+function createQuoteItem(quote, author) {
+    const quoteContainer = document.createElement('div');
+    quoteContainer.className = 'quote-item-container';
+    quoteContainer.innerHTML =
+        `<p class="quote-item">"${quote}" - ${author}</p>
+        <button>
+            <i class="fa fa-trash remove"></i>
+        </button>`;
+    return quoteContainer;
 }
 
-displayQuotes();
+//remove todo item by traversing the DOM to remove its div container
+todoList.addEventListener('click', removeItem);
+showQuoteContainer.addEventListener('click', removeItem);
 
+function removeItem(e) {
+    if (e.target.classList.contains('remove')) {
+        //container returns either todo Container or quotes container
+        const listContainer = e.target.closest('div').parentElement;
+        const itemContainer = e.target.closest('div');
+        //remove quote from quotes array
+        if (listContainer === quoteList) {
+            const index = [...listContainer.children].indexOf(itemContainer);
+            quotesArr.splice(index, 1);
+        }
+        itemContainer.remove();
+    } else {
+        return;
+    }
+}
