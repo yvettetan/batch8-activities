@@ -10,10 +10,10 @@ function isDisplayedFlex(container) {
 
 /*/greet user section/*/
 
-(function greeting() {
+(async function greeting() {
     const centerTime = document.getElementById('center-time');
-    setInterval(timeNowCenter, 1000);
     //automatically updates time
+    setInterval(timeNowCenter, 1000);
     function timeNowCenter() {
         //gets current time in 12 hour format
         let now = new Date();
@@ -25,7 +25,6 @@ function isDisplayedFlex(container) {
             }).format(now);
         centerTime.textContent = currentTime;
         //greets user depending on time of day
-        // setTimeout(() => {
         let dayOrNightValue = document.getElementById('timeOfDay');
         let dayOrNight = centerTime.innerHTML[centerTime.innerHTML.length - 2];
         if (dayOrNight === 'A') {
@@ -41,7 +40,6 @@ function isDisplayedFlex(container) {
         } else {
             dayOrNightValue.innerText = 'Good evening,';
         }
-        // }, 500);
     }
 }());
 
@@ -169,24 +167,19 @@ newTodoInput.addEventListener('keyup', function (e) {
     }
 })
 
-//sets todo checkbox 'id' and label 'for' attributes to the todoItem's index in the todo list
+//create container for each new todo
 function addTodo() {
     const todoItem = document.createElement('div');
     todoItem.className = 'todoItem';
     let newTodo = document.getElementById('todoInput');
     todoItem.innerHTML =
-        `<input type="checkbox" class="todoCheck">
-        <label class="todo-text">${newTodo.value}
-            <button>
+        `<input type="checkbox" id="${newTodo.value}" class="todoCheck">
+        <label for="${newTodo.value}" class="todo-text">${newTodo.value}</label>
+        <button>
                 <i class="fa fa-trash remove"></i>
-            </button>
-        </label>`;
+        </button>`;
     newTodo.value = "";
     todoList.appendChild(todoItem);
-    const todoCheckbox = todoItem.firstElementChild;
-    const todoLabel = todoCheckbox.nextElementSibling;
-    todoCheckbox.id = [...todoList.children].indexOf(todoItem);
-    todoLabel.setAttribute('for', todoCheckbox.id);
 }
 
 //*quotes section 

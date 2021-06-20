@@ -3,6 +3,9 @@ button {
     outline: none;
     border: none;
 }
+input[type="checkbox"]:checked ~ label {
+    text-decoration: line-through;
+}
 #center-time {
     font-size: 3rem;
 }
@@ -67,7 +70,7 @@ h2 {
     margin-bottom: 0.5em;
 }
 .todoItem {
-    padding: 0.5em 0;
+    padding: 0.5em 0.5em 0.5em 0;
     font-size: 0.8rem;
     display: flex;
     align-items: center;
@@ -75,12 +78,11 @@ h2 {
 .todoCheck {
     margin: 0 0.5em;
 }
-.todoCheck:checked ~ label {
-    text-decoration: line-through;
-}
 .todo-text {
     display: flex;
+    flex-wrap: wrap;
     width: 100%;
+    margin: 0 0.2em;
     justify-content: space-between;
 }
 .todoItem:last-child {
@@ -170,9 +172,6 @@ h2 {
     justify-content: center;
     align-items: center;
 }
-#main-focus:checked ~ label {
-    text-decoration: line-through;
-}
 #main-focus-text {
     padding-left: 0.5em;
     font-size: 1.5rem;
@@ -254,7 +253,7 @@ h2 {
     width: 100%;
     font-family: var(--montserrat);
     font-size: 0.6rem;
-    padding: 0.2em 0.3em;
+    padding: 0.4em 0.3em;
     border: 1px solid black;
 }
 #show-quote-option {
