@@ -3,8 +3,8 @@
 # Write a while loop that takes input from the user,
 # performs an action, and only stops when the user types
 # "STOP". Each loop can get info from the user
-
 question = 'What is your name?'
+puts 'Type STOP to say goodbye'
 puts question
 user_input = gets.chomp
 while user_input
