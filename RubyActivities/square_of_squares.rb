@@ -1,6 +1,3 @@
-# puts "Enter a number to check if it\'s a perfect square"
-# number = gets.chomp.to_i
-
 def perfect_square(number)
   square_root = number**0.5
   if number.negative?
