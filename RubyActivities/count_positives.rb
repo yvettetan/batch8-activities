@@ -6,9 +6,7 @@ else
   positive_arr = arr.find_all { |num| num > 0 }
   negative_arr = arr.find_all { |num| num < 0 }
   sum_neg = 0
-  negative_arr.each do |num|
-    sum_neg += num
-  end
+  negative_arr.each { |num| sum_neg += num }
   count_arr = [positive_arr.length, sum_neg]
   p count_arr
 end
