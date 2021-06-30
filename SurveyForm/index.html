@@ -5,49 +5,40 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Oleo+Script&family=Open+Sans:wght@400;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <title>Survey Form</title>
 </head>
 
 <body>
-    <main class="container">
+    <main>
         <header>
-            <h1 id="title">Client Satisfaction Survey Form
-            </h1>
-            <p id="description">Thank you for taking the time to help us improve our services</p>
+            <h1 id="title">Client Satisfaction Survey Form</h1>
+            <p id="description">We value your feedback.<br>Thank you for taking the time to help us improve our
+                catering services.</p>
         </header>
         <div id="form-container">
-            <form action="/" id="survey-form" method="POST">
-                <!-- name -->
-                <div class="group">
-                    <label id="name-label" for="name">Name</label><br>
-                    <input id="name" type="text" placeholder="Enter your name" required>
+            <form action="/" id="survey-form" method="GET">
+                <div class="input-group">
+                    <label for="name" id="name-label">Name</label>
+                    <input type="text" id="name" placeholder="Enter your name">
                 </div>
-
-                <!-- email -->
-                <div class="group"><br>
-                    <label id="email-label" for="email">Email</label><br>
-                    <input id="email" type="email" placeholder="Enter your email" required>
+                <div class="input-group">
+                    <label for="email" id="email-label">Email*</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
                 </div>
-
-                <!-- date of event -->
-                <div class="group"><br>
-                    <label id="date-label" for="date">Date of Event</label><br>
-                    <input type="date" id="date">
+                <div class="input-group">
+                    <label for="date" id="date-label">Date of event*</label>
+                    <input type="date" id="date" required>
                 </div>
-
-                <!-- number of pax -->
-                <div class="group"><br>
-                    <label id="number-label" for="number">Number of guests</label><br>
-                    <input type="number" id="number" placeholder="Enter number of guests" min="30" max="1000" required>
+                <div class="input-group">
+                    <label for="guests" id="number-label">Number of guests*</label>
+                    <input type="number" id="guests" placeholder="Enter number of guests" min="30" max="1000" required>
                 </div>
-
-
-
-                <!-- select event -->
-                <div class="group">
-                    <p>Which option best describes your event?</p>
-                    <select name="options" id="dropdown" required>
+                <div class="input-group">
+                    <p class="input-group-label">Which option best describes your event?*</p>
+                    <select name="type of event" id="dropdown" required>
                         <option disabled selected value>select event</option>
                         <option value="wedding">Wedding</option>
                         <option value="debut">Birthday</option>
@@ -57,25 +48,18 @@
                         <option value="others">Others</option>
                     </select>
                 </div>
-
-
-
-                <!-- service type -->
-                <div class="group">
-                    <p class="group-label">Type of Service</p>
-                    <div class="input2">
+                <div class="input-group">
+                    <p class="input-group-label">Type of Service</p>
+                    <div class="options">
                         <input id="catering" type="radio" name="service-type" value="catering">
                         <label for="catering">Catering Only</label><br>
                         <input id="catering-styling" type="radio" name="service-type" value="catering-styling">
                         <label for="catering-styling">Catering and Styling</label>
                     </div>
-
                 </div>
-                <!-- food Satisfaction -->
-
-                <div class="group">
-                    <p class="group-label">Overall Satisfaction of Food</p>
-                    <div class="input2">
+                <div class="input-group">
+                    <p class="input-group-label">Overall Satisfaction of Food</p>
+                    <div class="options">
                         <input id="food-highly-satisfied" type="radio" name="food-satisfaction"
                             value="highly-satisfied">
                         <label for="food-highly-satisfied">Highly Satisfied</label><br>
@@ -89,12 +73,11 @@
                             value="highly-dissatisfied">
                         <label for="food-highly-dissatisfied">Highly Dissatisfied</label>
                     </div>
-
                 </div>
-                <!-- service satisfaction -->
-                <div class="group">
-                    <p class="group-label">Overall Satisfaction of Service</p>
-                    <div class="input2">
+
+                <div class="input-group">
+                    <p class="input-group-label">Overall Satisfaction of Service</p>
+                    <div class="options">
                         <input id="service-highly-satisfied" type="radio" name="service-satisfaction"
                             value="highly-satisfied">
                         <label for="service-highly-satisfied">Highly Satisfied</label><br>
@@ -110,10 +93,11 @@
                     </div>
 
                 </div>
-                <!-- styling satisfaction -->
-                <div class="group">
-                    <p class="group-label">Overall Satisfaction of Styling</p>
-                    <div class="input2">
+
+                <div class="input-group">
+                    <p class="input-group-label">Overall Satisfaction of Styling <span class="instruction">(if
+                            applicable)</span></p>
+                    <div class="options">
                         <input id="styling-highly-satisfied" type="radio" name="styling-satisfaction"
                             value="highly-satisfied">
                         <label for="styling-highly-satisfied">Highly Satisfied</label><br>
@@ -131,13 +115,11 @@
                         <label for="styling-not-applicable">Not Applicable</label>
                     </div>
                 </div>
-
-                <!-- source -->
-                <div class="group">
-                    <p class="group-label">How did you hear about us? <span class="instruction">(Check all that
+                <div class="input-group">
+                    <p class="input-group-label">How did you hear about us? <span class="instruction">(Check all that
                             apply)</span>
                     </p>
-                    <div class="input2">
+                    <div class="options">
                         <label><input type="checkbox" name="family" value="family">Family</label><br>
                         <label><input type="checkbox" name="friends" value="friends">Friends</label><br>
                         <label><input type="checkbox" name="trade-fair" value="trade-fair">Trade Fair</label><br>
@@ -146,24 +128,22 @@
                         <label><input type="checkbox" name="facebook" value="facebook">Facebook</label><br>
                         <label><input type="checkbox" name="instagram" value="instagram">Instagram</label><br>
                         <label><input type="checkbox" name="blog" value="blog">Blog</label><br>
-                        <div><br>
-                            <label for="others">Other <span class="instruction">(please specify)</span></label>
-                            <input type="text">
+                        <div>
+                            <label><input type="checkbox" name="others" value="others">Others <span
+                                    class="instruction">(please
+                                    specify)</span></label>
+                            <input id="others" type="text" name="others value=" others">
                         </div>
 
                     </div>
                 </div>
-                <!-- comments -->
-                <div class="group"></div>
-                <p class="group-label">How can we improve our service?</p>
-                <div class="input2">
-                    <textarea id="comments" cols="50" rows="10"
+                <div class="input-group">
+                    <p class="input-group-label"">How can we improve our services?</p>
+                    <textarea id=" comments" cols="50" rows="10"
                         placeholder="Kindly enter your comments or suggestions"></textarea>
                 </div>
-
-                <!-- submit button -->
-                <div class="button">
-                    <button id="submit">Submit</button>
+                <div class="input-group">
+                    <input type="submit" id="submit">
                 </div>
             </form>
         </div>
