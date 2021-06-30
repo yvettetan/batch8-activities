@@ -1,16 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Roboto&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lora:wght@500&family=Roboto&display=swap");
 :root {
-    --oxford-blue: #031E3A;
+    --oxford-blue: #031e3a;
     --background-color: #e8ebf0;
-    --roboto: 'Roboto', sans-serif;
-    --lora: 'Lora', serif;
+    --roboto: "Roboto", sans-serif;
+    --lora: "Lora", serif;
 }
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-body, header, .form-container, footer, .social-proof, .benefits-container {
+a {
+    text-decoration: none;
+}
+body,
+header,
+.form-container,
+footer,
+.social-proof,
+.benefits-container {
     width: 100vw;
 }
 body {
@@ -32,7 +40,8 @@ body {
     text-transform: uppercase;
     box-shadow: 0px 4px 3px rgba(0, 0, 0, 0.1);
 }
-#header-img, .logo {
+#header-img,
+.logo {
     width: 20vmin;
 }
 #nav-bar ul a {
@@ -42,20 +51,21 @@ body {
     text-decoration: none;
     list-style-type: none;
     font-size: 2vmin;
-    padding: .5em;
+    padding: 0.5em;
 }
 
 #nav-bar ul a:hover {
-   color: rgb(72, 72, 72);
+    color: rgb(72, 72, 72);
 }
 
 #nav-bar a:last-of-type {
-    outline: .2vmin solid var(--oxford-blue);
+    outline: 0.2vmin solid var(--oxford-blue);
 }
-#nav-bar a:last-of-type:hover, #nav-bar a:last-of-type:focus {
+#nav-bar a:last-of-type:hover,
+#nav-bar a:last-of-type:focus {
     background-color: var(--oxford-blue);
     color: white;
-    transition: linear .3s;
+    transition: linear 0.3s;
     text-decoration: none;
 }
 .container {
@@ -92,20 +102,21 @@ body {
     font-size: 2.5vmin;
     font-family: var(--roboto);
     text-transform: uppercase;
-    padding: .5em;
+    padding: 0.5em;
 }
 .btn {
+    margin-top: 1em;
     background-color: var(--oxford-blue);
     border: none;
     color: white;
     font-size: 3vmin;
     padding: 2vmin 8vmin;
-    letter-spacing: .2vmin;
-    transition: linear .3s;
+    letter-spacing: 0.2vmin;
+    transition: linear 0.3s;
 }
 .btn:hover {
     cursor: pointer;
-    background-color:  #112f4f;
+    background-color: #112f4f;
 }
 .social-proof {
     width: 100%;
@@ -136,11 +147,11 @@ body {
 }
 #recipes:hover {
     background-image: url(./images/recipes2.png);
-    transition: .5s linear;
+    transition: 0.5s linear;
 }
 #journals:hover {
     background-image: url(./images/journals2.jpeg);
-    transition: .5s linear;
+    transition: 0.5s linear;
 }
 .recipe-journal-container {
     width: 100%;
@@ -179,9 +190,9 @@ h3 {
     padding: 5vmin 0 2vmin 0;
     font-family: var(--lora);
 }
-iframe{
+iframe {
     width: 100%;
-    height: calc(100vw/1.77);
+    height: calc(100vw / 1.77);
 }
 .story-container {
     padding: 2em 0;
@@ -195,10 +206,10 @@ iframe{
 }
 .box:hover {
     background-color: rgba(76, 76, 76, 0.189);
-    transition: .5s linear;
+    transition: 0.5s linear;
 }
 .box p:hover {
-   text-decoration: underline;
+    text-decoration: underline;
 }
 .products-container {
     background-color: var(--background-color);
@@ -206,33 +217,35 @@ iframe{
     flex-wrap: wrap;
 }
 .product-card {
-      margin: 0 auto;
-      outline: 1px solid white;
-      padding: 2%;
-      flex-grow: 1;
-      flex-basis: 48%;
-      cursor:pointer;
-      text-transform: uppercase;
-      text-align: center;
-      font-size: 16px;
+    margin: 0 auto;
+    outline: 1px solid white;
+    padding: 2%;
+    flex-grow: 1;
+    flex-basis: 48%;
+    cursor: pointer;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 16px;
 }
 .product-card img {
     max-width: 100%;
     height: auto;
-    padding: .8em;
+    padding: 0.8em;
 }
 .product-card img:hover {
     transform: scale(1.1);
-    transition: .3s ease;
+    transition: 0.3s ease;
 }
-.extra1, .extra2 {
+.extra1,
+.extra2 {
     display: none;
 }
 .form-container {
     text-align: center;
     margin: 12vmin 0;
 }
-#contact-us, #subscribe {
+#contact-us,
+#subscribe {
     font-size: 4vmin;
 }
 #contact-form {
@@ -241,14 +254,18 @@ iframe{
     background-color: var(--background-color);
     text-align: left;
 }
-
-.contact-text, .subscribe-text, .recipe-journal p {
+.contact-text,
+.subscribe-text,
+.recipe-journal p {
     font-size: 2vmin;
+}
+.email {
+    text-decoration: underline;
 }
 #form {
     text-align: center;
     display: flex;
-    flex-direction: column;;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     margin: 5vmin 0;
@@ -257,14 +274,15 @@ iframe{
     width: 60vmin;
     height: 6.5vmin;
     padding: 0 1vmin;
-    border: .2vmin solid var(--oxford-blue);
+    border: 0.2vmin solid var(--oxford-blue);
     border-radius: 0;
     font-size: 2.5vmin;
 }
 #submit {
     padding: 1.5vmin 23vmin;
     margin: 1vmin;
-    letter-spacing: .2vmin;
+    letter-spacing: 0.2vmin;
+    -webkit-appearance: none;
 }
 .sustainability-container {
     display: grid;
@@ -278,7 +296,7 @@ iframe{
 .sustainability-container img {
     max-width: 70%;
     height: auto;
-    padding: 0 .5em;
+    padding: 0 0.5em;
 }
 #awards {
     max-width: 100%;
@@ -294,7 +312,7 @@ footer {
 }
 .fa {
     color: white;
-    padding: .5em;
+    padding: 0.5em;
     text-align: center;
     text-decoration: none;
     width: 20px;
@@ -324,12 +342,16 @@ footer {
     padding: 1em;
     font-size: 2vmin;
 }
+.links span:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
 @media (min-width: 30.063em) {
     .about-text {
         font-size: 18px;
     }
     .product-card {
-     flex-basis: 31%;
+        flex-basis: 31%;
     }
     .extra1 {
         display: block;
@@ -352,38 +374,39 @@ footer {
         justify-content: space-between;
         width: 90%;
     }
-    #recipes, #journals {
-       width: 90%;
-       height: 40vmin;
-       margin: .5em;
+    #recipes,
+    #journals {
+        width: 90%;
+        height: 40vmin;
+        margin: 0.5em;
     }
     .images {
         display: flex;
     }
 }
- @media (min-width: 48.063em) {
+@media (min-width: 48.063em) {
     #nav-bar ul a {
         font-size: 18px;
-    } 
+    }
     .container {
-         width: 80%;
-     }
+        width: 80%;
+    }
     .product-card {
-         flex-basis: 21%;
+        flex-basis: 21%;
     }
     .extra1 {
-            display: block;
+        display: block;
     }
     .extra2 {
-            display: block;
+        display: block;
     }
     .video-container {
-           display: flex;
-           justify-content: center;
+        display: flex;
+        justify-content: center;
     }
     iframe {
-            width: 60vw;
-            height: calc(60vw/1.77);
+        width: 60vw;
+        height: calc(60vw / 1.77);
     }
     h2 {
         font-size: 4vmin;
