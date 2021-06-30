@@ -3,49 +3,55 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Github Page</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700&family=Pacifico&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./Portfolio/main.css">
+    <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
+    <title>Yvette Tan | Avion School - Batch 8</title>
 </head>
 
 <body>
-    <header>
-        <h1>Welcome to my Github Page!</h1><br>
-
+    <!-- who you are
+what you do
+how to get in touch with you. -->
+    <header id="header">
+        <img id="logo" src="./Portfolio/images/logo.svg" alt="logo">
+        <ion-icon class="nav-btn" name="menu-outline"></ion-icon>
+        <nav id="navbar" class="hide">
+            <!-- <span class="navlink font-m" href="#about">About</span>
+            <span class="navlink projects-btn font-m">Projects</span>
+            <a class="navlink font-m" href="#">Contact</a> -->
+        </nav>
     </header>
-    <section class="avion">
-
-        <div class="container">
-            <div class="batch8">
-                <h2>batch8-activities</h2><br>
-                <h3>View the project on Github</h3>
-                <a href="https://github.com/yvettetan/batch8-activities">
-                    <p class="activities-link">yvettetan/batch8-activities</p>
-                </a>
-            </div>
-            <div class="project-container">
-                <span>This is where I submit all my works in Avion School</span>
-                <ul class="project">
-                    <a href="https://github.com/yvettetan/batch8-activities/tree/main/BestPractice">
-                        <li> <a href="https://yvettetan.github.io/batch8-activities/BestPractice/index.html">Best
-                                Practices Page</a></li>
-                        <li> <a href="https://yvettetan.github.io/batch8-activities/TributePage/index.html">Tribute
-                                Page</a> </li>
-                        <li> <a href="https://yvettetan.github.io/batch8-activities/SurveyForm/index.html">Survey
-                                Form</a></li>
-                        <li><a
-                                href="https://yvettetan.github.io/batch8-activities/Chessboard-flexbox/index.html">Chessboard-flexbox</a>
-                        </li>
+    <!--* home -->
+    <section id="home" class="">
+        <div id="greeting">
+            <span class="introduction">Hi! I'm</span>
+            <span id="name" class="cursive font-lg">Yvette Tan</span>
+            <p class="introduction">This is where I submit all my works in Avion School.</p>
+            <button class="projects-btn">View All Projects</button>
+            <div id="home-info">
+                <span id="batch">batch 8</span>
+                <button id="repository-link">
+                    <a class="font-s" href="https://github.com/yvettetan/batch8-activities" target="_blank">
+                        <ion-icon name="logo-github"></ion-icon>&nbsp;view github repository
                     </a>
-                </ul>
+                </button>
             </div>
         </div>
+        <img class="wave" src="./Portfolio/images/wave.svg" alt="">
     </section>
 
-    <footer>
-        <span>This project is maintained by yvettetan</span>
-    </footer>
+    <!--* projects -->
+    <section id="projects" class="hide">
+        <!-- <h1 class="section-title">Projects</h1> -->
+        <div id="projects-list"></div>
+        <div id="about-project" class="hide">
+        </div>
+    </section>
+    <script src="./Portfolio/index.js"></script>
 </body>
 
 </html>
