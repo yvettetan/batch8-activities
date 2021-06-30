@@ -35,13 +35,13 @@ main {
     text-align: center;
 }
 header {
-    margin: 2em 0;
+    margin-top: 2em;
     color: var(--headerColor);
-    text-shadow: 2px 2px 10px rgb(53, 53, 53);
+    text-shadow: 2px 2px 10px rgb(70, 70, 70);
 }
 h1 {
     font-family: var(--ff-header);
-    letter-spacing: 1.5px;
+    letter-spacing: 3px;
     font-size: 2rem;
     margin-bottom: 1em;
 }
@@ -52,9 +52,10 @@ h1 {
     background-color: var(--primaryColor);
     text-align: left;
     max-width: 800px;
-    margin: auto;
+    margin: 2em auto;
     padding: 1.5em;
     border-radius: 0.6rem;
+    box-shadow: 0 0 30px rgb(104, 104, 104);
 }
 input,
 select {
@@ -81,9 +82,14 @@ textarea:focus,
 select:focus {
     outline: none;
     border: 1px solid var(--secondaryColor);
+    /* font-size: 16px; */
 }
 input[type="checkbox"] {
     margin-right: 0.5em;
+}
+input[type="date"],
+input[type="submit"] {
+    -webkit-appearance: none;
 }
 #others {
     width: 100%;
@@ -98,11 +104,12 @@ textarea {
     font-size: smaller;
 }
 #submit {
-    width: 50%;
+    width: 80%;
     margin: 1em auto auto auto;
     background-color: var(--secondaryColor);
     color: #fff;
     font-family: var(--ff-body);
+    cursor: pointer;
 }
 #name-label,
 #email-label,
