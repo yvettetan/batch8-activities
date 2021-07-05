@@ -1,0 +1,21 @@
+--previous table students
+SELECT *
+FROM students;
+
+--total count of all students
+SELECT COUNT(*)
+FROM students;
+
+--all students with location Manila
+SELECT *
+FROM students
+WHERE location = 'Manila';
+
+--average age of all students
+SELECT AVG(age)
+FROM students;
+
+--descending order of students by age
+SELECT *
+FROM students
+ORDER BY age DESC;
