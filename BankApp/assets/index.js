@@ -186,7 +186,7 @@ function findUser(email, type) {
         };
     };
 }
-//look for account number is in storage, return number or balance or name
+//look for account number in storage, return number or balance or name
 function findAccount(accountNumber, type) {
     const accounts = AccountStore.getAccouts();
     for (let i = 0; i < accounts.length; i++) {
@@ -313,7 +313,6 @@ class AccountStore {
         })
         localStorage.setItem('accounts', JSON.stringify(accounts));
     }
-
     static deleteAccount(accountNumber) {
         const accounts = AccountStore.getAccouts();
         //loop through the accounts and check if current account iterated matches the index
@@ -958,6 +957,7 @@ class UserUI {
         }
         UserUI.showTotal(userEmail);
     }
+    //display updated total income/expense
     static showTotal(email) {
         let incomeTotal = 0;
         let expenseTotal = 0;
@@ -1016,11 +1016,9 @@ document.querySelector('#income-list-data').addEventListener('click', (e) => {
     //target table row and remove from table
     let targetIncomeItem = e.target.parentElement.parentElement;
     if (e.target.classList.contains('delete')) {
-        let deleteButton = e.target;
         UserUI.deleteOrEditIncome(loggedInEmail, targetIncomeItem, 'delete');
     }
     if (e.target.classList.contains('edit')) {
-        let editButton = e.target;
         UserUI.deleteOrEditIncome(loggedInEmail, targetIncomeItem, 'edit');
     }
 })
