@@ -802,15 +802,16 @@ class GroceryUI {
         itemContainer.classList.toggle('strikethrough');
     }
     static is_grocerylist_empty() {
+        const items = GroceryStore.get_grocery_items();
         const groceryItemsCount = groceryListContainer.childElementCount;
-        if (groceryItemsCount === 1) {
+        if (groceryItemsCount <= 1) {
             groceryListContainer.innerHTML =
                 `<div class="empty-cart-container">
                     <strong>Your grocery list is empty</strong>
                     <img src = "./assets/images/empty-cart.svg" alt="empty cart">
                    </img>
                 </div>`;
-        } else if (groceryItemsCount === 2) {
+        } else if (items.length != 0) {
             //hide empty cart container
             hide([groceryListContainer.children[0]]);
         }
@@ -853,7 +854,8 @@ GroceryItem.create_grocery_item = (itemName, itemCount) => {
 groceryListContainer.addEventListener('click', (e) => {
     const targetElement = e.target;
     const itemContainer = e.target.parentElement.parentElement;
-    const index = [...itemContainer.parentElement.children].indexOf(itemContainer);
+    //index-1 will get the exact index in storage, since index of 0 will be the empty cart image
+    const index = [...itemContainer.parentElement.children].indexOf(itemContainer)-1;
     if (targetElement.classList.contains('grocery-delete')) {
         GroceryUI.edit_or_delete_item(itemContainer, 'delete');
         GroceryStore.edit_or_delete_item(index, 'delete');
@@ -864,5 +866,3 @@ groceryListContainer.addEventListener('click', (e) => {
         GroceryUI.complete_item(targetElement);
     }
 })
-
-
