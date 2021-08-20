@@ -16,7 +16,7 @@ for (let btn of projectsBtn) {
 }
 
 logoBtn.addEventListener('click', () => {
-    hide([projectSection, aboutProjectContainer]);
+    hide([projectSection]);
     show([homeSection, projectsList]);
     document.getElementById('header').style.boxShadow = 'none';
 })
@@ -45,70 +45,70 @@ class Project {
 const tributePage = new Project(
     'Tribute Page',
     './Portfolio/images/tributepage.png',
-    'https://github.com/yvettetan/batch8-activities/tree/main/TributePage',
-    'https://yvettetan.github.io/batch8-activities/TributePage/index.html',
+    'https://github.com/yvettetan/batch8-frontend-activities/tree/main/TributePage',
+    'https://yvettetan.github.io/batch8-frontend-activities/TributePage/index.html',
     ['html5', 'css3'],
     'This page was created as a tribute to Saoirse Ronan. '
 )
 const SurveyForm = new Project(
     'Survey Form',
     './Portfolio/images/survey.png',
-    'https://github.com/yvettetan/batch8-activities/tree/main/SurveyForm',
-    'https://yvettetan.github.io/batch8-activities/SurveyForm/index.html',
+    'https://github.com/yvettetan/batch8-frontend-activities/tree/main/SurveyForm',
+    'https://yvettetan.github.io/batch8-frontend-activities/SurveyForm/index.html',
     ['html5', 'css3']
 )
 const marineChessboard = new Project(
     'Marine Chessboard - flexbox',
     './Portfolio/images/chessboard-flex.png',
-    'https://github.com/yvettetan/batch8-activities/tree/main/Chessboard-flexbox',
-    'https://yvettetan.github.io/batch8-activities/Chessboard-flexbox/index.html',
+    'https://github.com/yvettetan/batch8-frontend-activities/tree/main/Chessboard-flexbox',
+    'https://yvettetan.github.io/batch8-frontend-activities/Chessboard-flexbox/index.html',
     ['html5', 'css3']
 )
 const safariChessboard = new Project(
     'Safari Chessboard - grid',
     './Portfolio/images/chessboard-grid.png',
-    'https://github.com/yvettetan/batch8-activities/tree/main/Chessboard-grid',
-    'https://yvettetan.github.io/batch8-activities/Chessboard-grid/index.html',
+    'https://github.com/yvettetan/batch8-frontend-frontend-activities/tree/main/Chessboard-grid',
+    'https://yvettetan.github.io/batch8-frontend-frontend-activities/Chessboard-grid/index.html',
     ['html5', 'css3']
 )
 const landingPage = new Project(
     'Product Landing Page',
     './Portfolio/images/landingpage.png',
-    'https://github.com/yvettetan/batch8-activities/tree/main/LandingPage',
-    'https://yvettetan.github.io/batch8-activities/LandingPage/index.html',
+    'https://github.com/yvettetan/batch8-frontend-frontend-activities/tree/main/LandingPage',
+    'https://yvettetan.github.io/batch8-frontend-frontend-activities/LandingPage/index.html',
     ['html5', 'css3']
 )
 const momentum = new Project(
     'Momentum',
     './Portfolio/images/momentum.png',
-    'https://github.com/yvettetan/batch8-activities/tree/main/MomentumApp',
-    'https://yvettetan.github.io/batch8-activities/MomentumApp/index.html',
+    'https://github.com/yvettetan/batch8-frontend-activities/tree/main/MomentumApp',
+    'https://yvettetan.github.io/batch8-frontend-activities/MomentumApp/index.html',
     ['html5', 'css3', 'Javascript']
 )
 const quizGame = new Project(
     'Quiz Game',
     './Portfolio/images/quizgame.png',
-    'https://github.com/yvettetan/batch8-activities/tree/main/QuizGame',
-    'https://yvettetan.github.io/batch8-activities/QuizGame/index.html',
+    'https://github.com/yvettetan/batch8-frontend-activities/tree/main/QuizGame',
+    'https://yvettetan.github.io/batch8-frontend-activities/QuizGame/index.html',
 )
 const tictactoe = new Project(
     'Tic Tac Toe',
     './Portfolio/images/tictactoe.png',
-    'https://github.com/yvettetan/batch8-activities/tree/main/TicTacToe',
-    'https://yvettetan.github.io/batch8-activities/TicTacToe/index.html',
+    'https://github.com/yvettetan/batch8-frontend-activities/tree/main/TicTacToe',
+    'https://yvettetan.github.io/batch8-frontend-activities/TicTacToe/index.html',
 )
 const bankBudget = new Project(
     'Bank & Budget Page',
     './Portfolio/images/bank.png',
-    'https://github.com/yvettetan/batch8-activities/tree/main/BankApp',
-    'https://yvettetan.github.io/batch8-activities/BankApp/login.html',
+    'https://github.com/yvettetan/batch8-frontend-activities/tree/main/BankApp',
+    'https://yvettetan.github.io/batch8-frontend-activities/BankApp/login.html',
 )
 
 const scout = new Project(
     'Scout: Food Expiry Tracker',
     './Portfolio/images/scout.png',
-    'https://github.com/yvettetan/batch8-activities/tree/main/Scout',
-    'https://yvettetan.github.io/batch8-activities/Scout/index.html#',
+    'https://github.com/yvettetan/batch8-frontend-activities/tree/main/Scout',
+    'https://yvettetan.github.io/batch8-frontend-activities/Scout/index.html#',
 )
 const projectsArr = [tributePage, SurveyForm, marineChessboard, safariChessboard, landingPage, momentum, quizGame, tictactoe, bankBudget, scout];
 
@@ -121,28 +121,8 @@ projectsArr.forEach(project => {
                     <img src="${project.image}" alt="${project.title} image">
                 </div>
                 <div class="project-info">
-                    <button class="project-info-btn project-details">view details</button>
                     <a class="project-links" href="${project.code}" target="_blank"><ion-icon name="code-slash-outline"></ion-icon>view code</a>
                     <a class="project-links" href="${project.site}" target="_blank"><ion-icon name="open-outline"></ion-icon>visit site</a>
                 </div>`;
     projectsList.appendChild(projectContainer);
 })
-const projectDetailsBtn = document.querySelectorAll('.project-details');
-for (let btn of projectDetailsBtn) {
-    btn.addEventListener('click', () => {
-        hide([projectsList]);
-        show([aboutProjectContainer]);
-        const projectTitle = btn.parentElement.closest('.project-container').firstElementChild.textContent;
-        projectsArr.forEach(project => {
-            if (project.title == projectTitle) {
-                display_project_info(project);
-            }
-        })
-    })
-}
-const aboutProjectContainer = document.querySelector('#about-project')
-display_project_info = project => {
-    aboutProjectContainer.innerHTML =
-        `<ion-icon name="arrow-back-outline"></ion-icon>
-        ${project.title}`;
-}
