@@ -1,1 +1,0 @@
-puts 'random content'
