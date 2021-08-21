@@ -61,7 +61,7 @@ h2 {
     background-color: transparent;
     border: none;
     position: relative;
-    right: 5%;
+    right: 1%;
     outline: none;
     padding-left: 1em;
 }
@@ -398,17 +398,14 @@ h2 {
     }
     #add-quote-option,
     #show-quote-option {
-        font-size: 2vmin;
+        font-size: 90%;
         height: max-content;
     }
     #quote-list p {
-        font-size: 2.5vmin;
+        font-size: 100%;
     }
     #todoContainer {
         width: 40vmin;
-        font-size: 2vmin;
-    }
-    .todoItem {
         font-size: 2vmin;
     }
 }
