@@ -592,6 +592,7 @@ Item.create_item = (id, name, count, unit, category, date, location) => {
         input.value = '';
     }
     noExpiryDate.checked = false;
+    alert(`${count} ${name} successfully added to your ${location}`);
 }
 
 //traverse DOM to target each item card, either to delete item or update count
@@ -610,8 +611,14 @@ Item.update_item = (targetElement) => {
         const targetLocation = targetCard.parentElement.id.split('-')[0];
         //delete item
         if (targetElement.classList.contains('item-delete')) {
-            ItemStore.delete_item(targetCard, targetLocation);
-            ItemUI.delete_item_card(targetCard);
+            var answer = window.confirm(`Are you sure you want to remove this item in your ${targetLocation}?`);
+                if (answer) {
+                ItemStore.delete_item(targetCard, targetLocation);
+                ItemUI.delete_item_card(targetCard);
+                }
+                else {
+                    return;
+                }
             //add item count
         } else if (targetElement.classList.contains('item-plus')) {
             ItemStore.add_or_subtract_item(targetCard, targetLocation, 'add');
