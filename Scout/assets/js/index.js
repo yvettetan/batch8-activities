@@ -593,6 +593,8 @@ Item.create_item = (id, name, count, unit, category, date, location) => {
     }
     noExpiryDate.checked = false;
     alert(`${count} ${name} successfully added to your ${location}`);
+    hide([addItemContainer]);
+    show([fridgeContainer]);
 }
 
 //traverse DOM to target each item card, either to delete item or update count
