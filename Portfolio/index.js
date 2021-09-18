@@ -33,13 +33,11 @@ hide = elementsArr => {
 }
 
 class Project {
-    constructor(title, image, code, site, skills = [], about) {
+    constructor(title, image, code, site) {
         this.title = title;
         this.image = image;
         this.code = code;
         this.site = site;
-        this.skills = skills;
-        this.about = about;
     }
 }
 const tributePage = new Project(
@@ -47,36 +45,30 @@ const tributePage = new Project(
     './Portfolio/images/tributepage.png',
     'https://github.com/yvettetan/batch8-frontend-activities/tree/main/TributePage',
     'https://yvettetan.github.io/batch8-frontend-activities/TributePage/index.html',
-    ['html5', 'css3'],
-    'This page was created as a tribute to Saoirse Ronan. '
 )
 const SurveyForm = new Project(
     'Survey Form',
     './Portfolio/images/survey.png',
     'https://github.com/yvettetan/batch8-frontend-activities/tree/main/SurveyForm',
     'https://yvettetan.github.io/batch8-frontend-activities/SurveyForm/index.html',
-    ['html5', 'css3']
 )
 const marineChessboard = new Project(
     'Marine Chessboard - flexbox',
     './Portfolio/images/chessboard-flex.png',
     'https://github.com/yvettetan/batch8-frontend-activities/tree/main/Chessboard-flexbox',
     'https://yvettetan.github.io/batch8-frontend-activities/Chessboard-flexbox/index.html',
-    ['html5', 'css3']
 )
 const safariChessboard = new Project(
     'Safari Chessboard - grid',
     './Portfolio/images/chessboard-grid.png',
-    'https://github.com/yvettetan/batch8-frontend-frontend-activities/tree/main/Chessboard-grid',
-    'https://yvettetan.github.io/batch8-frontend-frontend-activities/Chessboard-grid/index.html',
-    ['html5', 'css3']
+    'https://github.com/yvettetan/batch8-frontend-activities/tree/main/Chessboard-grid',
+    'https://yvettetan.github.io/batch8-frontend-activities/Chessboard-grid/index.html',
 )
 const landingPage = new Project(
     'Product Landing Page',
     './Portfolio/images/landingpage.png',
-    'https://github.com/yvettetan/batch8-frontend-frontend-activities/tree/main/LandingPage',
-    'https://yvettetan.github.io/batch8-frontend-frontend-activities/LandingPage/index.html',
-    ['html5', 'css3']
+    'https://github.com/yvettetan/batch8-frontend-activities/tree/main/LandingPage',
+    'https://yvettetan.github.io/batch8-frontend-activities/LandingPage/index.html',
 )
 const momentum = new Project(
     'Momentum',
