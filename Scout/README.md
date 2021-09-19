@@ -27,22 +27,22 @@ The objective of the project was to build an app that helps address a problem of
 
 ### Screenshot
 Home:
-![Home Page](Scout/assets/images/scout-home.png)
+![Home Page](./assets/images/scout-home.png)
 
 Tips:
-![Food Waste Tips](Scout/assets/images/scout-tips.png)
+![Food Waste Tips](./assets/images/scout-tips.png)
 
 Search Recipes:
-![Search Recipes](Scout/assets/images/scout-recipes.png)
+![Search Recipes](./assets/images/scout-recipes.png)
 
 View Items:
-![Search Item](Scout/assets/images/scout-search.png)
+![Search Item](./assets/images/scout-search.png)
 
 Grocery List:
-![Grocery List](Scout/assets/images/scout-list.png)
+![Grocery List](./assets/images/scout-list.png)
 
 Add Food Items:
-![Add Item](Scout/assets/images/scout-add.png)
+![Add Item](./assets/images/scout-add.png)
 
 ## The Process
 
